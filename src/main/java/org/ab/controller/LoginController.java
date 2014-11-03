@@ -1,15 +1,20 @@
 package org.ab.controller;
 
-import org.springframework.stereotype.Component;
+import java.util.logging.Logger;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Component
-@RequestMapping("/")
+@Controller
+@RequestMapping("/login")
 public class LoginController {
-
-	@RequestMapping("/login.app")
-    public String welcomeHandler() {
-		System.out.println("login");
-		return "home";
+	private static final Logger logger = Logger.getLogger(LoginController.class.getName());
+	
+	@RequestMapping
+    public String showLoginPage(final Model model) {
+		logger.info("LoginController show login page");
+		return "index";
     }
+	
 }

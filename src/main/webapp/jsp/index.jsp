@@ -19,7 +19,7 @@
  <html xmlns="http://www.w3.org/1999/xhtml">
  <body onload="document.forms.loginForm.login.focus()">   
     
-    <form method="post" action="login.app" enctype="application/x-www-form-urlencoded" accept-charset="UTF-8"
+    <form method="post" action='/j_spring_security_check' enctype="application/x-www-form-urlencoded" accept-charset="UTF-8"
     	name="loginForm">
 	<input type="hidden" id="event" name="event" />
 	
@@ -36,18 +36,18 @@
 	  			<td style="width: 80px" >
 					Login:
 				</td><td >
-					<input type="text" name="login" value="" style="width: 120px;" />
+					<input type="text" name="j_username" value="" style="width: 120px;" />
 				</td>
 			</tr><tr>
 	  			<td>
 					Hasło:
 				</td><td >
-					<input type="password" name="password" value="" style="width: 120px;" />
+					<input type="password" name="j_password" value="" style="width: 120px;" />
 				</td>
 			</tr><tr>
 				<td/>
 				<td width="80px" >
-					<input type="submit" value="Login" onclick="submitForm('login')" />
+					<input type="submit" value="Login" name="submit" />
 				</td>
 			</tr>
 		</table>
