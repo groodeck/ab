@@ -13,7 +13,7 @@
 		<intercept-url pattern="/login*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 	    <intercept-url pattern="/**" access="ROLE_AB_USER" />
 	    <form-login login-page='/login'
-	    	default-target-url='/home' 
+	    	default-target-url='/subscribers' 
 	    	always-use-default-target="true" 
 	    	authentication-failure-url="/login"/>
 	</http>
