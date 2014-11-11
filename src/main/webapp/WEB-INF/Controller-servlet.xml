@@ -13,6 +13,8 @@
 	<context:component-scan base-package="org.ab"/>
 	<mvc:annotation-driven/>
 	
+	<mvc:resources location="/resources/" mapping="/resources/**"/>
+	
 	<bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" />
 	
 	<bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer" >

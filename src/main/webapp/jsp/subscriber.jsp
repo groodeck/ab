@@ -1,13 +1,16 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
 	xmlns:s="http://www.springframework.org/tags"
 	xmlns:sf="http://www.springframework.org/tags/form"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:custom="urn:jsptagdir:/WEB-INF/tags">
+	
    	<jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
      
  <html xmlns="http://www.w3.org/1999/xhtml">
  
  <jsp:text>
  	<![CDATA[
+ 		<script type="text/javascript" src="data/js/common.js" ></script>
  		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
  		<script type="text/javascript">
 	 		function addRow(tableName, inputName){
@@ -151,7 +154,11 @@
 			</tr>
 			<tr>
 				<th><label for="contract_sign_date">Data podpisania umowy:</label></th>
-				<td><sf:input path="currentContract.contractSignDate" size="15" id="contract_sign_date" /></td>
+				<td>
+					
+					<custom:date name="currentContract.contractSignDate" identifier="currentContractSignDate" 
+						value="${subscriber.currentContract.contractSignDate}" />
+				</td>
 			</tr>
 			<tr>
 				<th><label for="contract_activation_date">Data aktywacji:</label></th>
