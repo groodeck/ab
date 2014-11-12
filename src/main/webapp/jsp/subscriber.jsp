@@ -116,7 +116,9 @@
 		<table>
 			<tr>
 				<th><label for="city">Miasto:</label></th>
-				<td><sf:input path="mainAddress.city" size="15" id="city" /></td>
+				<td>
+					<sf:select path="mainAddress.city" items="${cities}" id="city"/>
+				</td>
 			</tr>
 			<tr>
 				<th><label for="zip_code">Kod pocztowy:</label></th>
@@ -155,14 +157,16 @@
 			<tr>
 				<th><label for="contract_sign_date">Data podpisania umowy:</label></th>
 				<td>
-					
 					<custom:date name="currentContract.contractSignDate" identifier="currentContractSignDate" 
-						value="${subscriber.currentContract.contractSignDate}" />
+						value="${subscriber.currentContract.contractSignDate}" additionalAttributes="size='15'"/>
 				</td>
 			</tr>
 			<tr>
 				<th><label for="contract_activation_date">Data aktywacji:</label></th>
-				<td><sf:input path="currentContract.contractActivationDate" size="15" id="contract_activation_date" /></td>
+				<td>
+					<custom:date name="currentContract.contractActivationDate" identifier="currentContractActivationDate" 
+						value="${subscriber.currentContract.contractActivationDate}" additionalAttributes="size='15'"/>
+				</td>
 			</tr>
 			<tr>
 				<th><label for="contract_period">Okres obowiązywania umowy:</label></th>
@@ -186,7 +190,7 @@
 			</tr>
 		</table>
 		</div>
-		<input type="submit" value="Zapisz"/>
+			<input type="submit" value="Zapisz"/>
 		</fieldset>
 	</sf:form>
 	

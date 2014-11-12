@@ -4,6 +4,9 @@ import java.util.logging.Logger;
 
 import org.ab.model.SubscriberModel;
 import org.ab.model.dictionary.ClientType;
+import org.ab.model.dictionary.SelectValueService;
+import org.ab.service.CityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SubscriberController {
 	private static final Logger logger = Logger.getLogger(SubscriberController.class.getName());
 	
+	@Autowired
+	private SelectValueService selectValuesService;
+	
 	@RequestMapping("/new")
     public String handleInitEntry(final Model model) {
 		model.addAttribute("subscriber", new SubscriberModel());
-		model.addAttribute("clientTypes", ClientType.asValueMap());
+		model.addAllAttributes(selectValuesService.getSubscriberDictionaries());
 		return "subscriber";
     }
 	
@@ -24,7 +30,7 @@ public class SubscriberController {
     public String handleSearchAction(final SubscriberModel subscriber, final Model model) {
 		System.out.println("saving subscriber " + subscriber);
 		model.addAttribute("subscriber", subscriber);
-		model.addAttribute("clientTypes", ClientType.asValueMap());
+		model.addAllAttributes(selectValuesService.getSubscriberDictionaries());
 		return "subscriber";
     }
 	

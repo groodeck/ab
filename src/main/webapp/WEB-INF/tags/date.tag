@@ -10,6 +10,7 @@
 	<jsp:directive.attribute name="name" type="String" required="true"/>
 	<jsp:directive.attribute name="value" type="String" required="false"/>
 	<jsp:directive.attribute name="editable" type="Boolean" required="false"/>
+	<jsp:directive.attribute name="additionalAttributes" type="String" required="false"/>
 	
 	<c:set var="disabledStr" value=""/>
 	<c:choose>
@@ -36,7 +37,7 @@
 	</c:choose>
 
 <![CDATA[	
-	 <input type="text" name="${name}" id="datepicker${identifier}" value="${value}" ${disabledStr} /> 	
+	 <input type="text" name="${name}" id="datepicker${identifier}" value="${value}" ${disabledStr} ${additionalAttributes} /> 	
 ]]>
 
 </jsp:root>

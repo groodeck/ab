@@ -7,6 +7,11 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>JaworNET AB</name>
   
+  	<properties>
+		<spring.framework.version>4.1.1.RELEASE</spring.framework.version>
+		<hibernate.version>4.3.4.Final</hibernate.version>
+	</properties>
+	
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -18,13 +23,13 @@
     <dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-web</artifactId>
-		<version>4.1.1.RELEASE</version>
+		<version>${spring.framework.version}</version>
 	</dependency>
     
     <dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-webmvc</artifactId>
-		<version>4.1.1.RELEASE</version>
+		<version>${spring.framework.version}</version>
 	</dependency>
 	
 	<dependency>
@@ -36,7 +41,7 @@
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-jdbc</artifactId>
-		<version>4.1.1.RELEASE</version>
+		<version>${spring.framework.version}</version>
 	</dependency>
 	
     <dependency>
@@ -96,7 +101,36 @@
 		<version>8.1.16.v20140903</version>
 	</dependency>
 	
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-core</artifactId>
+		<version>${hibernate.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-entitymanager</artifactId>
+		<version>${hibernate.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>javax.persistence</groupId>
+		<artifactId>persistence-api</artifactId>
+		<version>1.0.2</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-tx</artifactId>
+		<version>${spring.framework.version}</version>
+	</dependency>
 	
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.framework.version}</version>
+		</dependency>
+		
   </dependencies>
   
   <build>
