@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 public class SubscriberModel {
 	
 	private String subscriberId;
+	private String subscriberIdn;
 	private String clientType;
 	private String name;
 	private String surname;
@@ -21,7 +22,9 @@ public class SubscriberModel {
 	
 	private Address mainAddress;
 	private Address serviceAddress;
+	private boolean serviceAddressSet;
 	private Address correspondenceAddress;
+	private boolean correspondenceAddressSet;
 	
 	private List<String> phoneNumbers;
 	private List<String> emails;
@@ -29,6 +32,7 @@ public class SubscriberModel {
 	public SubscriberModel(){
 		phoneNumbers = Lists.newArrayList("123", "234", "456");
 		emails = Lists.newArrayList("34535");
+		currentContract = new Contract();
 	}
 	
 	public String getSubscriberId() {
@@ -126,6 +130,30 @@ public class SubscriberModel {
 	}
 	public void setBalance(String balance) {
 		this.balance = balance;
+	}
+
+	public boolean isServiceAddressSet() {
+		return serviceAddressSet;
+	}
+
+	public void setServiceAddressSet(boolean serviceAddressSet) {
+		this.serviceAddressSet = serviceAddressSet;
+	}
+
+	public boolean isCorrespondenceAddressSet() {
+		return correspondenceAddressSet;
+	}
+
+	public void setCorrespondenceAddressSet(boolean correspondenceAddressSet) {
+		this.correspondenceAddressSet = correspondenceAddressSet;
+	}
+
+	public String getSubscriberIdn() {
+		return subscriberIdn;
+	}
+
+	public void setSubscriberIdn(String subscriberIdn) {
+		this.subscriberIdn = subscriberIdn;
 	}
 
 }

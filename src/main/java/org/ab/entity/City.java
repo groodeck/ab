@@ -24,11 +24,11 @@ public class City {
 		return cityDescription;
 	}
 
-	private void setCityIdn(String cityIdn) {
+	public void setCityIdn(String cityIdn) {
 		this.cityIdn = cityIdn;
 	}
 
-	private void setCityDescription(String cityDescription) {
+	public void setCityDescription(String cityDescription) {
 		this.cityDescription = cityDescription;
 	}
 }

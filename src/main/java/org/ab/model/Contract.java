@@ -3,16 +3,19 @@ package org.ab.model;
 public class Contract {
 
 	private String contractId;
+	private String contractIdn;
 	private String contractStatus;
 	private String contractSignDate;
 	private String contractActivationDate;
+	private String contractEndDate;
 	private String contractPeriod;
 	private String contractPack;
 	private String contractSubscription;
 	private String installationFee;
+	private String activationFee;
 	
-	public String getContractId() {
-		return contractId;
+	public String getContractIdn() {
+		return contractIdn;
 	}
 	public String getContractStatus() {
 		return contractStatus;
@@ -35,8 +38,8 @@ public class Contract {
 	public String getInstallationFee() {
 		return installationFee;
 	}
-	public void setContractId(String contractId) {
-		this.contractId = contractId;
+	public void setContractIdn(String contractIdn) {
+		this.contractIdn = contractIdn;
 	}
 	public void setContractStatus(String contractStatus) {
 		this.contractStatus = contractStatus;
@@ -58,6 +61,24 @@ public class Contract {
 	}
 	public void setInstallationFee(String installationFee) {
 		this.installationFee = installationFee;
+	}
+	public String getContractEndDate() {
+		return contractEndDate;
+	}
+	public void setContractEndDate(String contractEndDate) {
+		this.contractEndDate = contractEndDate;
+	}
+	public String getContractId() {
+		return contractId;
+	}
+	public void setContractId(String contractId) {
+		this.contractId = contractId;
+	}
+	public String getActivationFee() {
+		return activationFee;
+	}
+	public void setActivationFee(String activationFee) {
+		this.activationFee = activationFee;
 	}
 	
 }

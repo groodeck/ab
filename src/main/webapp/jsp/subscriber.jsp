@@ -10,8 +10,8 @@
  
  <jsp:text>
  	<![CDATA[
- 		<script type="text/javascript" src="data/js/common.js" ></script>
  		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> 
  		<script type="text/javascript">
 	 		function addRow(tableName, inputName){
 	 			var tableRowSet = $('#'+ tableName +' tr');
@@ -24,6 +24,52 @@
 					$('#'+ tableName +' tr:last-child').remove();
 				}
 	 		}
+	 		
+	 		function changeRowsVisible(select){
+	 			if(select.value == 'INDIVIDUAL'){
+	 				$(".individualRow").show();
+	 				$(".companyRow").hide();
+	 			} else {
+	 				$(".individualRow").hide();
+	 				$(".companyRow").show();
+	 			}
+	 		}
+	 		
+	 		function changeAddressVisible(checkbox, tableId){
+	 			if($(checkbox).attr('checked')){
+	 				$('#'+ tableId).show();
+	 			} else {
+	 				$('#'+ tableId).hide();
+	 			}
+	 		}
+	 		
+	 		refreshContractEndDate = function (){
+	 			var period = $("#contract_period").val();
+	 			var startDateCntrl = $("#datepickercurrentContractActivationDate");
+		 		var endDateCntrl = $("#datepickercurrentContractEndDate");
+	 			if(isNaN(period)){
+	 				endDateCntrl.val('');
+	 			} else {
+	 				var startDate = new Date(startDateCntrl.val());
+		 			startDate.setMonth(startDate.getMonth() + parseInt(period));
+		 			endDateCntrl.val($.datepicker.formatDate('yy-mm-dd', startDate));
+	 			}
+	 		}
+	 		
+	 		refreshContractPack = function (){
+	 			var packageId = $("#contract_pack").val();
+	 			$.getJSON( "/async/getPackageDetails/" + packageId, function(data) {
+	 				$("#activation_fee").val(data.activationFee)
+	 				$("#installation_fee").val(data.installationFee)
+	 				$("#contract_subscription").val(data.subscription)
+				})
+	 		}	
+	 		
+	 		$(document).ready(function() {
+			    changeRowsVisible($( "#client_type" ));
+			    changeAddressVisible($( "#correspAddressCheckbox" ), 'correspondenceAddressTable');
+			    changeAddressVisible($( "#serviceAddressSet" ), 'serviceAddressTable');
+			});
 	 	</script>
  	]]>
  </jsp:text>
@@ -32,30 +78,28 @@
    <h2>Abonent</h2>
    <sf:form method="post" action="/subscriber/save" modelAttribute="subscriber" >
 		<fieldset>
-		<div align="center" style="float: left; width: 50%">
+		
+		
+		<div id="subscriberDataDiv" align="center" style="float:left; width: 50%;">
 		<h3>Dane abonenta</h3>
 		<table>
 			<tr>
-				<th><label for="client_type">Typ klienta:</label></th>
+				<th align="right"><label for="client_type">Typ klienta:</label></th>
 				<td>
-					<sf:select path="clientType" items="${clientTypes}" id="client_type"/>
+					<sf:select path="clientType" items="${clientTypes}" id="client_type" onchange="changeRowsVisible(this)"/>
 				</td>
 			</tr>
-			<tr id="individualNameRow">
+			<tr class="individualRow">
 				<th><label for="client_name">Imię:</label></th>
 				<td><sf:input path="name" size="15" id="client_name" /></td>
 			</tr>
-			<tr id="individualSurnameRow">
-				<th><label for="client_surname">Nazwisko/Nazwa firmy:</label></th>
+			<tr class="individualRow">
+				<th><label for="client_surname">Nazwisko:</label></th>
 				<td><sf:input path="surname" size="15" id="client_surname" /></td>
 			</tr>
-			<tr id="companyNameRow">
+			<tr class="companyRow">
 				<th><label for="company_name">Nazwa firmy:</label></th>
 				<td><sf:input path="companyName" size="15" id="company_name" /></td>
-			</tr>
-			<tr>
-				<th><label for="client_id_number">Numer dowodu:</label></th>
-				<td><sf:input path="clientIdNumber" size="15" id="client_id_number" /></td>
 			</tr>
 			<tr>
 				<th><label for="phone_number">Numer telefonu:</label></th>
@@ -76,13 +120,16 @@
 						</c:forEach>
 					</table>
 				</td>
-				
 			</tr>
-			<tr>
+			<tr class="individualRow">
+				<th><label for="client_id_number">Numer dowodu:</label></th>
+				<td><sf:input path="clientIdNumber" size="15" id="client_id_number" /></td>
+			</tr>
+			<tr class="individualRow">
 				<th><label for="pesel">PESEL:</label></th>
 				<td><sf:input path="pesel" size="15" id="pesel" /></td>
 			</tr>
-			<tr>
+			<tr class="companyRow">
 				<th><label for="regon">REGON:</label></th>
 				<td><sf:input path="regon" size="15" id="regon" /></td>
 			</tr>
@@ -113,46 +160,109 @@
 		</table>
 		
 		<h3>Adres</h3>
-		<table>
-			<tr>
-				<th><label for="city">Miasto:</label></th>
-				<td>
-					<sf:select path="mainAddress.city" items="${cities}" id="city"/>
-				</td>
-			</tr>
-			<tr>
-				<th><label for="zip_code">Kod pocztowy:</label></th>
-				<td><sf:input path="mainAddress.zipCode" size="15" id="zip_code" /></td>
-			</tr>
-			<tr>
-				<th><label for="street">Ulica:</label></th>
-				<td><sf:input path="mainAddress.street" size="15" id="street" /></td>
-			</tr>
-			<tr>
-				<th><label for="house_no">Numer domu:</label></th>
-				<td><sf:input path="mainAddress.houseNo" size="15" id="house_no" /></td>
-			</tr>
-			<tr>
-				<th><label for="apartament_no">Numer mieszkania:</label></th>
-				<td><sf:input path="mainAddress.apartamentNo" size="15" id="apartament_no"/></td>
-			</tr>
-		</table>
-		
+			<table>
+				<tr>
+					<th><label for="city">Miasto:</label></th>
+					<td>
+						<sf:select path="mainAddress.city" items="${cities}" id="city"/>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="zip_code">Kod pocztowy:</label></th>
+					<td><sf:input path="mainAddress.zipCode" size="15" id="zip_code" /></td>
+				</tr>
+				<tr>
+					<th><label for="street">Ulica:</label></th>
+					<td><sf:input path="mainAddress.street" size="15" id="street" /></td>
+				</tr>
+				<tr>
+					<th><label for="house_no">Numer domu:</label></th>
+					<td><sf:input path="mainAddress.houseNo" size="15" id="house_no" /></td>
+				</tr>
+				<tr>
+					<th><label for="apartament_no">Numer mieszkania:</label></th>
+					<td><sf:input path="mainAddress.apartamentNo" size="15" id="apartament_no"/></td>
+				</tr>
+			</table>
+			
+			<h3>Adres świadczenia usługi <sf:checkbox id="serviceAddressSet" path="serviceAddressSet" 
+				onclick="changeAddressVisible(this, 'serviceAddressTable')"/> </h3>
+			<table id="serviceAddressTable">
+				<tr>
+					<th><label for="city">Miasto:</label></th>
+					<td>
+						<sf:select path="serviceAddress.city" items="${cities}" id="city"/>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="zip_code">Kod pocztowy:</label></th>
+					<td><sf:input path="serviceAddress.zipCode" size="15" id="zip_code" /></td>
+				</tr>
+				<tr>
+					<th><label for="street">Ulica:</label></th>
+					<td><sf:input path="serviceAddress.street" size="15" id="street" /></td>
+				</tr>
+				<tr>
+					<th><label for="house_no">Numer domu:</label></th>
+					<td><sf:input path="serviceAddress.houseNo" size="15" id="house_no" /></td>
+				</tr>
+				<tr>
+					<th><label for="apartament_no">Numer mieszkania:</label></th>
+					<td><sf:input path="serviceAddress.apartamentNo" size="15" id="apartament_no"/></td>
+				</tr>
+			</table>
+			
+			<h3>Adres wysyłki faktury <sf:checkbox id="correspAddressCheckbox" path="correspondenceAddressSet" 
+				onclick="changeAddressVisible(this, 'correspondenceAddressTable')"/> </h3>
+			<table id="correspondenceAddressTable">
+				<tr>
+					<th><label for="city">Miasto:</label></th>
+					<td>
+						<sf:select path="correspondenceAddress.city" items="${cities}" id="city"/>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="zip_code">Kod pocztowy:</label></th>
+					<td><sf:input path="correspondenceAddress.zipCode" size="15" id="zip_code" /></td>
+				</tr>
+				<tr>
+					<th><label for="street">Ulica:</label></th>
+					<td><sf:input path="correspondenceAddress.street" size="15" id="street" /></td>
+				</tr>
+				<tr>
+					<th><label for="house_no">Numer domu:</label></th>
+					<td><sf:input path="correspondenceAddress.houseNo" size="15" id="house_no" /></td>
+				</tr>
+				<tr>
+					<th><label for="apartament_no">Numer mieszkania:</label></th>
+					<td><sf:input path="correspondenceAddress.apartamentNo" size="15" id="apartament_no"/></td>
+				</tr>
+			</table>
 		</div>
-		<div align="center" style="float: left; width: 50%">
+		
+		
+		<div id="contractDiv" align="center" style="float:left; width: 50%">
 		<h3>Umowa</h3>
 		<table style="font-family:sans-serif;" >
 			<tr>
-				<th><label for="subscriber_id">Nr abonenta:</label></th>
-				<td><sf:input path="subscriberId" size="15" id="subscriber_id" /></td>
+				<th><label for="subscriber_idn">Nr abonenta:</label></th>
+				<td>
+					<sf:input path="subscriberIdn" size="15" id="subscriber_idn" disabled="true" />
+					<sf:hidden path="subscriberIdn"/> 
+				</td>
 			</tr>
 			<tr>
-				<th><label for="contract_id">Nr umowy:</label></th>
-				<td><sf:input path="currentContract.contractId" size="15" id="contract_id" /></td>
+				<th><label for="contract_idn">Nr umowy:</label></th>
+				<td>
+					<sf:input path="currentContract.contractIdn" size="15" id="contract_idn" disabled="true" />
+					<sf:hidden path="currentContract.contractIdn"/> 
+				</td>
 			</tr>
 			<tr>
 				<th><label for="contract_status">Status:</label></th>
-				<td><sf:input path="currentContract.contractStatus" size="15" id="contract_status" /></td>
+				<td>
+					<sf:select path="currentContract.contractStatus" items="${contractStatuses}" id="contract_status"/>
+				</td>
 			</tr>
 			<tr>
 				<th><label for="contract_sign_date">Data podpisania umowy:</label></th>
@@ -165,20 +275,35 @@
 				<th><label for="contract_activation_date">Data aktywacji:</label></th>
 				<td>
 					<custom:date name="currentContract.contractActivationDate" identifier="currentContractActivationDate" 
-						value="${subscriber.currentContract.contractActivationDate}" additionalAttributes="size='15'"/>
+						value="${subscriber.currentContract.contractActivationDate}" additionalAttributes="size='15' onChange='refreshContractEndDate()'" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="contract_period">Okres obowiązywania umowy:</label></th>
-				<td><sf:input path="currentContract.contractPeriod" size="15" id="contract_period" /></td>
+				<td><sf:select path="currentContract.contractPeriod" items="${contractDurations}" id="contract_period"
+					onchange="refreshContractEndDate()"/></td>
+			</tr>
+			<tr>
+				<th><label for="contract_end_date">Data zakończenia umowy:</label></th>
+				<td>
+					<custom:date name="currentContract.contractEndDate" identifier="currentContractEndDate" 
+						value="${subscriber.currentContract.contractEndDate}" additionalAttributes="size='15'"/>
+				</td>
 			</tr>
 			<tr>
 				<th><label for="contract_pack">Pakiet:</label></th>
-				<td><sf:input path="currentContract.contractPack" size="15" id="contract_pack" /></td>
+				<td>
+					<sf:select path="currentContract.contractPack" items="${packages}" id="contract_pack"
+						onchange="refreshContractPack()"/>
+				</td>
 			</tr>
 			<tr>
 				<th><label for="contract_subscription">Abonament miesięczny:</label></th>
 				<td><sf:input path="currentContract.contractSubscription" size="15" id="contract_subscription" /></td>
+			</tr>
+			<tr>
+				<th><label for="activation_fee">Opłata aktywacyjna:</label></th>
+				<td><sf:input path="currentContract.activationFee" size="15" id="activation_fee" /></td>
 			</tr>
 			<tr>
 				<th><label for="installation_fee">Opłata za wykonanie instalacji:</label></th>
@@ -189,8 +314,26 @@
 				<td><sf:input path="balance" size="15" id="balance" /></td>
 			</tr>
 		</table>
+		
+		
 		</div>
+		
+		<div id="mainAddressDiv" align="center" style="clear:both; width: 33%">
+			
+		</div>
+		
+		<div id="serviceAddressDiv" align="center" style="width: 33%; background-color: yellow;">
+			
+		</div>
+		
+		<div id="correspondenceAddressDiv" align="center" style="width: 33%">
+			
+		</div>
+		
+		
+		<div id="submitDiv" align="center" style="clear:both; width: 100%; height:50px; vertical-align: middle;">
 			<input type="submit" value="Zapisz"/>
+		</div>
 		</fieldset>
 	</sf:form>
 	
