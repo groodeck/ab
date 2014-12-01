@@ -29,6 +29,7 @@ public class SelectValueService {
 		results.put("cities", cityService.getCityDictionary());
 		results.put("packages", packageService.getPackageDictionary());
 		results.put("contractDurations", durationService.getDurationDictionary());
+		results.put("deviceTypes", DeviceType.asValueMap());
 		return results;
 	}
 
