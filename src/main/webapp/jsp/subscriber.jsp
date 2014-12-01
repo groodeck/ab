@@ -100,7 +100,14 @@
 		<h3>Dane abonenta</h3>
 		<table width="100%">
 			<tr>
-				<th align="right" style="width: 40%"><label for="client_type">Typ klienta:</label></th>
+				<th align="right" style="width: 40%"><label for="subscriber_idn">Nr abonenta:</label></th>
+				<td>
+					<sf:input path="subscriberIdn" size="15" id="subscriber_idn" disabled="true" />
+					<sf:hidden path="subscriberIdn"/> 
+				</td>
+			</tr>
+			<tr>
+				<th align="right"><label for="client_type">Typ klienta:</label></th>
 				<td>
 					<sf:select path="clientType" items="${clientTypes}" id="client_type" onchange="changeRowsVisible(this)"/>
 				</td>
@@ -261,14 +268,7 @@
 		<h3>Umowa</h3>
 		<table style="font-family:sans-serif;"  width="100%" >
 			<tr>
-				<th align="right" style="width: 40%"><label for="subscriber_idn">Nr abonenta:</label></th>
-				<td>
-					<sf:input path="subscriberIdn" size="15" id="subscriber_idn" disabled="true" />
-					<sf:hidden path="subscriberIdn"/> 
-				</td>
-			</tr>
-			<tr>
-				<th align="right"><label for="contract_idn">Nr umowy:</label></th>
+				<th align="right" style="width: 40%"><label for="contract_idn">Nr umowy:</label></th>
 				<td>
 					<sf:input path="currentContract.contractIdn" size="15" id="contract_idn" disabled="true" />
 					<sf:hidden path="currentContract.contractIdn"/> 
@@ -328,6 +328,14 @@
 			<tr>
 				<th align="right"><label for="balance">Saldo:</label></th>
 				<td><sf:input path="balance" size="15" id="balance" /></td>
+			</tr>
+			<tr>
+				<th align="right"><label for="balance">Uwagi:</label></th>
+				<td><sf:textarea rows="3" path="comment" cols="40" id="comment" /></td>
+			</tr>
+			<tr>
+				<th align="right"><label for="balance">Dodatkowe uwagi:</label></th>
+				<td><sf:textarea rows="3" path="additionalComment" cols="40" id="additionalComment" /></td>
 			</tr>
 		</table>
 		

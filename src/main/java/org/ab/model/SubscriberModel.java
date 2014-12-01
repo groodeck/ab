@@ -19,6 +19,8 @@ public class SubscriberModel {
 
 	private Contract currentContract;
 	private String balance;
+	private String comment;
+	private String additionalComment;
 	
 	private Address mainAddress;
 	private Address serviceAddress;
@@ -165,6 +167,22 @@ public class SubscriberModel {
 
 	public void setDevices(List<Device> devices) {
 		this.devices = devices;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public String getAdditionalComment() {
+		return additionalComment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public void setAdditionalComment(String additionalComment) {
+		this.additionalComment = additionalComment;
 	}
 
 }
