@@ -9,13 +9,14 @@
 		http://www.springframework.org/schema/security 
 		http://www.springframework.org/schema/security/spring-security.xsd">
 	
-	<http auto-config='true'>
-		<intercept-url pattern="/login*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-	    <intercept-url pattern="/**" access="ROLE_AB_USER" />
+	<http auto-config='true' use-expressions="true">
+		<intercept-url pattern="/login*" access="isAnonymous()"/>
+	    <intercept-url pattern="/**" access="hasRole('ROLE_AB_USER')" />
 	    <form-login login-page='/login'
 	    	default-target-url='/subscribers' 
 	    	always-use-default-target="true" 
 	    	authentication-failure-url="/login"/>
+	    <logout />
 	</http>
 	
 	<authentication-manager>
