@@ -50,6 +50,8 @@ create table subscriber(
 	regon varchar(15),
 	nip varchar(15),
 	balance decimal,
+	comment varchar(200),
+	additionalComment varchar(200),
 );
 
 create table contractPackage(
@@ -76,4 +78,13 @@ create table address(
  	houseNo varchar(10),
  	apartmentNo varchar(10),
  	subscriberId integer,
+);
+
+create table device(
+	deviceId integer not null IDENTITY PRIMARY KEY,
+ 	deviceType varchar(15) not null,
+ 	serialNumber varchar(30),
+ 	mac varchar(20),
+ 	ip varchar(20),
+ 	contractId integer,
 );

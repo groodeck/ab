@@ -31,12 +31,9 @@ public class SubscriberModel {
 	private List<String> phoneNumbers;
 	private List<String> emails;
 	
-	private List<Device> devices;
-	
 	public SubscriberModel(){
 		phoneNumbers = Lists.newArrayList("");
 		emails = Lists.newArrayList("");
-		devices = Lists.newArrayList(new Device());
 		currentContract = new Contract();
 	}
 	
@@ -159,14 +156,6 @@ public class SubscriberModel {
 
 	public void setSubscriberIdn(String subscriberIdn) {
 		this.subscriberIdn = subscriberIdn;
-	}
-
-	public List<Device> getDevices() {
-		return devices;
-	}
-
-	public void setDevices(List<Device> devices) {
-		this.devices = devices;
 	}
 
 	public String getComment() {

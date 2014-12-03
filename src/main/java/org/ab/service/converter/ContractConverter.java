@@ -19,6 +19,9 @@ public class ContractConverter {
 	@Autowired
 	private ContractPackageDao packageDao;
 	
+	@Autowired
+	private DeviceConverter deviceConverter;
+	
 	public Contract convert(org.ab.model.Contract model) {
 		final Contract entity = new Contract();
 		
@@ -63,6 +66,9 @@ public class ContractConverter {
 		if(isNotBlank(activationFee)){
 			entity.setActivationFee(new BigDecimal(activationFee));
 		}
+		
+		entity.setDevices(deviceConverter.convert(model.getDevices()));
+		
 		return entity;
 	}
 

@@ -1,5 +1,9 @@
 package org.ab.model;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 public class Contract {
 
 	private String contractId;
@@ -13,6 +17,11 @@ public class Contract {
 	private String contractSubscription;
 	private String installationFee;
 	private String activationFee;
+	private List<Device> devices;
+	
+	public Contract(){
+		devices = Lists.newArrayList(new Device());
+	}
 	
 	public String getContractIdn() {
 		return contractIdn;
@@ -80,5 +89,10 @@ public class Contract {
 	public void setActivationFee(String activationFee) {
 		this.activationFee = activationFee;
 	}
-	
+	public List<Device> getDevices() {
+		return devices;
+	}
+	public void setDevices(List<Device> devices) {
+		this.devices = devices;
+	}
 }

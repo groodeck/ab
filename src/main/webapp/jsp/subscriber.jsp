@@ -29,10 +29,10 @@
 	 			var tableRowSet = $('#deviceTable tr');
 	 			var rowCount = tableRowSet.length-1;
 				tableRowSet.last().after(
-					 '<tr><td><select name="devices['+rowCount+'].deviceType" id="devices_'+rowCount+'_deviceType" ></select></td>'
-				   + '<td><input name="devices['+rowCount+'].serialNumber" size="20"/></td>'
-				   + '<td><input name="devices['+rowCount+'].mac" size="20"/></td>'
-				   + '<td><input name="devices['+rowCount+'].ip" size="20"/></td></tr>');
+					 '<tr><td><select name="currentContract.devices['+rowCount+'].deviceType" id="devices_'+rowCount+'_deviceType" ></select></td>'
+				   + '<td><input name="currentContract.devices['+rowCount+'].serialNumber" size="20"/></td>'
+				   + '<td><input name="currentContract.devices['+rowCount+'].mac" size="20"/></td>'
+				   + '<td><input name="currentContract.devices['+rowCount+'].ip" size="20"/></td></tr>');
 				$("#devices_0_deviceType").find('option').clone().appendTo("#devices_"+rowCount+"_deviceType");
 		 	}
 		 	
@@ -347,16 +347,16 @@
 				<td>Nr MAC</td>
 				<td>IP adres</td>
 			</tr>
-			<c:forEach var="device" items="${subscriber.devices}" varStatus="status">
+			<c:forEach var="device" items="${subscriber.currentContract.devices}" varStatus="status">
 			<tr>
 				<td>
-					<sf:select path="devices[${status.index}].deviceType" items="${deviceTypes}" id="devices_${status.index}_deviceType" /></td>
+					<sf:select path="currentContract.devices[${status.index}].deviceType" items="${deviceTypes}" id="devices_${status.index}_deviceType" /></td>
 				<td>
-					<sf:input path="devices[${status.index}].serialNumber" size="20"/></td>
+					<sf:input path="currentContract.devices[${status.index}].serialNumber" size="20"/></td>
 				<td>
-					<sf:input path="devices[${status.index}].mac" size="20"/></td>
+					<sf:input path="currentContract.devices[${status.index}].mac" size="20"/></td>
 				<td>
-					<sf:input path="devices[${status.index}].ip" size="20"/></td>
+					<sf:input path="currentContract.devices[${status.index}].ip" size="20"/></td>
 					
 				<c:if test="${status.first}">
 					<td valign="top">

@@ -70,6 +70,12 @@ public class Subscriber {
     @JoinColumn(name="subscriberId")
 	private Set<Address> addresses;
 
+	@Column(name="comment")
+	private String comment;
+	
+	@Column(name="additionalComment")
+	private String additionalComment;
+	
 	public Integer getSubscriberId() {
 		return subscriberId;
 	}
@@ -180,6 +186,22 @@ public class Subscriber {
 
 	public void setAddresses(Set<Address> addresses) {
 		this.addresses = addresses;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public String getAdditionalComment() {
+		return additionalComment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public void setAdditionalComment(String additionalComment) {
+		this.additionalComment = additionalComment;
 	}
 	
 }

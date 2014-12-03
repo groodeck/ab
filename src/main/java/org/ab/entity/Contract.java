@@ -1,7 +1,9 @@
 package org.ab.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,10 +13,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.ab.model.dictionary.ContractStatus;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
@@ -68,6 +70,10 @@ public class Contract {
 	
 	@Column(name="active")
 	private boolean active;
+	
+	@OneToMany(cascade={CascadeType.ALL})
+    @JoinColumn(name="contractId")
+	private List<Device> devices;
 	
 	public Integer getContractId() {
 		return contractId;
@@ -171,6 +177,14 @@ public class Contract {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public List<Device> getDevices() {
+		return devices;
+	}
+
+	public void setDevices(List<Device> devices) {
+		this.devices = devices;
 	}
 	
 	
