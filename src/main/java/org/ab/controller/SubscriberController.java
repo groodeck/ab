@@ -67,8 +67,10 @@ public class SubscriberController {
     public String handleSaveAction(final SubscriberModel subscriber, final Model model) {
 		System.out.println("saving subscriber " + subscriber);
 		subscriberService.save(subscriber);
+		model.addAttribute("subscriber", subscriber);
+		model.addAllAttributes(selectValuesService.getSubscriberDictionaries());
 		model.addAttribute("uiMessage", "Zapisano dane klienta i umowy");
-		return "subscribers";
+		return "subscriber";
     }
 	
 	

@@ -1,16 +1,16 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
 	xmlns:s="http://www.springframework.org/tags"
 	xmlns:sf="http://www.springframework.org/tags/form"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:custom="urn:jsptagdir:/WEB-INF/tags">
    	<jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
      
  <html xmlns="http://www.w3.org/1999/xhtml">
  
  <body> 
    
-   <c:if test="${not empty uiMessage}">
-   		<h2><c:out value="${uiMessage}"/></h2>
-   </c:if>
+   <custom:message uiMessage="${uiMessage}"/>
+   
    <h2>Abonenci</h2>
    
 		<table style="font-family:sans-serif;" >
@@ -28,8 +28,6 @@
 				</td>
 			</tr>
 		</table>
-		
-		
 	
 	
 </body>

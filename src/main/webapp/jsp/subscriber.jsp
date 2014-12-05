@@ -92,6 +92,9 @@
  </jsp:text>
 	 
  <body> 
+  
+  	<custom:message uiMessage="${uiMessage}"/>
+  
    <h2>Abonent</h2>
    <sf:form method="post" action="/subscriber/save" modelAttribute="subscriber" >
 		<fieldset>
