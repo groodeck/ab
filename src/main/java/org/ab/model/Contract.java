@@ -18,9 +18,12 @@ public class Contract {
 	private String installationFee;
 	private String activationFee;
 	private List<Device> devices;
+	private String user;
+	private boolean active;
 	
 	public Contract(){
 		devices = Lists.newArrayList(new Device());
+		active = true;
 	}
 	
 	public String getContractIdn() {
@@ -94,5 +97,21 @@ public class Contract {
 	}
 	public void setDevices(List<Device> devices) {
 		this.devices = devices;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 }

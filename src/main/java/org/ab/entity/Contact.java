@@ -15,13 +15,13 @@ import org.ab.model.dictionary.ContactType;
 
 @Entity
 @Table(name="Contact")
-public class Contact {
+public class Contact{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	@Column(name="contactId")
 	private Integer contactId;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name="contactType")
 	private ContactType contactType;
@@ -37,6 +37,9 @@ public class Contact {
 		return contactId;
 	}
 
+	public Contact(){
+	}
+	
 	public Contact(ContactType contactType, String contact) {
 		this.contactType = contactType;
 		this.contact = contact;

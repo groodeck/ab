@@ -10,14 +10,15 @@ import org.springframework.stereotype.Component;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 @Component
 public class ContactConverter {
 
-	public Set<Contact> convert(final List<String> phones,
+	public List<Contact> convert(final List<String> phones,
 			final List<String> emails) {
-		final Set<Contact> contacts = Sets.newHashSet();
+		final List<Contact> contacts = Lists.newArrayList();
 		if (phones != null) {
 			contacts.addAll(convertPhones(phones));
 		}

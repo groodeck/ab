@@ -12,6 +12,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -39,7 +40,30 @@ public class SubscriberController {
 		model.addAllAttributes(selectValuesService.getSubscriberDictionaries());
 		return "subscriber";
     }
+	
+	@RequestMapping("/edit/{subscriberId}")
+    public String handleEditSubscriber(@PathVariable int subscriberId, final Model model) {
+		final SubscriberModel subscriber = subscriberService.getSubscriberDetails(subscriberId);
+		if(subscriber == null){
+			model.addAttribute("uiMessage", "Nie mo¿na pobraæ danych abonenta");
+			return "subscribers";
+		} else {
+			model.addAttribute("subscriber", subscriber);
+			model.addAllAttributes(selectValuesService.getSubscriberDictionaries());
+			return "subscriber";
+		}
+    }
 
+	@RequestMapping("/save")
+    public String handleSaveAction(final SubscriberModel subscriber, final Model model) {
+		System.out.println("saving subscriber " + subscriber);
+		subscriberService.save(subscriber);
+		model.addAttribute("subscriber", subscriber);
+		model.addAllAttributes(selectValuesService.getSubscriberDictionaries());
+		model.addAttribute("uiMessage", "Zapisano dane klienta i umowy");
+		return "subscriber";
+    }
+	
 	private void initSubscriber(final SubscriberModel newSubscriber) {
 		newSubscriber.setSubscriberIdn(generateNewIdn());
 		final LocalDate today = LocalDate.now();
@@ -62,16 +86,4 @@ public class SubscriberController {
 		}
 		return result;
 	}
-
-	@RequestMapping("/save")
-    public String handleSaveAction(final SubscriberModel subscriber, final Model model) {
-		System.out.println("saving subscriber " + subscriber);
-		subscriberService.save(subscriber);
-		model.addAttribute("subscriber", subscriber);
-		model.addAllAttributes(selectValuesService.getSubscriberDictionaries());
-		model.addAttribute("uiMessage", "Zapisano dane klienta i umowy");
-		return "subscriber";
-    }
-	
-	
 }

@@ -1,7 +1,9 @@
 -- nie testowane
 create table Users(
+	userId integer(10) not null,
 	username varchar(45) not null,
   	password varchar(45) not null,
+  	name varchar(60) not null,
   	enabled tinyint(3) not null
 )
 
@@ -36,6 +38,7 @@ create table contract(
 	activationFee decimal,
 	subscriberId integer,
 	active bit not null default 0,
+	userId integer,
 );
 
 create table subscriber(

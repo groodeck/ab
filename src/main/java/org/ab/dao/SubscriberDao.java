@@ -14,8 +14,18 @@ public class SubscriberDao {
 	@PersistenceContext
 	private EntityManager em;
 	
-	public void save(final Subscriber subscriber) {
-		em.persist(subscriber);
+	public Integer save(final Subscriber subscriber) {
+		//TODO sprawdz poprzednie podejscie bez wyciagania encji przed konwersj¹
+		if(subscriber.getSubscriberId() != null){
+			em.merge(subscriber);
+		} else {
+			em.persist(subscriber);
+		}
+		return subscriber.getSubscriberId();
+	}
+
+	public Subscriber getSubscriber(int subscriberId) {
+		return em.find(Subscriber.class, subscriberId);
 	}
 	
 }

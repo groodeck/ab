@@ -1,5 +1,7 @@
 package org.ab.model;
 
+import org.apache.commons.lang.StringUtils;
+
 public class Address {
 
 	private String city;
@@ -39,4 +41,18 @@ public class Address {
 		this.apartamentNo = apartamentNo;
 	}
 	
+	public String getStreetDetails(){
+		if(StringUtils.isNotBlank(street)){
+			final StringBuilder sb = new StringBuilder(street);
+			if(StringUtils.isNotBlank(houseNo)){
+				sb.append(" " + houseNo);
+			}
+			if(StringUtils.isNotBlank(apartamentNo)){
+				sb.append("/" + apartamentNo);
+			}
+			return sb.toString();
+		} else {
+			return "";
+		}
+	}
 }

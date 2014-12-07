@@ -1,6 +1,7 @@
 package org.ab.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.ab.model.dictionary.ClientType;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 @Entity
 @Table(name="Subscriber")
@@ -58,17 +62,17 @@ public class Subscriber {
 	@Column(name="balance")
 	private BigDecimal balance;
 	
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
     @JoinColumn(name="subscriberId")
-	private Set<Contract> contracts;
+	private List<Contract> contracts;
 	
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
     @JoinColumn(name="subscriberId")
-	private Set<Contact> contacts;
+	private List<Contact> contacts;
 	
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
     @JoinColumn(name="subscriberId")
-	private Set<Address> addresses;
+	private List<Address> addresses;
 
 	@Column(name="comment")
 	private String comment;
@@ -76,6 +80,11 @@ public class Subscriber {
 	@Column(name="additionalComment")
 	private String additionalComment;
 	
+	public Subscriber(){
+		contracts = Lists.newArrayList();
+		contacts = Lists.newArrayList();
+		addresses = Lists.newArrayList();
+	}
 	public Integer getSubscriberId() {
 		return subscriberId;
 	}
@@ -120,7 +129,7 @@ public class Subscriber {
 		return balance;
 	}
 
-	public Set<Contract> getContracts() {
+	public List<Contract> getContracts() {
 		return contracts;
 	}
 
@@ -168,23 +177,23 @@ public class Subscriber {
 		this.balance = balance;
 	}
 
-	public void setContracts(Set<Contract> contract) {
+	public void setContracts(List<Contract> contract) {
 		this.contracts = contract;
 	}
 
-	public Set<Contact> getContacts() {
+	public List<Contact> getContacts() {
 		return contacts;
 	}
 
-	public void setContacts(Set<Contact> contacts) {
+	public void setContacts(List<Contact> contacts) {
 		this.contacts = contacts;
 	}
 
-	public Set<Address> getAddresses() {
+	public List<Address> getAddresses() {
 		return addresses;
 	}
 
-	public void setAddresses(Set<Address> addresses) {
+	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
 	}
 
@@ -203,5 +212,4 @@ public class Subscriber {
 	public void setAdditionalComment(String additionalComment) {
 		this.additionalComment = additionalComment;
 	}
-	
 }

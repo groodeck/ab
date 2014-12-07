@@ -45,6 +45,9 @@ public class Address {
     @JoinColumn(name="subscriberId", insertable=false, updatable=false, nullable=false)
 	private Subscriber subscriber;
 
+	public Address(){
+	}
+	
 	public Address(final AddressType addressType, final String city, final String zipCode,
 			final String street, final String houseNo, final String apartmentNo) {
 		this.addressType = addressType;

@@ -2,6 +2,9 @@ package org.ab.model;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 public class SubscriberModel {
@@ -174,4 +177,15 @@ public class SubscriberModel {
 		this.additionalComment = additionalComment;
 	}
 
+	public String getEffectiveName(){
+		if(StringUtils.isNotBlank(companyName)){
+			return companyName;
+		} else {
+			return Joiner.on(" ").join(name, surname);  
+		}
+	}
+	
+	public String getPhoneList(){
+		return Joiner.on("<br/>").join(phoneNumbers);
+	}
 }

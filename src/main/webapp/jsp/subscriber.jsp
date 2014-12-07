@@ -101,6 +101,9 @@
 		
 		<div id="subscriberDataDiv" align="center" style="float:left; width: 50%;">
 		<h3>Dane abonenta</h3>
+		
+		<sf:hidden path="subscriberId"/>
+		
 		<table width="100%">
 			<tr>
 				<th align="right" style="width: 40%"><label for="subscriber_idn">Nr abonenta:</label></th>

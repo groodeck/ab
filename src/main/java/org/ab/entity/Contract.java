@@ -65,7 +65,7 @@ public class Contract {
 	private BigDecimal activationFee;
 
 	@ManyToOne
-    @JoinColumn(name="subscriberId", insertable=false, updatable=false, nullable=false)
+    @JoinColumn(name="subscriberId", insertable=false, updatable=true, nullable=true)
 	private Subscriber subscriber;
 	
 	@Column(name="active")
@@ -74,6 +74,10 @@ public class Contract {
 	@OneToMany(cascade={CascadeType.ALL})
     @JoinColumn(name="contractId")
 	private List<Device> devices;
+	
+	@ManyToOne
+	@JoinColumn(name="userId")
+	private User user;
 	
 	public Integer getContractId() {
 		return contractId;
@@ -187,5 +191,12 @@ public class Contract {
 		this.devices = devices;
 	}
 	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 	
 }
