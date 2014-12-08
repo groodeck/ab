@@ -21,13 +21,7 @@ public class SubscriberService {
 	
 	@Transactional
 	public void save(final SubscriberModel subscriberModel) {
-		final Subscriber subscriber;
-		if(StringUtils.isNotBlank(subscriberModel.getSubscriberId())){
-			subscriber = subscriberDao.getSubscriber(Integer.parseInt(subscriberModel.getSubscriberId()));
-		} else {
-			subscriber = new Subscriber();
-		}
-		subscriberConverter.convert(subscriberModel, subscriber);
+		final Subscriber subscriber = subscriberConverter.convert(subscriberModel);
 		final Integer id = subscriberDao.save(subscriber);
 		subscriberModel.setSubscriberId(id.toString());
 	}

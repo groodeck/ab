@@ -124,8 +124,8 @@ public class SubscriberConverter {
 		
 	};
 	
-	public Subscriber convert(org.ab.model.SubscriberModel model, final Subscriber entity) {
-		
+	public Subscriber convert(org.ab.model.SubscriberModel model) {
+		final Subscriber entity = new Subscriber();
 		final String subscriberId = model.getSubscriberId();
 		if(isNotBlank(subscriberId)){
 			entity.setSubscriberId(Integer.parseInt(subscriberId));
