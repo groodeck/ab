@@ -54,17 +54,17 @@ public class ContractConverter {
 		
 		final String contractSubscription = model.getContractSubscription();
 		if(isNotBlank(contractSubscription)){
-			entity.setContractSubscription(new BigDecimal(contractSubscription));
+			entity.setContractSubscription(new BigDecimal(asNumber(contractSubscription)));
 		}
 		
 		final String installationFee = model.getInstallationFee();
 		if(isNotBlank(installationFee)){
-			entity.setInstallationFee(new BigDecimal(installationFee));
+			entity.setInstallationFee(new BigDecimal(asNumber(installationFee)));
 		}
 		
 		final String activationFee = model.getActivationFee();
 		if(isNotBlank(activationFee)){
-			entity.setActivationFee(new BigDecimal(activationFee));
+			entity.setActivationFee(new BigDecimal(asNumber(activationFee)));
 		}
 		
 		entity.setDevices(deviceConverter.convert(model.getDevices()));
@@ -72,6 +72,10 @@ public class ContractConverter {
 		entity.setActive(model.isActive());
 		
 		return entity;
+	}
+
+	private String asNumber(final String numericString) {
+		return numericString.replaceAll(",", ".");
 	}
 
 	public org.ab.model.Contract convert(final Contract entity) {

@@ -69,6 +69,7 @@ public class SubscriberController {
 		final LocalDate today = LocalDate.now();
 		final Contract currentContract = newSubscriber.getCurrentContract();
 		currentContract.setContractSignDate(today.toString("yyyy-MM-dd"));
+		currentContract.setContractActivationDate(today.toString("yyyy-MM-dd"));
 		long nextContractId = contractService.getContractsSignCount(today) + 1;
 		currentContract.setContractIdn(today.toString("ddMMyyyy") + "-" + nextContractId);
 	}

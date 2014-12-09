@@ -30,9 +30,9 @@
 	 			var rowCount = tableRowSet.length-1;
 				tableRowSet.last().after(
 					 '<tr><td><select name="currentContract.devices['+rowCount+'].deviceType" id="devices_'+rowCount+'_deviceType" ></select></td>'
-				   + '<td><input name="currentContract.devices['+rowCount+'].serialNumber" size="20"/></td>'
-				   + '<td><input name="currentContract.devices['+rowCount+'].mac" size="20"/></td>'
-				   + '<td><input name="currentContract.devices['+rowCount+'].ip" size="20"/></td></tr>');
+				   + '<td><input name="currentContract.devices['+rowCount+'].serialNumber" size="15"/></td>'
+				   + '<td><input name="currentContract.devices['+rowCount+'].mac" size="15"/></td>'
+				   + '<td><input name="currentContract.devices['+rowCount+'].ip" size="15"/></td></tr>');
 				$("#devices_0_deviceType").find('option').clone().appendTo("#devices_"+rowCount+"_deviceType");
 		 	}
 		 	
@@ -86,6 +86,8 @@
 			    changeRowsVisible($( "#client_type" ));
 			    changeAddressVisible($( "#correspAddressCheckbox" ), 'correspondenceAddressTable');
 			    changeAddressVisible($( "#serviceAddressSet" ), 'serviceAddressTable');
+			    refreshContractEndDate();
+			    refreshContractPack();
 			});
 	 	</script>
  	]]>
@@ -358,11 +360,11 @@
 				<td>
 					<sf:select path="currentContract.devices[${status.index}].deviceType" items="${deviceTypes}" id="devices_${status.index}_deviceType" /></td>
 				<td>
-					<sf:input path="currentContract.devices[${status.index}].serialNumber" size="20"/></td>
+					<sf:input path="currentContract.devices[${status.index}].serialNumber" size="15"/></td>
 				<td>
-					<sf:input path="currentContract.devices[${status.index}].mac" size="20"/></td>
+					<sf:input path="currentContract.devices[${status.index}].mac" size="15"/></td>
 				<td>
-					<sf:input path="currentContract.devices[${status.index}].ip" size="20"/></td>
+					<sf:input path="currentContract.devices[${status.index}].ip" size="15"/></td>
 					
 				<c:if test="${status.first}">
 					<td valign="top">

@@ -3,9 +3,7 @@ package org.ab.service.converter;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -25,7 +23,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 @Component
 public class SubscriberConverter {
@@ -149,7 +146,7 @@ public class SubscriberConverter {
 		
 		final String balance = model.getBalance();
 		if(isNotBlank(balance)){
-			entity.setBalance(new BigDecimal(balance));
+			entity.setBalance(new BigDecimal(balance.replaceAll(",", ".")));
 		}
 		
 		final List<Contract> contracts = Lists.newArrayList();
@@ -166,12 +163,32 @@ public class SubscriberConverter {
 		entity.getContacts().addAll(contactConverter.convert(phones, emails));
 		
 		final Address mainAddress = model.getMainAddress();
-		final Address serviceAddress = model.getServiceAddress();
-		final Address correspondanceAddress = model.getCorrespondenceAddress();
+		final Address serviceAddress = getServiceAddressIfSet(model);
+		final Address correspondanceAddress = getCorrespondenceAddressIfSet(model);
 		entity.getAddresses().clear();
 		entity.getAddresses().addAll(
 				addressConverter.convert(mainAddress, serviceAddress, correspondanceAddress));
+		
+		entity.setComment(model.getComment());
+		entity.setAdditionalComment(model.getAdditionalComment());
+		
 		return entity;
+	}
+
+	private Address getCorrespondenceAddressIfSet(final org.ab.model.SubscriberModel model) {
+		if(model.isCorrespondenceAddressSet()){
+			return model.getCorrespondenceAddress();
+		} else {
+			return null;
+		}
+	}
+
+	private Address getServiceAddressIfSet(final org.ab.model.SubscriberModel model) {
+		if(model.isServiceAddressSet()){
+			return model.getServiceAddress();
+		} else {
+			return null;
+		}
 	}
 
 	@Transactional
