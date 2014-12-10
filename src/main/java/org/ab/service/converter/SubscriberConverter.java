@@ -121,7 +121,7 @@ public class SubscriberConverter {
 		
 	};
 	
-	public Subscriber convert(org.ab.model.SubscriberModel model) {
+	public Subscriber convert(org.ab.model.SubscriberModel model, final String userName) {
 		final Subscriber entity = new Subscriber();
 		final String subscriberId = model.getSubscriberId();
 		if(isNotBlank(subscriberId)){
@@ -152,7 +152,7 @@ public class SubscriberConverter {
 		final List<Contract> contracts = Lists.newArrayList();
 		org.ab.model.Contract currentContract = model.getCurrentContract();
 		if(currentContract != null){
-			contracts.add(contractConverter.convert(currentContract));
+			contracts.add(contractConverter.convert(currentContract, userName));
 		}
 		entity.getContracts().clear();
 		entity.getContracts().addAll(contracts);

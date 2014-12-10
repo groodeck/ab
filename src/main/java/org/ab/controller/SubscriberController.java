@@ -1,5 +1,6 @@
 package org.ab.controller;
 
+import java.security.Principal;
 import java.util.logging.Logger;
 
 import org.ab.model.Contract;
@@ -55,9 +56,9 @@ public class SubscriberController {
     }
 
 	@RequestMapping("/save")
-    public String handleSaveAction(final SubscriberModel subscriber, final Model model) {
+    public String handleSaveAction(final SubscriberModel subscriber, final Model model, final Principal principal) {
 		System.out.println("saving subscriber " + subscriber);
-		subscriberService.save(subscriber);
+		subscriberService.save(subscriber, principal.getName());
 		model.addAttribute("subscriber", subscriber);
 		model.addAllAttributes(selectValuesService.getSubscriberDictionaries());
 		model.addAttribute("uiMessage", "Zapisano dane klienta i umowy");

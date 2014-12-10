@@ -20,8 +20,8 @@ public class SubscriberService {
 	private SubscriberDao subscriberDao;
 	
 	@Transactional
-	public void save(final SubscriberModel subscriberModel) {
-		final Subscriber subscriber = subscriberConverter.convert(subscriberModel);
+	public void save(final SubscriberModel subscriberModel, final String userName) {
+		final Subscriber subscriber = subscriberConverter.convert(subscriberModel, userName);
 		final Integer id = subscriberDao.save(subscriber);
 		subscriberModel.setSubscriberId(id.toString());
 	}

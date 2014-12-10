@@ -12,7 +12,11 @@
 			<a href="/j_spring_security_logout">
     			<button>Wyloguj</button>
 			</a>
-				
+			<br/>
+			
+			<!-- menu -->
+			<a href="/subscribers">Abonenci</a>
+			
 		</security:authorize>
 	</span>
 

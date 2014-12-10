@@ -5,6 +5,7 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 import java.math.BigDecimal;
 
 import org.ab.dao.ContractPackageDao;
+import org.ab.dao.UserDao;
 import org.ab.entity.Contract;
 import org.ab.entity.ContractPackage;
 import org.ab.model.dictionary.ContractStatus;
@@ -20,9 +21,12 @@ public class ContractConverter {
 	private ContractPackageDao packageDao;
 	
 	@Autowired
+	private UserDao userDao;
+	
+	@Autowired
 	private DeviceConverter deviceConverter;
 	
-	public Contract convert(org.ab.model.Contract model) {
+	public Contract convert(org.ab.model.Contract model, final String userName) {
 		final Contract entity = new Contract();
 		
 		entity.setContractIdn(model.getContractIdn());
@@ -71,6 +75,8 @@ public class ContractConverter {
 		
 		entity.setActive(model.isActive());
 		
+		entity.setUser(userDao.findByName(userName));
+		
 		return entity;
 	}
 
@@ -109,10 +115,10 @@ public class ContractConverter {
 		if(entity.getContractSubscription() != null){
 			model.setContractSubscription(entity.getContractSubscription().toPlainString());
 		}
-		model.setDevices(deviceConverter.convertToModel(entity.getDevices()));
 		if(entity.getUser() != null){
 			model.setUser(entity.getUser().getName());
 		}
+		model.setDevices(deviceConverter.convertToModel(entity.getDevices()));
 		
 		return model;
 	}

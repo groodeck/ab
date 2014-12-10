@@ -44,30 +44,32 @@
 		</table>
 		<br/>
 		
-		<table border="1" cellspacing="0" cellpadding="2">
-			<tr>
-				<td>lp</td>
-				<td>Data podpisania umowy</td>
-				<td>Abonent</td>
-				<td>Adres</td>
-				<td>Miejscowość</td>
-				<td>Telefon</td>
-				<td>Data zakończenia umowy</td>
-				<td>Przedstawiciel handlowy</td>
-			</tr>
-			<c:forEach var="subscriber" items="${subscribers}" varStatus="status" >
+		<c:if test="${not empty subscribers}">
+			<table border="1" cellspacing="0" cellpadding="2">
 				<tr>
-					<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${status.index}"/></td>
-					<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.contractSignDate}"/></td>
-					<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.effectiveName}"/></td>
-					<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.mainAddress.streetDetails}"/></td>
-					<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.mainAddress.city}"/></td>
-					<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.phoneList}"/></td>
-					<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.contractEndDate}"/></td>
-					<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.user}"/></td>
+					<td>lp</td>
+					<td>Data podpisania umowy</td>
+					<td>Abonent</td>
+					<td>Adres</td>
+					<td>Miejscowość</td>
+					<td>Telefon</td>
+					<td>Data zakończenia umowy</td>
+					<td>Przedstawiciel handlowy</td>
 				</tr>
-			</c:forEach>
-		</table>
+				<c:forEach var="subscriber" items="${subscribers}" varStatus="status" >
+					<tr>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${status.index + 1}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.contractSignDate}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.effectiveName}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.mainAddress.streetDetails}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.mainAddress.city}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.phoneList}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.contractEndDate}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.user}"/></td>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:if>
 	
 	
 </body>
