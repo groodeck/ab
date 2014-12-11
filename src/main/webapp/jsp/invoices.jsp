@@ -13,6 +13,7 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> 
  		<script type="text/javascript">
 	 		generateInvoices = function (){
+	 		alert('jestem');
 	 			var month = $('#month').val()
 	 			var year = $('#year').val()
 	 			window.location.href = '/invoices/generate/'+year+'/'+month;
@@ -40,13 +41,11 @@
 				</td>
 				<td width="30"/>
 				<td>
-					Miesiąc(MM): <input id="month" />
-				</td>
-				<td>
-					Rok(YYYY): <input id="year" />
-				</td>
-				<td>
-					<a href="javascript:generateInvoices()"><button>Generuj faktury</button></a>
+					<sf:form method="post" commandName="generationParams" action="/invoices/generate">
+						Miesiąc: <sf:select path="month" items="${months}" id="month" />
+						Rok: <sf:select path="year" items="${years}" id="year" />
+						<button>Generuj faktury</button>
+					</sf:form>
 				</td>
 			</tr>
 		</table>

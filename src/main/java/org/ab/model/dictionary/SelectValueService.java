@@ -37,18 +37,18 @@ public class SelectValueService {
 		return results;
 	}
 
-	public Map<String, Map<String, String>> getInvoicesDictionaries() {
-		final Map<String, Map<String, String>> results = Maps.newHashMap();
+	public Map<String, ?> getInvoicesDictionaries() {
+		final Map<String, Map> results = Maps.newHashMap();
 		results.put("months", Month.asValueMap());
 		results.put("years", getYearValueMap());
 		return results;
 	}
 
-	private Map<String, String> getYearValueMap() {
+	private Map<Integer, String> getYearValueMap() {
 		final LocalDate now = LocalDate.now();
-		final Map<String, String> valueMap = Maps.newHashMap();
+		final Map<Integer, String> valueMap = Maps.newTreeMap();
 		for(int year = START_YEAR; year <= now.getYear()+1; year++){
-			valueMap.put(String.valueOf(year), String.valueOf(year));
+			valueMap.put(year, String.valueOf(year));
 		}
 		return valueMap;
 	}

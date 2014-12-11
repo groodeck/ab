@@ -1,5 +1,7 @@
 package org.ab.model.dictionary;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -26,10 +28,10 @@ public enum Month {
 		this.desc = desc;
 	}
 	
-	public static Map<String, String> asValueMap(){
-		final Map<String, String> valueMap = Maps.newHashMap();
+	public static Map<Integer, String> asValueMap(){
+		final Map<Integer, String> valueMap = Maps.newTreeMap();
 		for(final Month type : values()){
-			valueMap.put(String.valueOf(type.getMonthNumber()), type.getDesc());
+			valueMap.put(type.getMonthNumber(), type.getDesc());
 		}
 		return valueMap;
 	}
