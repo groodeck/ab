@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC
 	"-//Apache Seftware Foundation//DTD Tiles Configuration 2.1//EN"
-	"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+	"src/main/webapp/WEB-INF/dtd/tiles-config_2_1.dtd">
 	
 	<tiles-definitions>
 
 		<definition name="template" template="/jsp/main_template.jsp">
 			<put-attribute name="header" value="/jsp/header.jsp"/>
+			<put-attribute name="menu" value="/jsp/menu.jsp"/>
 		</definition>
 		
 		<definition name="subscribers" extends="template">
@@ -19,6 +20,10 @@
 		
 		<definition name="login" extends="template">
 			<put-attribute name="content" value="/jsp/login.jsp"/>
+		</definition>
+		
+		<definition name="invoices" extends="template">
+			<put-attribute name="content" value="/jsp/invoices.jsp"/>
 		</definition>
 		
 	</tiles-definitions>

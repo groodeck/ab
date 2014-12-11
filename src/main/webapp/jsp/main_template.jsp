@@ -23,6 +23,9 @@
 	<div id="banner">
 		<tiles:insertAttribute name="header" />
 	</div>
+	<div id="menu">
+		<tiles:insertAttribute name="menu" />
+	</div>
 	<div id="page">
 		<tiles:insertAttribute name="content" />
 	</div>

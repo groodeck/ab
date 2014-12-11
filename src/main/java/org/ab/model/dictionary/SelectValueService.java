@@ -1,10 +1,12 @@
 package org.ab.model.dictionary;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.ab.service.CityService;
 import org.ab.service.ContractPackageService;
 import org.ab.service.DurationService;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,8 @@ import com.google.common.collect.Maps;
 
 @Component
 public class SelectValueService {
+
+	private static final int START_YEAR = 2010;
 
 	@Autowired
 	private CityService cityService;
@@ -22,7 +26,7 @@ public class SelectValueService {
 	@Autowired
 	private DurationService durationService;
 	
-	public Map<String, ?> getSubscriberDictionaries() {
+	public Map<String, Map<String, String>> getSubscriberDictionaries() {
 		final Map<String, Map<String, String>> results = Maps.newHashMap();
 		results.put("clientTypes", ClientType.asValueMap());
 		results.put("contractStatuses", ContractStatus.asValueMap());
@@ -31,6 +35,22 @@ public class SelectValueService {
 		results.put("contractDurations", durationService.getDurationDictionary());
 		results.put("deviceTypes", DeviceType.asValueMap());
 		return results;
+	}
+
+	public Map<String, Map<String, String>> getInvoicesDictionaries() {
+		final Map<String, Map<String, String>> results = Maps.newHashMap();
+		results.put("months", Month.asValueMap());
+		results.put("years", getYearValueMap());
+		return results;
+	}
+
+	private Map<String, String> getYearValueMap() {
+		final LocalDate now = LocalDate.now();
+		final Map<String, String> valueMap = Maps.newHashMap();
+		for(int year = START_YEAR; year <= now.getYear()+1; year++){
+			valueMap.put(String.valueOf(year), String.valueOf(year));
+		}
+		return valueMap;
 	}
 
 
