@@ -1,10 +1,14 @@
 package org.ab.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -27,6 +31,10 @@ public class ContractPackage {
 	@Column(name="installationFee")
 	private BigDecimal installationFee;
 
+	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
+    @JoinColumn(name="packageId")
+	private List<Service> services;
+	
 	public Integer getPackageId() {
 		return packageId;
 	}
@@ -65,6 +73,14 @@ public class ContractPackage {
 
 	public void setInstallationFee(BigDecimal installationFee) {
 		this.installationFee = installationFee;
+	}
+
+	public List<Service> getServices() {
+		return services;
+	}
+
+	public void setServices(List<Service> services) {
+		this.services = services;
 	}
 	
 }

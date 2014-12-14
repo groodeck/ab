@@ -71,7 +71,7 @@ public class Contract {
 	@Column(name="active")
 	private boolean active;
 	
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
     @JoinColumn(name="contractId")
 	private List<Device> devices;
 	

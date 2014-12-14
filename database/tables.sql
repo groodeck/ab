@@ -91,3 +91,11 @@ create table device(
  	ip varchar(20),
  	contractId integer,
 );
+
+create table service(
+	serviceId integer not null IDENTITY PRIMARY KEY,
+ 	serviceName varchar(50) not null,
+ 	vat varchar(30) not null,
+ 	subscriptionNet decimal not null,
+ 	packageId integer,
+);
