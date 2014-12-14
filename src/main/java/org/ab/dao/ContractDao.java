@@ -1,5 +1,7 @@
 package org.ab.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -23,5 +25,15 @@ public class ContractDao {
 
 	public void save(Contract contract) {
 		em.persist(contract);
+	}
+
+	public List<Contract> findContracts(final LocalDate dateFrom, final LocalDate dateTo) {
+		return em.createQuery("from Contract c where "
+				+ "c.contractActivationDate <= :dateFrom "
+				+ "and (c.contractEndDate = null "
+				+ "		or c.contractEndDate >= :dateTo)")
+				.setParameter("dateFrom", dateFrom)
+				.setParameter("dateTo", dateTo)
+				.getResultList();
 	}
 }
