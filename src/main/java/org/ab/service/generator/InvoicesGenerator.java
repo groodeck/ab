@@ -164,5 +164,5 @@ public class InvoicesGenerator {
 		}
 		return prop;
 	}
-
 }
+
