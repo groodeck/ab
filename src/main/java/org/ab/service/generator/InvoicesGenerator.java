@@ -15,6 +15,7 @@ import org.ab.entity.Subscriber;
 import org.ab.model.dictionary.AddressType;
 import org.ab.model.dictionary.ClientType;
 import org.ab.service.generator.Invoice.Builder;
+import org.ab.util.DecimalWriter;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
@@ -58,20 +59,30 @@ public class InvoicesGenerator {
 	private void generateServices(final List<Service> services, final Contract contract,
 			final Builder invoiceBuilder) {
 
-//		BigDecimal total
+		BigDecimal totalNetAmount = BigDecimal.ZERO;
+		BigDecimal totalVatAmount = BigDecimal.ZERO;
+		BigDecimal totalGrossAmount = BigDecimal.ZERO;
 		for(final Service service: services){
 			final BigDecimal netAmount = service.getSubscriptionNet().setScale(2);
 			final BigDecimal vatRate = convertToRate(service.getVat());
 			final BigDecimal vatAmount = netAmount.multiply(vatRate).setScale(2);
+			final BigDecimal grossAmount = netAmount.add(vatAmount);
 			final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
 				.withServiceName(service.getServiceName())
 				.withQuantity(ONE)
 				.withNetAmount(netAmount.toPlainString())
 				.withVatAmount(vatAmount.toPlainString())
-				.withGrossAmount(netAmount.add(vatAmount).toPlainString());
+				.withGrossAmount(grossAmount.toPlainString());
 			invoiceBuilder.withServiceRecord(serviceBuilder.build());
+			totalNetAmount = totalNetAmount.add(netAmount);
+			totalVatAmount = totalVatAmount.add(vatAmount);
+			totalGrossAmount = totalGrossAmount.add(grossAmount);
 		}
-		// TODO Auto-generated method stub
+		invoiceBuilder.withNetAmount(totalNetAmount.toPlainString())
+		.withVatAmount(totalVatAmount.toPlainString())
+		.withGrossAmount(totalGrossAmount.toPlainString())
+		.withGrossAmountWords(DecimalWriter.getDecimalSpoken(totalGrossAmount.toPlainString()));
+
 
 	}
 
