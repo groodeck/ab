@@ -61,8 +61,14 @@ public class Contract {
 	@Column(name="installationFee")
 	private BigDecimal installationFee;
 	
+	@Column(name="installationFeePaid")
+	private Boolean installationFeePaid;
+	
 	@Column(name="activationFee")
 	private BigDecimal activationFee;
+	
+	@Column(name="activationFeePaid")
+	private Boolean activationFeePaid;
 
 	@ManyToOne
     @JoinColumn(name="subscriberId", insertable=false, updatable=true, nullable=true)
@@ -197,6 +203,22 @@ public class Contract {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Boolean getInstallationFeePaid() {
+		return installationFeePaid;
+	}
+
+	public Boolean getActivationFeePaid() {
+		return activationFeePaid;
+	}
+
+	public void setInstallationFeePaid(Boolean installationFeePaid) {
+		this.installationFeePaid = installationFeePaid;
+	}
+
+	public void setActivationFeePaid(Boolean activationFeePaid) {
+		this.activationFeePaid = activationFeePaid;
 	}
 	
 }

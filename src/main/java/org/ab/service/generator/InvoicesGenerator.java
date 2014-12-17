@@ -50,7 +50,6 @@ public class InvoicesGenerator {
 			final ContractPackage contractPackage = contract.getContractPackage();
 			final List<Service> services = contractPackage.getServices();
 			generateServices(services, contract, invoiceBuilder);
-
 			results.add(invoiceBuilder.build());
 		}
 		return results;
@@ -78,12 +77,38 @@ public class InvoicesGenerator {
 			totalVatAmount = totalVatAmount.add(vatAmount);
 			totalGrossAmount = totalGrossAmount.add(grossAmount);
 		}
+		final BigDecimal activationFee = contract.getContractPackage().getActivationFee();
+		if(activationFee != null && activationFee.compareTo(BigDecimal.ZERO) > 0
+				&& (contract.getActivationFeePaid() == null 
+					|| contract.getActivationFeePaid().equals(Boolean.FALSE))){
+			invoiceBuilder.withServiceRecord(new InvoiceServiceRecord.Builder()
+			.withServiceName("Op³ata aktywacyjna")
+			.withQuantity(ONE)
+			.withNetAmount(activationFee.toString())
+			.withGrossAmount(activationFee.toString())
+			.build());
+			totalNetAmount = totalNetAmount.add(activationFee);
+			totalVatAmount = totalVatAmount.add(BigDecimal.ZERO);
+			totalGrossAmount = totalGrossAmount.add(activationFee);
+		}
+		final BigDecimal installationFee = contract.getContractPackage().getInstallationFee();
+		if(installationFee != null && installationFee.compareTo(BigDecimal.ZERO) > 0
+				&& (contract.getInstallationFeePaid() == null 
+					|| contract.getActivationFeePaid().equals(Boolean.FALSE))){
+			invoiceBuilder.withServiceRecord(new InvoiceServiceRecord.Builder()
+			.withServiceName("Op³ata instalacyjna")
+			.withQuantity(ONE)
+			.withNetAmount(installationFee.toString())
+			.withGrossAmount(installationFee.toString())
+			.build());
+			totalNetAmount = totalNetAmount.add(installationFee);
+			totalVatAmount = totalVatAmount.add(BigDecimal.ZERO);
+			totalGrossAmount = totalGrossAmount.add(installationFee);
+		}
 		invoiceBuilder.withNetAmount(totalNetAmount.toPlainString())
-		.withVatAmount(totalVatAmount.toPlainString())
-		.withGrossAmount(totalGrossAmount.toPlainString())
-		.withGrossAmountWords(DecimalWriter.getDecimalSpoken(totalGrossAmount.toPlainString()));
-
-
+			.withVatAmount(totalVatAmount.toPlainString())
+			.withGrossAmount(totalGrossAmount.toPlainString())
+			.withGrossAmountWords(DecimalWriter.getDecimalSpoken(totalGrossAmount.toPlainString()));
 	}
 
 	private BigDecimal convertToRate(final Integer rate) {
