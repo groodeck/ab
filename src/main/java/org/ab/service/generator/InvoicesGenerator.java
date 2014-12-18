@@ -18,6 +18,7 @@ import org.ab.service.generator.Invoice.Builder;
 import org.ab.util.DecimalWriter;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Joiner;
@@ -29,16 +30,15 @@ import com.google.common.collect.Lists;
 @Component
 public class InvoicesGenerator {
 
-	private static final String ONE = "1";
+	@Autowired
+	private InvoiceContentGenerator contentGenerator;
 
-	// 2. for each contract:
-	//	- wygeneruj fakturê z uslug¹/uslugami z kontraktu
-	// 	- dodaj oplate instalacyjna i aktywacyjna jesli nie byla pobrana.
-	// 	- encja faktury w bazie powinna miec pole albo mapowanie do pola z contentem faktury w HTMLu
+	private static final Integer ONE = 1;
+
 	public List<Invoice> generateInvoices(final List<Contract> contracts) {
 		final Properties props = loadProperties("companyDetails.properties");
 		final String city = props.getProperty("company.city");
-		final String currentDate = LocalDate.now().toString();
+		final LocalDate currentDate = LocalDate.now();
 		final List<Invoice> results = Lists.newArrayList();
 		for(final Contract contract : contracts){
 			final Invoice.Builder invoiceBuilder = new Invoice.Builder()
@@ -50,9 +50,16 @@ public class InvoicesGenerator {
 			final ContractPackage contractPackage = contract.getContractPackage();
 			final List<Service> services = contractPackage.getServices();
 			generateServices(services, contract, invoiceBuilder);
-			results.add(invoiceBuilder.build());
+			final Invoice invoice = invoiceBuilder.build();
+			final String html = generateHtmlContent(invoice);
+			invoice.setHtmlContent(html);
+			results.add(invoice);
 		}
 		return results;
+	}
+
+	private String generateHtmlContent(final Invoice invoice) {
+		return this.contentGenerator.generateHtml(invoice);
 	}
 
 	private void generateServices(final List<Service> services, final Contract contract,
@@ -61,59 +68,33 @@ public class InvoicesGenerator {
 		BigDecimal totalNetAmount = BigDecimal.ZERO;
 		BigDecimal totalVatAmount = BigDecimal.ZERO;
 		BigDecimal totalGrossAmount = BigDecimal.ZERO;
+		int serviceCounter = 1;
 		for(final Service service: services){
-			final BigDecimal netAmount = service.getSubscriptionNet().setScale(2);
-			final BigDecimal vatRate = convertToRate(service.getVat());
-			final BigDecimal vatAmount = netAmount.multiply(vatRate).setScale(2);
-			final BigDecimal grossAmount = netAmount.add(vatAmount);
-			final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
-				.withServiceName(service.getServiceName())
-				.withQuantity(ONE)
-				.withNetAmount(netAmount.toPlainString())
-				.withVatAmount(vatAmount.toPlainString())
-				.withGrossAmount(grossAmount.toPlainString());
-			invoiceBuilder.withServiceRecord(serviceBuilder.build());
-			totalNetAmount = totalNetAmount.add(netAmount);
-			totalVatAmount = totalVatAmount.add(vatAmount);
-			totalGrossAmount = totalGrossAmount.add(grossAmount);
-		}
-		final BigDecimal activationFee = contract.getContractPackage().getActivationFee();
-		if(activationFee != null && activationFee.compareTo(BigDecimal.ZERO) > 0
-				&& (contract.getActivationFeePaid() == null 
-					|| contract.getActivationFeePaid().equals(Boolean.FALSE))){
-			invoiceBuilder.withServiceRecord(new InvoiceServiceRecord.Builder()
-			.withServiceName("Op³ata aktywacyjna")
-			.withQuantity(ONE)
-			.withNetAmount(activationFee.toString())
-			.withGrossAmount(activationFee.toString())
-			.build());
-			totalNetAmount = totalNetAmount.add(activationFee);
-			totalVatAmount = totalVatAmount.add(BigDecimal.ZERO);
-			totalGrossAmount = totalGrossAmount.add(activationFee);
-		}
-		final BigDecimal installationFee = contract.getContractPackage().getInstallationFee();
-		if(installationFee != null && installationFee.compareTo(BigDecimal.ZERO) > 0
-				&& (contract.getInstallationFeePaid() == null 
-					|| contract.getActivationFeePaid().equals(Boolean.FALSE))){
-			invoiceBuilder.withServiceRecord(new InvoiceServiceRecord.Builder()
-			.withServiceName("Op³ata instalacyjna")
-			.withQuantity(ONE)
-			.withNetAmount(installationFee.toString())
-			.withGrossAmount(installationFee.toString())
-			.build());
-			totalNetAmount = totalNetAmount.add(installationFee);
-			totalVatAmount = totalVatAmount.add(BigDecimal.ZERO);
-			totalGrossAmount = totalGrossAmount.add(installationFee);
-		}
-		invoiceBuilder.withNetAmount(totalNetAmount.toPlainString())
-			.withVatAmount(totalVatAmount.toPlainString())
-			.withGrossAmount(totalGrossAmount.toPlainString())
-			.withGrossAmountWords(DecimalWriter.getDecimalSpoken(totalGrossAmount.toPlainString()));
-	}
 
-	private BigDecimal convertToRate(final Integer rate) {
-		final BigDecimal decimalPart = new BigDecimal(rate).divide(new BigDecimal(100)).setScale(2);
-		return BigDecimal.ONE.add(decimalPart);
+			if(!service.isDisposable()
+					||(service.isDisposable() && !contract.getDisposableFeePaid())){
+				final BigDecimal netAmount = service.getSubscriptionNet().setScale(2);
+				final Integer vatRate = service.getVatRate();
+				final BigDecimal vatAmount = service.getVatAmount().setScale(2);
+				final BigDecimal grossAmount = netAmount.add(vatAmount);
+				final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
+					.withLp(serviceCounter++)
+					.withServiceName(service.getServiceName())
+					.withQuantity(ONE)
+					.withVatRate(vatRate)
+					.withNetAmount(netAmount)
+					.withVatAmount(vatAmount)
+					.withGrossAmount(grossAmount);
+				invoiceBuilder.withServiceRecord(serviceBuilder.build());
+				totalNetAmount = totalNetAmount.add(netAmount);
+				totalVatAmount = totalVatAmount.add(vatAmount);
+				totalGrossAmount = totalGrossAmount.add(grossAmount);
+			}
+		}
+		invoiceBuilder.withNetAmount(totalNetAmount)
+			.withVatAmount(totalVatAmount)
+			.withGrossAmount(totalGrossAmount)
+			.withGrossAmountWords(DecimalWriter.getDecimalSpoken(totalGrossAmount.toPlainString()));
 	}
 
 	private InvoiceParticipant getBuyer(final Contract contract) {

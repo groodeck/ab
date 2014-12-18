@@ -1,13 +1,15 @@
 package org.ab.service.generator;
 
+import java.math.BigDecimal;
+
 public class InvoiceServiceRecord {
-	private final String lp;
+	private final Integer lp;
 	private final String serviceName;
-	private final String vatRate;
-	private final String netAmount;
-	private final String vatAmount;
-	private final String grossAmount;
-	private final String quantity;
+	private final Integer vatRate;
+	private final BigDecimal netAmount;
+	private final BigDecimal vatAmount;
+	private final BigDecimal grossAmount;
+	private final Integer quantity;
 
 	public InvoiceServiceRecord(final Builder builder) {
 		this.lp = builder.lp;
@@ -18,42 +20,42 @@ public class InvoiceServiceRecord {
 		this.grossAmount = builder.grossAmount;
 		this.quantity = builder.quantity;
 	}
-	public String getLp() {
+	public Integer getLp() {
 		return this.lp;
 	}
 	public String getServiceName() {
 		return this.serviceName;
 	}
-	public String getVatRate() {
+	public Integer getVatRate() {
 		return this.vatRate;
 	}
-	public String getNetAmount() {
+	public BigDecimal getNetAmount() {
 		return this.netAmount;
 	}
-	public String getVatAmount() {
+	public BigDecimal getVatAmount() {
 		return this.vatAmount;
 	}
-	public String getGrossAmount() {
+	public BigDecimal getGrossAmount() {
 		return this.grossAmount;
 	}
-	public String getQuantity() {
+	public Integer getQuantity() {
 		return this.quantity;
 	}
 
 	public static class Builder {
-		private String lp;
+		private Integer lp;
 		private String serviceName;
-		private String vatRate;
-		private String netAmount;
-		private String vatAmount;
-		private String grossAmount;
-		private String quantity;
+		private Integer vatRate;
+		private BigDecimal netAmount;
+		private BigDecimal vatAmount;
+		private BigDecimal grossAmount;
+		private Integer quantity;
 
 		public InvoiceServiceRecord build(){
 			return new InvoiceServiceRecord(this);
 		}
 
-		public Builder withLp(final String lp) {
+		public Builder withLp(final Integer lp) {
 			this.lp = lp;
 			return this;
 		}
@@ -63,27 +65,27 @@ public class InvoiceServiceRecord {
 			return this;
 		}
 
-		public Builder withVatRate(final String vatRate) {
+		public Builder withVatRate(final Integer vatRate) {
 			this.vatRate = vatRate;
 			return this;
 		}
 
-		public Builder withNetAmount(final String netAmount) {
+		public Builder withNetAmount(final BigDecimal netAmount) {
 			this.netAmount = netAmount;
 			return this;
 		}
 
-		public Builder withVatAmount(final String vatAmount) {
+		public Builder withVatAmount(final BigDecimal vatAmount) {
 			this.vatAmount = vatAmount;
 			return this;
 		}
 
-		public Builder withGrossAmount(final String grossAmount) {
+		public Builder withGrossAmount(final BigDecimal grossAmount) {
 			this.grossAmount = grossAmount;
 			return this;
 		}
 
-		public Builder withQuantity(final String quantity) {
+		public Builder withQuantity(final Integer quantity) {
 			this.quantity = quantity;
 			return this;
 		}

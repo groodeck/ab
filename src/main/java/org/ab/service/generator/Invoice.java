@@ -1,6 +1,9 @@
 package org.ab.service.generator;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import org.joda.time.LocalDate;
 
 import com.google.common.collect.Lists;
 
@@ -9,13 +12,14 @@ public class Invoice {
 	private final InvoiceParticipant buyer;
 	private final String invoiceNumber;
 	private final String dateHeader;
-	private final String createDate;
-	private final String receiveDate;
+	private final LocalDate createDate;
+	private final LocalDate receiveDate;
 	private final List<InvoiceServiceRecord> serviceRecords;
-	private final String netAmount;
-	private final String vatAmount;
-	private final String grossAmount;
+	private final BigDecimal netAmount;
+	private final BigDecimal vatAmount;
+	private final BigDecimal grossAmount;
 	private final String grossAmountWords;
+	private String htmlContent;
 
 	private Invoice(final Builder builder){
 		this.seller = builder.seller;
@@ -37,12 +41,12 @@ public class Invoice {
 		private InvoiceParticipant buyer;
 		private String invoiceNumber;
 		private String dateHeader;
-		private String createDate;
-		private String receiveDate;
+		private LocalDate createDate;
+		private LocalDate receiveDate;
 		private final List<InvoiceServiceRecord> serviceRecords = Lists.newArrayList();
-		private String netAmount;
-		private String vatAmount;
-		private String grossAmount;
+		private BigDecimal netAmount;
+		private BigDecimal vatAmount;
+		private BigDecimal grossAmount;
 		private String grossAmountWords;
 
 		public Invoice build(){
@@ -69,12 +73,12 @@ public class Invoice {
 			return this;
 		}
 
-		public Builder withCreateDate(final String createDate) {
+		public Builder withCreateDate(final LocalDate createDate) {
 			this.createDate = createDate;
 			return this;
 		}
 
-		public Builder withReceiveDate(final String receiveDate) {
+		public Builder withReceiveDate(final LocalDate receiveDate) {
 			this.receiveDate = receiveDate;
 			return this;
 		}
@@ -84,17 +88,17 @@ public class Invoice {
 			return this;
 		}
 
-		public Builder withNetAmount(final String netAmount) {
+		public Builder withNetAmount(final BigDecimal netAmount) {
 			this.netAmount = netAmount;
 			return this;
 		}
 
-		public Builder withVatAmount(final String vatAmount) {
+		public Builder withVatAmount(final BigDecimal vatAmount) {
 			this.vatAmount = vatAmount;
 			return this;
 		}
 
-		public Builder withGrossAmount(final String grossAmount) {
+		public Builder withGrossAmount(final BigDecimal grossAmount) {
 			this.grossAmount = grossAmount;
 			return this;
 		}
@@ -121,11 +125,11 @@ public class Invoice {
 		return this.dateHeader;
 	}
 
-	public String getCreateDate() {
+	public LocalDate getCreateDate() {
 		return this.createDate;
 	}
 
-	public String getReceiveDate() {
+	public LocalDate getReceiveDate() {
 		return this.receiveDate;
 	}
 
@@ -133,19 +137,27 @@ public class Invoice {
 		return this.serviceRecords;
 	}
 
-	public String getNetAmount() {
+	public BigDecimal getNetAmount() {
 		return this.netAmount;
 	}
 
-	public String getVatAmount() {
+	public BigDecimal getVatAmount() {
 		return this.vatAmount;
 	}
 
-	public String getGrossAmount() {
+	public BigDecimal getGrossAmount() {
 		return this.grossAmount;
 	}
 
 	public String getGrossAmountWords() {
 		return this.grossAmountWords;
+	}
+
+	public void setHtmlContent(final String html) {
+		this.htmlContent = html;
+	}
+
+	public String getHtmlContent() {
+		return this.htmlContent;
 	}
 }

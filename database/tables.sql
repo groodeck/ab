@@ -35,9 +35,8 @@ create table contract(
 	contractPackageId integer,
 	contractSubscription decimal,
 	installationFee decimal,
-	installationFeePaid bit, 
 	activationFee decimal,
-	activationFeePaid bit,
+	disposableFeePaid bit,
 	subscriberId integer,
 	active bit not null default 0,
 	userId integer,
@@ -97,7 +96,10 @@ create table device(
 create table service(
 	serviceId integer not null IDENTITY PRIMARY KEY,
  	serviceName varchar(50) not null,
- 	vat varchar(30) not null,
+ 	vatRate integer not null,
+ 	vat decimal not null,
  	subscriptionNet decimal not null,
+ 	subscriptionGross decimal not null,
+ 	disposable bit not null,
  	packageId integer,
 );

@@ -6,6 +6,7 @@ import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
 import org.ab.model.dictionary.SelectValueService;
 import org.ab.service.InvoicesService;
+import org.ab.service.generator.Invoice;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,8 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/invoices")
@@ -36,20 +35,15 @@ public class InvoicesController {
 	@RequestMapping("/generate")
     public String handleInvoicesGeneration(final @ModelAttribute("generationParams") InvoiceGenerationParams generationParams,
     		final Model model) {
-		this.invoicesService.generateInvoices(generationParams);
+		final List<Invoice> invoices = this.invoicesService.generateInvoices(generationParams);
 		System.out.println(String.format("year: %s, month: %s", generationParams.getYear(), generationParams.getMonth()));
 		model.addAttribute("uiMessage", "Wygenerowano faktury");
 
 		model.addAllAttributes(this.selectValuesService.getInvoicesDictionaries());
-		model.addAttribute("invoices", Lists.newArrayList());
-		model.addAttribute("invoice", getInvoiceContent());
+		model.addAttribute("invoices", invoices);
+		model.addAttribute("invoice", invoices.get(0).getHtmlContent());
 		return "invoices";
     }
-
-	private String getInvoiceContent() {
-		final String content = "test <BR/> test";
-		return content;
-	}
 
 	@RequestMapping("/search")
     public String handleSearchAction(final @RequestParam("dateFrom") String dateFrom,

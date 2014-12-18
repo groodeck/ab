@@ -82,7 +82,7 @@
 			<c:out value="${invoice}" escapeXml="false"/>
 		</div>
 		
-		<table border='1'>
+		<!-- <table border='1'>
 			<tr>
 				<td rowspan='3' colspan='3' width='250'>
 				
@@ -278,7 +278,7 @@
 				<td/>
 			</tr>
 			
-		</table>		
+		</table> -->		
 		
 	
 </body>

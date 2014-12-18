@@ -25,200 +25,189 @@ import org.joda.time.LocalDate;
 public class Contract {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="contractId")
 	private Integer contractId;
-	
+
 	@Column(name="contractIdn")
 	private String contractIdn;
-	
+
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name="contractStatus")
 	private ContractStatus contractStatus;
-	
+
 	@Column(name="contractSignDate")
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate contractSignDate;
-	
+
 	@Column(name="contractActivationDate")
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate contractActivationDate;
-	
+
 	@Column(name="contractEndDate")
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate contractEndDate;
-	
+
 	@Column(name="contractPeriod")
 	private String contractPeriod;
-	
+
 	@ManyToOne
 	@JoinColumn(name="contractPackageId")
 	private ContractPackage contractPackage;
-	
+
 	@Column(name="contractSubscription")
 	private BigDecimal contractSubscription;
-	
+
 	@Column(name="installationFee")
 	private BigDecimal installationFee;
-	
-	@Column(name="installationFeePaid")
-	private Boolean installationFeePaid;
-	
+
 	@Column(name="activationFee")
 	private BigDecimal activationFee;
-	
-	@Column(name="activationFeePaid")
-	private Boolean activationFeePaid;
+
+	@Column(name="disposableFeePaid")
+	private boolean disposableFeePaid;
 
 	@ManyToOne
     @JoinColumn(name="subscriberId", insertable=false, updatable=true, nullable=true)
 	private Subscriber subscriber;
-	
+
 	@Column(name="active")
 	private boolean active;
-	
+
 	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
     @JoinColumn(name="contractId")
 	private List<Device> devices;
-	
+
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
-	
+
 	public Integer getContractId() {
-		return contractId;
+		return this.contractId;
 	}
 
 	public String getContractIdn() {
-		return contractIdn;
+		return this.contractIdn;
 	}
 
 	public ContractStatus getContractStatus() {
-		return contractStatus;
+		return this.contractStatus;
 	}
 
 	public LocalDate getContractSignDate() {
-		return contractSignDate;
+		return this.contractSignDate;
 	}
 
 	public LocalDate getContractActivationDate() {
-		return contractActivationDate;
+		return this.contractActivationDate;
 	}
 
 	public LocalDate getContractEndDate() {
-		return contractEndDate;
+		return this.contractEndDate;
 	}
 
 	public String getContractPeriod() {
-		return contractPeriod;
+		return this.contractPeriod;
 	}
 
 	public ContractPackage getContractPackage() {
-		return contractPackage;
+		return this.contractPackage;
 	}
 
 	public BigDecimal getContractSubscription() {
-		return contractSubscription;
+		return this.contractSubscription;
 	}
 
 	public BigDecimal getInstallationFee() {
-		return installationFee;
+		return this.installationFee;
 	}
 
-	public void setContractId(Integer contractId) {
+	public void setContractId(final Integer contractId) {
 		this.contractId = contractId;
 	}
 
-	public void setContractIdn(String contractIdn) {
+	public void setContractIdn(final String contractIdn) {
 		this.contractIdn = contractIdn;
 	}
 
-	public void setContractStatus(ContractStatus contractStatus) {
+	public void setContractStatus(final ContractStatus contractStatus) {
 		this.contractStatus = contractStatus;
 	}
 
-	public void setContractSignDate(LocalDate contractSignDate) {
+	public void setContractSignDate(final LocalDate contractSignDate) {
 		this.contractSignDate = contractSignDate;
 	}
 
-	public void setContractActivationDate(LocalDate contractActivationDate) {
+	public void setContractActivationDate(final LocalDate contractActivationDate) {
 		this.contractActivationDate = contractActivationDate;
 	}
 
-	public void setContractEndDate(LocalDate contractEndDate) {
+	public void setContractEndDate(final LocalDate contractEndDate) {
 		this.contractEndDate = contractEndDate;
 	}
 
-	public void setContractPeriod(String contractPeriod) {
+	public void setContractPeriod(final String contractPeriod) {
 		this.contractPeriod = contractPeriod;
 	}
 
-	public void setContractPackage(ContractPackage contractPackage) {
+	public void setContractPackage(final ContractPackage contractPackage) {
 		this.contractPackage = contractPackage;
 	}
 
-	public void setContractSubscription(BigDecimal contractSubscription) {
+	public void setContractSubscription(final BigDecimal contractSubscription) {
 		this.contractSubscription = contractSubscription;
 	}
 
-	public void setInstallationFee(BigDecimal installationFee) {
+	public void setInstallationFee(final BigDecimal installationFee) {
 		this.installationFee = installationFee;
 	}
 
 	public BigDecimal getActivationFee() {
-		return activationFee;
+		return this.activationFee;
 	}
 
-	public void setActivationFee(BigDecimal activationFee) {
+	public void setActivationFee(final BigDecimal activationFee) {
 		this.activationFee = activationFee;
 	}
 
 	public Subscriber getSubscriber() {
-		return subscriber;
+		return this.subscriber;
 	}
 
 	public boolean isActive() {
-		return active;
+		return this.active;
 	}
 
-	public void setSubscriber(Subscriber subscriber) {
+	public void setSubscriber(final Subscriber subscriber) {
 		this.subscriber = subscriber;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(final boolean active) {
 		this.active = active;
 	}
 
 	public List<Device> getDevices() {
-		return devices;
+		return this.devices;
 	}
 
-	public void setDevices(List<Device> devices) {
+	public void setDevices(final List<Device> devices) {
 		this.devices = devices;
 	}
-	
+
 	public User getUser() {
-		return user;
+		return this.user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(final User user) {
 		this.user = user;
 	}
 
-	public Boolean getInstallationFeePaid() {
-		return installationFeePaid;
+	public boolean getDisposableFeePaid() {
+		return this.disposableFeePaid;
 	}
 
-	public Boolean getActivationFeePaid() {
-		return activationFeePaid;
+	public void setDisposableFeePaid(final boolean disposableFeePaid) {
+		this.disposableFeePaid = disposableFeePaid;
 	}
 
-	public void setInstallationFeePaid(Boolean installationFeePaid) {
-		this.installationFeePaid = installationFeePaid;
-	}
-
-	public void setActivationFeePaid(Boolean activationFeePaid) {
-		this.activationFeePaid = activationFeePaid;
-	}
-	
 }

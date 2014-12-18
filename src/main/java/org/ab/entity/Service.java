@@ -16,58 +16,91 @@ public class Service {
 	@Id
 	@Column(name="serviceId")
 	private Integer serviceId;
-	
+
 	@Column(name="serviceName")
 	private String serviceName;
-	
+
+	@Column(name="vatRate")
+	private Integer vatRate;
+
 	@Column(name="vat")
-	private Integer vat;
-	
+	private BigDecimal vatAmount;
+
 	@Column(name="subscriptionNet")
 	private BigDecimal subscriptionNet;
+
+	@Column(name="subscriptionGross")
+	private BigDecimal subscriptionGross;
+
+	@Column(name="disposable")
+	private boolean disposable;
 
 	@ManyToOne
     @JoinColumn(name="packageId", insertable=false, updatable=false, nullable=false)
 	private ContractPackage contractPackage;
-	
+
 	public Integer getServiceId() {
-		return serviceId;
+		return this.serviceId;
 	}
 
 	public String getServiceName() {
-		return serviceName;
+		return this.serviceName;
 	}
 
-	public Integer getVat() {
-		return vat;
+	public BigDecimal getVatAmount() {
+		return this.vatAmount;
 	}
 
 	public BigDecimal getSubscriptionNet() {
-		return subscriptionNet;
+		return this.subscriptionNet;
 	}
 
-	public void setServiceId(Integer serviceId) {
+	public void setServiceId(final Integer serviceId) {
 		this.serviceId = serviceId;
 	}
 
-	public void setServiceName(String serviceName) {
+	public void setServiceName(final String serviceName) {
 		this.serviceName = serviceName;
 	}
 
-	public void setVat(Integer vat) {
-		this.vat = vat;
+	public void setVatAmount(final BigDecimal vat) {
+		this.vatAmount = vat;
 	}
 
-	public void setSubscriptionNet(BigDecimal subscriptionNet) {
+	public void setSubscriptionNet(final BigDecimal subscriptionNet) {
 		this.subscriptionNet = subscriptionNet;
 	}
 
 	public ContractPackage getContractPackage() {
-		return contractPackage;
+		return this.contractPackage;
 	}
 
 	public void setContractPackage(final ContractPackage contractPackage) {
 		this.contractPackage = contractPackage;
 	}
-	
+
+	public Integer getVatRate() {
+		return this.vatRate;
+	}
+
+	public void setVatRate(final Integer vatRate) {
+		this.vatRate = vatRate;
+	}
+
+	public BigDecimal getSubscriptionGross() {
+		return this.subscriptionGross;
+	}
+
+	public void setSubscriptionGross(final BigDecimal subscriptionGross) {
+		this.subscriptionGross = subscriptionGross;
+	}
+
+	public boolean isDisposable() {
+		return this.disposable;
+	}
+
+	public void setDisposable(final boolean disposable) {
+		this.disposable = disposable;
+	}
+
 }
