@@ -4,14 +4,14 @@
 				
 				</td>
 				<td colspan='7' width='200'><h2>FAKTURA VAT</h2></td>
-				<td colspan='4' width='150'>1/2/2014</td>
+				<td colspan='4' width='150'>${invoiceNumber}</td>
 			</tr>
 			<tr>
-				<td colspan='7'>Data wystawienia</td>
+				<td colspan='7'>Data wystawienia: ${createDate!}</td>
 				<td colspan='4'>ORYGINA£</td>
 			</tr>
 			<tr>
-				<td colspan='7'>Data sprzeda¿y</td>
+				<td colspan='7'>Data sprzeda¿y: ${receiveDate!}</td>
 				<td colspan='4'/>
 			</tr>
 			
@@ -25,21 +25,22 @@
 			</tr>
 			<tr>
 				<td colspan='7' rowspan='3'>
-					jawor net<br/>
-					00-100 Sierpc<br/>
-					£owicka 8/15
+					${seller.name!}<br/>
+					${seller.addressStreet!}<br/>
+					${seller.addressCity!}<br/>
+					${seller.regon!}
 				</td>
 				<td colspan='7' rowspan='3'>
-					Jan Kowalski<br/>
-					00-100 Sierpc<br/>
-					Narutowicza 2
+					${buyer.name!}<br/>
+					${buyer.addressStreet!}<br/>
+					${buyer.addressCity!}
 				</td>
 			</tr>
 			<tr/>
 			<tr/>
 			<tr>
-				<td colspan='7'>NIP:</td>
-				<td colspan='7'>NIP:</td>
+				<td colspan='7'>NIP: ${seller.nip!}</td>
+				<td colspan='7'>NIP: ${buyer.nip!}</td>
 			</tr>
 			
 			<tr>
@@ -93,10 +94,10 @@
 			<tr>
 				<td colspan='5'/>
 				<td colspan='2'>RAZEM</td>
-				<td colspan='2'/>
+				<td colspan='2'>${netAmount}</td>
 				<td>x</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
+				<td colspan='2'>${vatAmount}</td>
+				<td colspan='2'>${grossAmount}</td>
 			</tr>
 			<tr>
 				<td colspan='5'/>
@@ -121,7 +122,7 @@
 				<td colspan='2'/>
 			</tr>
 			<tr>
-				<td colspan='5' rowspan='2'/>
+				<td colspan='5' rowspan='2'>${grossAmountWords}</td>
 				<td colspan='2'/>
 				<td>5</td>
 				<td colspan='2'/>
@@ -139,7 +140,8 @@
 			</tr>
 			
 			<tr>
-				<td colspan='5' rowspan='2' height='40'>Razem do zap³aty:</td>
+				<td colspan='2' rowspan='2' height='40'>Razem do zap³aty:</td>
+				<td colspan='3' rowspan='2' height='40'>${grossAmount}</td>
 				<td colspan='9' rowspan='2'></td>
 			</tr>
 			<tr/>
