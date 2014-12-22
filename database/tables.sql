@@ -103,3 +103,37 @@ create table service(
  	disposable bit not null,
  	packageId integer,
 );
+
+create table invoice(
+	invoiceId integer not null IDENTITY PRIMARY KEY,
+	contractId integer not null,
+ 	settlementPeriodStart date not null,
+ 	settlementPeriodEnd date not null,
+ 	invoiceNumber varchar(30) not null,
+ 	createDate date,
+ 	receiveDate date,
+ 	netAmount decimal,
+ 	vatAmount decimal,
+ 	grossAmount decimal,
+ 	grossAmountWords varchar(150),
+ 	paymentDate date,
+ 	paid bit,
+);
+
+create table invoiceRecord(
+	invoiceRecordId integer not null IDENTITY PRIMARY KEY,
+	serviceName varchar(100) not null,
+	quantity integer,
+ 	netPrice decimal,
+ 	netAmount decimal,
+ 	vatRate integer,
+ 	vatAmount decimal,
+ 	grossAmount decimal,
+ 	invoiceId integer not null,
+);
+
+create table invoiceContent(
+	invoiceContentId integer not null IDENTITY PRIMARY KEY,
+ 	invoiceId integer not null,
+	invoiceHtml clob not null,
+);

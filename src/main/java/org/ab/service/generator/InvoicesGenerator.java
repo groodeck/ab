@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Properties;
 
+import org.ab.dao.InvoiceDao;
 import org.ab.entity.Address;
 import org.ab.entity.Contract;
 import org.ab.entity.ContractPackage;
@@ -33,15 +34,22 @@ public class InvoicesGenerator {
 	@Autowired
 	private InvoiceContentGenerator contentGenerator;
 
+	@Autowired
+	private InvoiceDao invoiceDao;
+
 	private static final Integer ONE = 1;
 
-	public List<Invoice> generateInvoices(final List<Contract> contracts) {
+	public List<Invoice> generateInvoices(final List<Contract> contracts, final LocalDate dateFrom, final LocalDate dateTo) {
 		final Properties props = loadProperties("companyDetails.properties");
 		final String city = props.getProperty("company.city");
 		final LocalDate currentDate = LocalDate.now();
 		final List<Invoice> results = Lists.newArrayList();
 		for(final Contract contract : contracts){
 			final Invoice.Builder invoiceBuilder = new Invoice.Builder()
+				.withInvoiceNumber(getInvoiceNumber(dateFrom, dateTo))
+				.withContract(contract)
+				.withSettlementPeriodStart(dateFrom)
+				.withSettlementPeriodEnd(dateTo)
 				.withSeller(getSeller(contract, props))
 				.withBuyer(getBuyer(contract))
 				.withCreateDate(currentDate)
@@ -56,6 +64,14 @@ public class InvoicesGenerator {
 			results.add(invoice);
 		}
 		return results;
+	}
+
+	String getInvoiceNumber(final LocalDate dateFrom, final LocalDate dateTo) {
+		final long invoicesGenerated = this.invoiceDao.getInvoiceCount(dateFrom, dateTo);
+
+		final String sequenceNumber = String.format("%06d", invoicesGenerated+1);
+		final String month = String.format("%02d", dateFrom.getMonthOfYear());
+		return String.format("FVAT/%s/%s/%s", sequenceNumber, month, dateFrom.getYear());
 	}
 
 	private String generateHtmlContent(final Invoice invoice) {

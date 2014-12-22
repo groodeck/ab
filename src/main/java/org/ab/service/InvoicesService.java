@@ -3,9 +3,11 @@ package org.ab.service;
 import java.util.List;
 
 import org.ab.dao.ContractDao;
+import org.ab.dao.InvoiceDao;
 import org.ab.entity.Contract;
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
+import org.ab.service.converter.InvoiceConverter;
 import org.ab.service.generator.Invoice;
 import org.ab.service.generator.InvoicesGenerator;
 import org.joda.time.LocalDate;
@@ -23,13 +25,26 @@ public class InvoicesService {
 	@Autowired
 	private InvoicesGenerator invoicesGenerator;
 
+	@Autowired
+	private InvoiceConverter invoiceConverter;
+
+	@Autowired
+	private InvoiceDao invoiceDao;
+
 	@Transactional
 	public List<Invoice> generateInvoices(final InvoiceGenerationParams generationParams) {
 		final LocalDate dateFrom = getFirstOfMonth(generationParams);
 		final LocalDate dateTo = getLastOfMonth(generationParams);
 		final List<Contract> contracts = this.contractDao.findContracts(dateFrom, dateTo);
-		return this.invoicesGenerator.generateInvoices(contracts);
+		final List<Invoice> invoices = this.invoicesGenerator.generateInvoices(contracts, dateFrom, dateTo);
+		persist(invoices);
+		return invoices;
 
+	}
+
+	private void persist(final List<Invoice> invoices) {
+		final List<org.ab.entity.Invoice> entities = this.invoiceConverter.convert(invoices);
+		this.invoiceDao.save(entities);
 	}
 
 	private LocalDate getLastOfMonth(final InvoiceGenerationParams generationParams) {

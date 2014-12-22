@@ -3,6 +3,7 @@ package org.ab.service.generator;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.ab.entity.Contract;
 import org.joda.time.LocalDate;
 
 import com.google.common.collect.Lists;
@@ -19,6 +20,9 @@ public class Invoice {
 	private final BigDecimal vatAmount;
 	private final BigDecimal grossAmount;
 	private final String grossAmountWords;
+	private final Contract contract;
+	private final LocalDate settlementPeriodStart;
+	private final LocalDate settlementPeriodEnd;
 	private String htmlContent;
 
 	private Invoice(final Builder builder){
@@ -33,6 +37,9 @@ public class Invoice {
 		this.vatAmount = builder.vatAmount;
 		this.grossAmount = builder.grossAmount;
 		this.grossAmountWords = builder.grossAmountWords;
+		this.contract = builder.contract;
+		this.settlementPeriodStart = builder.settlementPeriodStart;
+		this.settlementPeriodEnd = builder.settlementPeriodEnd;
 
 	}
 
@@ -48,6 +55,9 @@ public class Invoice {
 		private BigDecimal vatAmount;
 		private BigDecimal grossAmount;
 		private String grossAmountWords;
+		private Contract contract;
+		private LocalDate settlementPeriodStart;
+		private LocalDate settlementPeriodEnd;
 
 		public Invoice build(){
 			return new Invoice(this);
@@ -107,6 +117,21 @@ public class Invoice {
 			this.grossAmountWords = grossAmountWords;
 			return this;
 		}
+
+		public Builder withContract(final Contract contract) {
+			this.contract = contract;
+			return this;
+		}
+
+		public Builder withSettlementPeriodStart(final LocalDate date) {
+			this.settlementPeriodStart = date;
+			return this;
+		}
+
+		public Builder withSettlementPeriodEnd(final LocalDate date) {
+			this.settlementPeriodEnd = date;
+			return this;
+		}
 	}
 
 	public InvoiceParticipant getSeller() {
@@ -159,5 +184,17 @@ public class Invoice {
 
 	public String getHtmlContent() {
 		return this.htmlContent;
+	}
+
+	public Contract getContract() {
+		return this.contract;
+	}
+
+	public LocalDate getSettlementPeriodEnd() {
+		return this.settlementPeriodEnd;
+	}
+
+	public LocalDate getSettlementPeriodStart() {
+		return this.settlementPeriodStart;
 	}
 }
