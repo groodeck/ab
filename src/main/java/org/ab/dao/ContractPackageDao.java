@@ -14,12 +14,21 @@ public class ContractPackageDao {
 
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	public List<ContractPackage> findAll() {
 		return em.createQuery("from ContractPackage").getResultList();
 	}
 
-	public ContractPackage getById(String contractPack) {
+	public ContractPackage getById(final String contractPack) {
 		return em.find(ContractPackage.class, Integer.parseInt(contractPack));
+	}
+
+	public Integer save(final ContractPackage entity) {
+		if(entity.getPackageId() != null){
+			em.merge(entity);
+		} else {
+			em.persist(entity);
+		}
+		return entity.getPackageId();
 	}
 }

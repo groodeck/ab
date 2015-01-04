@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,6 +16,7 @@ import javax.persistence.Table;
 public class Service {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="serviceId")
 	private Integer serviceId;
 
@@ -36,23 +39,47 @@ public class Service {
 	private boolean disposable;
 
 	@ManyToOne
-    @JoinColumn(name="packageId", insertable=false, updatable=false, nullable=false)
+	@JoinColumn(name="packageId", insertable=false, updatable=false, nullable=false)
 	private ContractPackage contractPackage;
 
+	public ContractPackage getContractPackage() {
+		return contractPackage;
+	}
+
 	public Integer getServiceId() {
-		return this.serviceId;
+		return serviceId;
 	}
 
 	public String getServiceName() {
-		return this.serviceName;
+		return serviceName;
 	}
 
-	public BigDecimal getVatAmount() {
-		return this.vatAmount;
+	public BigDecimal getSubscriptionGross() {
+		return subscriptionGross;
 	}
 
 	public BigDecimal getSubscriptionNet() {
-		return this.subscriptionNet;
+		return subscriptionNet;
+	}
+
+	public BigDecimal getVatAmount() {
+		return vatAmount;
+	}
+
+	public Integer getVatRate() {
+		return vatRate;
+	}
+
+	public boolean isDisposable() {
+		return disposable;
+	}
+
+	public void setContractPackage(final ContractPackage contractPackage) {
+		this.contractPackage = contractPackage;
+	}
+
+	public void setDisposable(final boolean disposable) {
+		this.disposable = disposable;
 	}
 
 	public void setServiceId(final Integer serviceId) {
@@ -63,44 +90,20 @@ public class Service {
 		this.serviceName = serviceName;
 	}
 
-	public void setVatAmount(final BigDecimal vat) {
-		this.vatAmount = vat;
+	public void setSubscriptionGross(final BigDecimal subscriptionGross) {
+		this.subscriptionGross = subscriptionGross;
 	}
 
 	public void setSubscriptionNet(final BigDecimal subscriptionNet) {
 		this.subscriptionNet = subscriptionNet;
 	}
 
-	public ContractPackage getContractPackage() {
-		return this.contractPackage;
-	}
-
-	public void setContractPackage(final ContractPackage contractPackage) {
-		this.contractPackage = contractPackage;
-	}
-
-	public Integer getVatRate() {
-		return this.vatRate;
+	public void setVatAmount(final BigDecimal vat) {
+		vatAmount = vat;
 	}
 
 	public void setVatRate(final Integer vatRate) {
 		this.vatRate = vatRate;
-	}
-
-	public BigDecimal getSubscriptionGross() {
-		return this.subscriptionGross;
-	}
-
-	public void setSubscriptionGross(final BigDecimal subscriptionGross) {
-		this.subscriptionGross = subscriptionGross;
-	}
-
-	public boolean isDisposable() {
-		return this.disposable;
-	}
-
-	public void setDisposable(final boolean disposable) {
-		this.disposable = disposable;
 	}
 
 }

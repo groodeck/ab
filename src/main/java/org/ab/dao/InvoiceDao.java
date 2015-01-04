@@ -17,17 +17,23 @@ public class InvoiceDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public void save(final List<Invoice> entities) {
-		this.em.persist(entities);
+	public List<Invoice> findAll() {
+		return em.createQuery("from Invoice").getResultList();
 	}
 
 	public long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
-		return (Long)this.em.createQuery("select count(*) "
+		return (Long)em.createQuery("select count(*) "
 				+ "from Invoice i where "
 				+ "i.settlementPeriodStart = :dateFrom "
 				+ "and i.settlementPeriodEnd = :dateTo ")
 				.setParameter("dateFrom", dateFrom)
 				.setParameter("dateTo", dateTo)
 				.getSingleResult();
+	}
+
+	public void save(final List<Invoice> entities) {
+		for(final Invoice singleObject : entities){
+			em.persist(singleObject);
+		}
 	}
 }

@@ -9,6 +9,7 @@ import org.joda.time.LocalDate;
 import com.google.common.collect.Lists;
 
 public class Invoice {
+	private final Integer invoiceId;
 	private final InvoiceParticipant seller;
 	private final InvoiceParticipant buyer;
 	private final String invoiceNumber;
@@ -23,6 +24,8 @@ public class Invoice {
 	private final Contract contract;
 	private final LocalDate settlementPeriodStart;
 	private final LocalDate settlementPeriodEnd;
+	private final LocalDate paymentDate;
+	private final boolean paid;
 	private String htmlContent;
 
 	private Invoice(final Builder builder){
@@ -40,10 +43,13 @@ public class Invoice {
 		this.contract = builder.contract;
 		this.settlementPeriodStart = builder.settlementPeriodStart;
 		this.settlementPeriodEnd = builder.settlementPeriodEnd;
-
+		this.invoiceId = builder.invoiceId;
+		this.paymentDate = builder.paymentDate;
+		this.paid = builder.paid;
 	}
 
 	public static class Builder {
+		private Integer invoiceId;
 		private InvoiceParticipant seller;
 		private InvoiceParticipant buyer;
 		private String invoiceNumber;
@@ -58,11 +64,18 @@ public class Invoice {
 		private Contract contract;
 		private LocalDate settlementPeriodStart;
 		private LocalDate settlementPeriodEnd;
+		private LocalDate paymentDate;
+		private boolean paid;
 
 		public Invoice build(){
 			return new Invoice(this);
 		}
 
+		public Builder withInvoiceId(final Integer invoiceId) {
+			this.invoiceId = invoiceId;
+			return this;
+		}
+		
 		public Builder withSeller(final InvoiceParticipant seller) {
 			this.seller = seller;
 			return this;
@@ -132,6 +145,16 @@ public class Invoice {
 			this.settlementPeriodEnd = date;
 			return this;
 		}
+		
+		public Builder withPaymentDate(final LocalDate date) {
+			this.paymentDate = date;
+			return this;
+		}
+		
+		public Builder withPaid(final boolean paid) {
+			this.paid = paid;
+			return this;
+		}
 	}
 
 	public InvoiceParticipant getSeller() {
@@ -196,5 +219,17 @@ public class Invoice {
 
 	public LocalDate getSettlementPeriodStart() {
 		return this.settlementPeriodStart;
+	}
+
+	public Integer getInvoiceId() {
+		return invoiceId;
+	}
+
+	public LocalDate getPaymentDate() {
+		return paymentDate;
+	}
+
+	public boolean isPaid() {
+		return paid;
 	}
 }

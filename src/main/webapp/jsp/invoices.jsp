@@ -13,18 +13,16 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> 
  		<script type="text/javascript">
 	 		generateInvoices = function (){
-	 		alert('jestem');
 	 			var month = $('#month').val()
 	 			var year = $('#year').val()
 	 			window.location.href = '/invoices/generate/'+year+'/'+month;
 	 		}	
 	 		
-	 		
 	 	</script>
  	]]>
  </jsp:text>
  
- <body> 
+ <body > 
    
    <custom:message uiMessage="${uiMessage}"/>
    
@@ -55,24 +53,18 @@
 			<table border="1" cellspacing="0" cellpadding="2">
 				<tr>
 					<td>lp</td>
-					<td>Data podpisania umowy</td>
 					<td>Abonent</td>
-					<td>Adres</td>
-					<td>Miejscowość</td>
-					<td>Telefon</td>
-					<td>Data zakończenia umowy</td>
-					<td>Przedstawiciel handlowy</td>
+					<td>Okres rozliczeniowy</td>
+					<td>Data utworzenia</td>
+					<td>Wartość faktury</td>
 				</tr>
-				<c:forEach var="subscriber" items="${subscribers}" varStatus="status" >
+				<c:forEach var="invoice" items="${invoices}" varStatus="status" >
 					<tr>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${status.index + 1}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.contractSignDate}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.effectiveName}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.mainAddress.streetDetails}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.mainAddress.city}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.phoneList}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.contractEndDate}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.user}"/></td>
+						<td onclick="editSubscriber(${invoice.invoiceId})"><c:out value="${status.index + 1}"/></td>
+						<td onclick="editSubscriber(${invoice.invoiceId})"><c:out value="${invoice.buyer.name}"/></td>
+						<td onclick="editSubscriber(${invoice.invoiceId})"><c:out value="${invoice.settlementPeriodStart} - ${invoice.settlementPeriodEnd}"/></td>
+						<td onclick="editSubscriber(${invoice.invoiceId})"><c:out value="${invoice.createDate}"/></td>
+						<td onclick="editSubscriber(${invoice.invoiceId})"><c:out value="${invoice.grossAmount}"/></td>
 					</tr>
 				</c:forEach>
 			</table>
@@ -82,205 +74,6 @@
 			<c:out value="${invoice}" escapeXml="false"/>
 		</div>
 		
-		<!-- <table border='1'>
-			<tr>
-				<td rowspan='3' colspan='3' width='250'>
-				
-				</td>
-				<td colspan='7' width='200'><h2>FAKTURA VAT</h2></td>
-				<td colspan='4' width='150'>1/2/2014</td>
-			</tr>
-			<tr>
-				<td colspan='7'>Data wystawienia</td>
-				<td colspan='4'>ORYGINAŁ</td>
-			</tr>
-			<tr>
-				<td colspan='7'>Data sprzedaży</td>
-				<td colspan='4'/>
-			</tr>
-			
-			<tr>
-				<td colspan='3' align="center">pieczęć sprzedawcy</td>
-				<td colspan='11'/>
-			</tr>
-			<tr>
-				<td colspan='7'>Sprzedawca</td>
-				<td colspan='7'>Nabywca</td>
-			</tr>
-			<tr>
-				<td colspan='7' rowspan='3'>
-					jawor net<br/>
-					00-100 Sierpc<br/>
-					Łowicka 8/15
-				</td>
-				<td colspan='7' rowspan='3'>
-					Jan Kowalski<br/>
-					00-100 Sierpc<br/>
-					Narutowicza 2
-				</td>
-			</tr>
-			<tr/>
-			<tr/>
-			<tr>
-				<td colspan='7'>NIP:</td>
-				<td colspan='7'>NIP:</td>
-			</tr>
-			
-			<tr>
-				<td colspan='7' height='30'>Nr rachunku:</td>
-				<td colspan='7'>Sposób zapłaty:</td>
-			</tr>
-			<tr>
-				<td colspan='14' height='5'/>
-			</tr>
-			
-			<tr>
-				<td rowspan='3'>Lp.</td>
-				<td rowspan='3'>Nazwa towaru lub usługi</td>
-				<td rowspan='3'>PKWiU</td>
-				<td rowspan='3'>J.m.</td>
-				<td rowspan='3'>Ilość</td>
-				<td rowspan='2' colspan='2'>Cena jednostkowa bez podatku</td>
-				<td rowspan='2' colspan='2'>Wartość netto</td>
-				<td colspan='3'>Podatek</td>
-				<td rowspan='2' colspan='2'>Wartość brutto</td>
-			</tr>
-			<tr>
-				<td>%</td>
-				<td colspan='2'>kwota</td>
-			</tr>
-			<tr>
-				<td>zł</td>
-				<td>gr</td>
-				<td>zł</td>
-				<td>gr</td>
-				<td/>
-				<td>zł</td>
-				<td>gr</td>
-				<td>zł</td>
-				<td>gr</td>
-			</tr>
-			<tr>
-				<td>1</td>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td colspan='2'/>
-				<td colspan='2'/>
-				<td/>
-				<td colspan='2'/>
-				<td colspan='2'/>
-			</tr>
-			<tr>
-				<td colspan='5'/>
-				<td colspan='2'>RAZEM</td>
-				<td colspan='2'/>
-				<td>x</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
-			</tr>
-			<tr>
-				<td colspan='5'/>
-				<td colspan='2' rowspan='5'>W TYM</td>
-				<td colspan='2'/>
-				<td>zw</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
-			</tr>
-			<tr>
-				<td colspan='5'/>
-				<td colspan='2'/>
-				<td>23</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
-			</tr>
-			<tr>
-				<td colspan='5'>Słownie:</td>
-				<td colspan='2'/>
-				<td>8</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
-			</tr>
-			<tr>
-				<td colspan='5' rowspan='2'/>
-				<td colspan='2'/>
-				<td>5</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
-			</tr>
-			<tr>
-				<td colspan='2'/>
-				<td>0</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
-			</tr>
-			
-			<tr>
-				<td colspan='14' height='5'/>
-			</tr>
-			
-			<tr>
-				<td colspan='5' rowspan='2' height='40'>Razem do zapłaty:</td>
-				<td colspan='9' rowspan='2'></td>
-			</tr>
-			<tr/>
-			
-			<tr>
-				<td colspan='14' height='5'/>
-			</tr>
-			<tr>
-				<td colspan='14' rowspan='2' height='40' valign="top">Uwagi:</td>
-			</tr>
-			<tr/>
-			
-			<tr>
-				<td colspan='14' height='5'/>
-			</tr>
-			
-			<tr>
-				<td/>
-				<td colspan='2' rowspan='4' height='80' />
-				<td/>
-				<td/>
-				<td/>
-				<td colspan='7' rowspan='4' height='80' />
-				<td/>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-			</tr>
-			<tr>
-				<td/>
-				<td colspan='2' style="font-size: 10px">Podpis imienny osoby upoważnionej do odbioru faktur VAT</td>
-				<td/>
-				<td/>
-				<td/>
-				<td colspan='7' style="font-size: 10px">Podpis imienny osoby upoważnionej do wystawienia faktury VAT</td>
-				<td/>
-			</tr>
-			
-		</table> -->		
-		
-	
 </body>
 </html>
 	

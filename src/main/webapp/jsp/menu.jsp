@@ -10,7 +10,10 @@
 			<table>
 				<tr>
 					<td align="center"><a href="/subscribers">Abonenci</a></td>
+					<td width="20px" />
 					<td align="center"><a href="/invoices">Faktury</a></td>
+					<td width="20px" />
+					<td align="center"><a href="/packages">Pakiety</a></td>
 				</tr>
 			</table>
 			

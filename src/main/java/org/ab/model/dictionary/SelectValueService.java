@@ -1,6 +1,5 @@
 package org.ab.model.dictionary;
 
-import java.util.Collection;
 import java.util.Map;
 
 import org.ab.service.CityService;
@@ -19,13 +18,26 @@ public class SelectValueService {
 
 	@Autowired
 	private CityService cityService;
-	
+
 	@Autowired
 	private ContractPackageService packageService;
-	
+
 	@Autowired
 	private DurationService durationService;
-	
+
+	public Map<String, ?> getInvoicesDictionaries() {
+		final Map<String, Map> results = Maps.newHashMap();
+		results.put("months", Month.asValueMap());
+		results.put("years", getYearValueMap());
+		return results;
+	}
+
+	public Map<String, ?> getPackageDictionaries() {
+		final Map<String, Map> results = Maps.newHashMap();
+		results.put("vatRates", VatRate.asValueMap());
+		return results;
+	}
+
 	public Map<String, Map<String, String>> getSubscriberDictionaries() {
 		final Map<String, Map<String, String>> results = Maps.newHashMap();
 		results.put("clientTypes", ClientType.asValueMap());
@@ -34,13 +46,6 @@ public class SelectValueService {
 		results.put("packages", packageService.getPackageDictionary());
 		results.put("contractDurations", durationService.getDurationDictionary());
 		results.put("deviceTypes", DeviceType.asValueMap());
-		return results;
-	}
-
-	public Map<String, ?> getInvoicesDictionaries() {
-		final Map<String, Map> results = Maps.newHashMap();
-		results.put("months", Month.asValueMap());
-		results.put("years", getYearValueMap());
 		return results;
 	}
 

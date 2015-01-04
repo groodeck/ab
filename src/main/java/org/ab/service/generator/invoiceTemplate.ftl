@@ -1,4 +1,6 @@
-	<table border='1'>
+<html>
+	<body>	
+		<table border='1' style='font-size: 10px;'>
 			<tr>
 				<td rowspan='3' colspan='3' width='250'>
 				
@@ -20,17 +22,17 @@
 				<td colspan='11'/>
 			</tr>
 			<tr>
-				<td colspan='7'>Sprzedawca</td>
-				<td colspan='7'>Nabywca</td>
+				<td colspan='5'>Sprzedawca</td>
+				<td colspan='9'>Nabywca</td>
 			</tr>
 			<tr>
-				<td colspan='7' rowspan='3'>
+				<td colspan='5' rowspan='3'>
 					${seller.name!}<br/>
 					${seller.addressStreet!}<br/>
 					${seller.addressCity!}<br/>
 					${seller.regon!}
 				</td>
-				<td colspan='7' rowspan='3'>
+				<td colspan='9' rowspan='3'>
 					${buyer.name!}<br/>
 					${buyer.addressStreet!}<br/>
 					${buyer.addressCity!}
@@ -39,13 +41,13 @@
 			<tr/>
 			<tr/>
 			<tr>
-				<td colspan='7'>NIP: ${seller.nip!}</td>
-				<td colspan='7'>NIP: ${buyer.nip!}</td>
+				<td colspan='5'>NIP: ${seller.nip!}</td>
+				<td colspan='9'>NIP: ${buyer.nip!}</td>
 			</tr>
 			
 			<tr>
-				<td colspan='7' height='30'>Nr rachunku:</td>
-				<td colspan='7'>Sposób zap³aty:</td>
+				<td colspan='5' height='30'>Nr rachunku:</td>
+				<td colspan='9'>Sposób zap³aty:</td>
 			</tr>
 			<tr>
 				<td colspan='14' height='5'/>
@@ -57,7 +59,7 @@
 				<td rowspan='3'>PKWiU</td>
 				<td rowspan='3'>J.m.</td>
 				<td rowspan='3'>Iloœæ</td>
-				<td rowspan='2' colspan='2'>Cena jednostkowa bez podatku</td>
+				<td rowspan='2' colspan='2' width='30px'>Cena jednostkowa bez podatku</td>
 				<td rowspan='2' colspan='2'>Wartoœæ netto</td>
 				<td colspan='3'>Podatek</td>
 				<td rowspan='2' colspan='2'>Wartoœæ brutto</td>
@@ -199,3 +201,6 @@
 			</tr>
 			
 		</table>
+		
+	</body>
+</html>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC
 	"-//Apache Seftware Foundation//DTD Tiles Configuration 2.1//EN"
-	"src/main/webapp/WEB-INF/dtd/tiles-config_2_1.dtd">
+	"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 	
 	<tiles-definitions>
 
@@ -24,6 +24,14 @@
 		
 		<definition name="invoices" extends="template">
 			<put-attribute name="content" value="/jsp/invoices.jsp"/>
+		</definition>
+		
+		<definition name="packages" extends="template">
+			<put-attribute name="content" value="/jsp/packages.jsp"/>
+		</definition>
+		
+		<definition name="package" extends="template">
+			<put-attribute name="content" value="/jsp/package.jsp"/>
 		</definition>
 		
 	</tiles-definitions>

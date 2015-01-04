@@ -7,6 +7,7 @@ import org.ab.model.InvoiceModel;
 import org.ab.model.dictionary.SelectValueService;
 import org.ab.service.InvoicesService;
 import org.ab.service.generator.Invoice;
+import org.assertj.core.util.Collections;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,32 +26,38 @@ public class InvoicesController {
 	@Autowired
 	private SelectValueService selectValuesService;
 
+	private String getGenerationResultsMessage(final List<Invoice> invoices) {
+		if(Collections.isNullOrEmpty(invoices)){
+			return "Nie wygenerowano faktur";
+		} else {
+			return String.format("Wygenerowano faktury: %s szt.",invoices.size());
+		}
+	}
+
 	@RequestMapping
-    public String handleInitEntry(final Model model) {
+	public String handleInitEntry(final Model model) {
 		model.addAttribute("generationParams", new InvoiceGenerationParams(LocalDate.now()));
-		model.addAllAttributes(this.selectValuesService.getInvoicesDictionaries());
+		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());
 		return "invoices";
-    }
+	}
 
 	@RequestMapping("/generate")
-    public String handleInvoicesGeneration(final @ModelAttribute("generationParams") InvoiceGenerationParams generationParams,
-    		final Model model) {
-		final List<Invoice> invoices = this.invoicesService.generateInvoices(generationParams);
-		System.out.println(String.format("year: %s, month: %s", generationParams.getYear(), generationParams.getMonth()));
-		model.addAttribute("uiMessage", "Wygenerowano faktury");
+	public String handleInvoicesGeneration(final @ModelAttribute("generationParams") InvoiceGenerationParams generationParams,
+			final Model model) {
+		final List<Invoice> invoices = invoicesService.generateInvoices(generationParams);
+		model.addAttribute("uiMessage", getGenerationResultsMessage(invoices));
 
-		model.addAllAttributes(this.selectValuesService.getInvoicesDictionaries());
+		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());
 		model.addAttribute("invoices", invoices);
-		model.addAttribute("invoice", invoices.get(0).getHtmlContent());
 		return "invoices";
-    }
+	}
 
 	@RequestMapping("/search")
-    public String handleSearchAction(final @RequestParam("dateFrom") String dateFrom,
-    		final @RequestParam("dateTo") String dateTo, final Model model) {
+	public String handleSearchAction(final @RequestParam("dateFrom") String dateFrom,
+			final @RequestParam("dateTo") String dateTo, final Model model) {
 		final List<InvoiceModel> invoices =
-				this.invoicesService.findInvoices(LocalDate.now(), LocalDate.now());
+				invoicesService.findInvoices(LocalDate.now(), LocalDate.now());
 		model.addAttribute("invoices", invoices);
 		return "invoices";
-    }
+	}
 }

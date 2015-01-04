@@ -4,48 +4,53 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name="InvoiceContent")
 public class InvoiceContent {
 
+	@GenericGenerator(name = "generator", strategy = "foreign", parameters = @Parameter(name = "property", value = "invoice"))
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "invoiceContentId", unique = true, nullable = false)
-	private Integer invoiceContentId;
+	@GeneratedValue(generator = "generator")
+	@Column(name = "invoiceId", unique = true, nullable = false)
+	private Integer invoiceId;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@PrimaryKeyJoinColumn
 	private Invoice invoice;
 
 	@Column(name="invoiceHtml")
 	private String invoiceHtml;
 
-	public Integer getInvoiceContentId() {
-		return this.invoiceContentId;
-	}
-
-	public void setInvoiceContentId(final Integer invoiceContentId) {
-		this.invoiceContentId = invoiceContentId;
-	}
-
 	public Invoice getInvoice() {
-		return this.invoice;
+		return invoice;
+	}
+
+	public String getInvoiceHtml() {
+		return invoiceHtml;
+	}
+
+	public Integer getInvoiceId() {
+		return invoiceId;
 	}
 
 	public void setInvoice(final Invoice invoice) {
 		this.invoice = invoice;
 	}
 
-	public String getInvoiceHtml() {
-		return this.invoiceHtml;
-	}
-
 	public void setInvoiceHtml(final String invoiceHtml) {
 		this.invoiceHtml = invoiceHtml;
+	}
+
+	public void setInvoiceId(final Integer invoiceId) {
+		this.invoiceId = invoiceId;
 	}
 
 

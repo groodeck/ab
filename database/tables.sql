@@ -96,7 +96,7 @@ create table device(
 create table service(
 	serviceId integer not null IDENTITY PRIMARY KEY,
  	serviceName varchar(50) not null,
- 	vatRate integer not null,
+ 	vatRate integer,
  	vat decimal not null,
  	subscriptionNet decimal not null,
  	subscriptionGross decimal not null,
@@ -106,7 +106,7 @@ create table service(
 
 create table invoice(
 	invoiceId integer not null IDENTITY PRIMARY KEY,
-	contractId integer not null,
+	contractId integer,
  	settlementPeriodStart date not null,
  	settlementPeriodEnd date not null,
  	invoiceNumber varchar(30) not null,
@@ -129,11 +129,10 @@ create table invoiceRecord(
  	vatRate integer,
  	vatAmount decimal,
  	grossAmount decimal,
- 	invoiceId integer not null,
+ 	invoiceId integer,
 );
 
 create table invoiceContent(
-	invoiceContentId integer not null IDENTITY PRIMARY KEY,
- 	invoiceId integer not null,
+ 	invoiceId integer not null IDENTITY PRIMARY KEY,
 	invoiceHtml clob not null,
 );

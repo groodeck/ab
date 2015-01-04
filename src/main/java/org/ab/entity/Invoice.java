@@ -29,7 +29,7 @@ public class Invoice {
 	private Integer invoiceId;
 
 	@ManyToOne
-    @JoinColumn(name="contractId", insertable=false, updatable=true, nullable=true)
+	@JoinColumn(name="contractId")
 	private Contract contract;
 
 	@Column(name="settlementPeriodStart")
@@ -52,7 +52,7 @@ public class Invoice {
 	private LocalDate receiveDate;
 
 	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
-    @JoinColumn(name="invoiceId")
+	@JoinColumn(name="invoiceId")
 	private List<InvoiceRecord> invoiceRecords;
 
 	@Column(name="netAmount")
@@ -65,7 +65,7 @@ public class Invoice {
 	private BigDecimal grossAmount;
 
 	@Column(name="grossAmountWords")
-	private boolean grossAmountWords;
+	private String grossAmountWords;
 
 	@Column(name="paymentDate")
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
@@ -77,123 +77,123 @@ public class Invoice {
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "invoice", cascade = CascadeType.ALL)
 	private InvoiceContent invoiceContent;
 
-	public Integer getInvoiceId() {
-		return this.invoiceId;
-	}
-
-	public void setInvoiceId(final Integer invoiceId) {
-		this.invoiceId = invoiceId;
-	}
-
-	public LocalDate getSettlementPeriodStart() {
-		return this.settlementPeriodStart;
-	}
-
-	public void setSettlementPeriodStart(final LocalDate settlementPeriodStart) {
-		this.settlementPeriodStart = settlementPeriodStart;
-	}
-
-	public LocalDate getSettlementPeriodEnd() {
-		return this.settlementPeriodEnd;
-	}
-
-	public void setSettlementPeriodEnd(final LocalDate settlementPeriodEnd) {
-		this.settlementPeriodEnd = settlementPeriodEnd;
-	}
-
-	public String getInvoiceNumber() {
-		return this.invoiceNumber;
-	}
-
-	public void setInvoiceNumber(final String invoiceNumber) {
-		this.invoiceNumber = invoiceNumber;
+	public Contract getContract() {
+		return contract;
 	}
 
 	public LocalDate getCreateDate() {
-		return this.createDate;
+		return createDate;
+	}
+
+	public BigDecimal getGrossAmount() {
+		return grossAmount;
+	}
+
+	public InvoiceContent getInvoiceContent() {
+		return invoiceContent;
+	}
+
+	public Integer getInvoiceId() {
+		return invoiceId;
+	}
+
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
+
+	public List<InvoiceRecord> getInvoiceRecords() {
+		return invoiceRecords;
+	}
+
+	public BigDecimal getNetAmount() {
+		return netAmount;
+	}
+
+	public LocalDate getPaymentDate() {
+		return paymentDate;
+	}
+
+	public LocalDate getReceiveDate() {
+		return receiveDate;
+	}
+
+	public LocalDate getSettlementPeriodEnd() {
+		return settlementPeriodEnd;
+	}
+
+	public LocalDate getSettlementPeriodStart() {
+		return settlementPeriodStart;
+	}
+
+	public BigDecimal getVatAmount() {
+		return vatAmount;
+	}
+
+	public String isGrossAmountWords() {
+		return grossAmountWords;
+	}
+
+	public boolean isPaid() {
+		return paid;
+	}
+
+	public void setContract(final Contract contract) {
+		this.contract = contract;
 	}
 
 	public void setCreateDate(final LocalDate createDate) {
 		this.createDate = createDate;
 	}
 
-	public LocalDate getReceiveDate() {
-		return this.receiveDate;
-	}
-
-	public void setReceiveDate(final LocalDate receiveDate) {
-		this.receiveDate = receiveDate;
-	}
-
-	public List<InvoiceRecord> getInvoiceRecords() {
-		return this.invoiceRecords;
-	}
-
-	public void setInvoiceRecords(final List<InvoiceRecord> invoiceRecords) {
-		this.invoiceRecords = invoiceRecords;
-	}
-
-	public BigDecimal getNetAmount() {
-		return this.netAmount;
-	}
-
-	public void setNetAmount(final BigDecimal netAmount) {
-		this.netAmount = netAmount;
-	}
-
-	public BigDecimal getVatAmount() {
-		return this.vatAmount;
-	}
-
-	public void setVatAmount(final BigDecimal vatAmount) {
-		this.vatAmount = vatAmount;
-	}
-
-	public BigDecimal getGrossAmount() {
-		return this.grossAmount;
-	}
-
 	public void setGrossAmount(final BigDecimal grossAmount) {
 		this.grossAmount = grossAmount;
 	}
 
-	public boolean isGrossAmountWords() {
-		return this.grossAmountWords;
-	}
-
-	public void setGrossAmountWords(final boolean grossAmountWords) {
+	public void setGrossAmountWords(final String grossAmountWords) {
 		this.grossAmountWords = grossAmountWords;
-	}
-
-	public LocalDate getPaymentDate() {
-		return this.paymentDate;
-	}
-
-	public void setPaymentDate(final LocalDate paymentDate) {
-		this.paymentDate = paymentDate;
-	}
-
-	public boolean isPaid() {
-		return this.paid;
-	}
-
-	public void setPaid(final boolean paid) {
-		this.paid = paid;
-	}
-
-	public InvoiceContent getInvoiceContent() {
-		return this.invoiceContent;
 	}
 
 	public void setInvoiceContent(final InvoiceContent invoiceContent) {
 		this.invoiceContent = invoiceContent;
 	}
 
-	public Contract getContract() {
-		return this.contract;
+	public void setInvoiceId(final Integer invoiceId) {
+		this.invoiceId = invoiceId;
 	}
 
-	public void setContract(final Contract contract) {
-		this.contract = contract;
+	public void setInvoiceNumber(final String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
+	}
+
+	public void setInvoiceRecords(final List<InvoiceRecord> invoiceRecords) {
+		this.invoiceRecords = invoiceRecords;
+	}
+
+	public void setNetAmount(final BigDecimal netAmount) {
+		this.netAmount = netAmount;
+	}
+
+	public void setPaid(final boolean paid) {
+		this.paid = paid;
+	}
+
+	public void setPaymentDate(final LocalDate paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+
+	public void setReceiveDate(final LocalDate receiveDate) {
+		this.receiveDate = receiveDate;
+	}
+
+	public void setSettlementPeriodEnd(final LocalDate settlementPeriodEnd) {
+		this.settlementPeriodEnd = settlementPeriodEnd;
+	}
+
+	public void setSettlementPeriodStart(final LocalDate settlementPeriodStart) {
+		this.settlementPeriodStart = settlementPeriodStart;
+	}
+
+	public void setVatAmount(final BigDecimal vatAmount) {
+		this.vatAmount = vatAmount;
 	}
 }
