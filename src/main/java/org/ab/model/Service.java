@@ -1,6 +1,7 @@
 package org.ab.model;
 
 public class Service {
+	//TODO: remove
 	private boolean disposable;
 	private String serviceId;
 	private String serviceName;

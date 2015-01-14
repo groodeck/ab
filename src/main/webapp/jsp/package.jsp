@@ -24,7 +24,6 @@
 				   + '<td><select name="services['+rowCount+'].vatRate" id="services_'+rowCount+'_vatRate" ></select></td>'
 				   + '<td><input name="services['+rowCount+'].vatAmount" size="15"/></td>'
 				   + '<td><input name="services['+rowCount+'].subscriptionGross" size="15"/></td>'
-				   + '<td><input name="services['+rowCount+'].disposable" type="checkbox" value="true"/></td>'
 				   + '</tr>');
 				$("#services_0_vatRate").find('option').clone().appendTo("#services_"+rowCount+"_vatRate");
 		 	}
@@ -74,12 +73,25 @@
 				<td><sf:input path="packageSubscription" size="15" id="subscription" /></td>
 			</tr>
 			<tr>
+				<td/>
+				<td>Netto</td>
+				<td>Stawka VAT</td>
+				<td>VAT</td>
+				<td>Brutto</td>
+			</tr>
+			<tr>
 				<th align="right"><label for="activation_fee">Opłata aktywacyjna:</label></th>
-				<td><sf:input path="activationFee" size="15" id="activation_fee" /></td>
+				<td><sf:input path="activationFeeNet" size="15" id="activation_fee_net" /></td>
+				<td><sf:select path="activationFeeVatRate" items="${vatRates}" id="activation_fee_vat_rate"/></td>
+				<td><sf:input path="activationFeeVat" size="15" id="activation_fee_vat" /></td>
+				<td><sf:input path="activationFeeGross" size="15" id="activation_fee_gross" /></td>
 			</tr>
 			<tr>
 				<th align="right"><label for="installation_fee">Opłata instalacyjna:</label></th>
-				<td><sf:input path="installationFee" size="15" id="installation_fee" /></td>
+				<td><sf:input path="installationFeeNet" size="15" id="installation_fee" /></td>
+				<td><sf:select path="installationFeeVatRate" items="${vatRates}" id="installation_fee_vat_rate"/></td>
+				<td><sf:input path="installationFeeVat" size="15" id="installation_fee_vat" /></td>
+				<td><sf:input path="installationFeeGross" size="15" id="installation_fee_gross" /></td>
 			</tr>
 		</table>
 		
@@ -91,7 +103,6 @@
 				<td>Stawka VAT</td>
 				<td>VAT</td>
 				<td>Cena brutto</td>
-				<td>Jednorazowa</td>
 			</tr>
 			<c:forEach var="service" items="${contractPackage.services}" varStatus="status">
 			<tr>
@@ -106,8 +117,6 @@
 					<sf:input path="services[${status.index}].vatAmount" size="15"/></td>
 				<td>
 					<sf:input path="services[${status.index}].subscriptionGross" size="15"/></td>
-				<td>
-					<sf:checkbox path="services[${status.index}].disposable" /></td>
 					
 				<c:if test="${status.first}">
 					<td nowrap="nowrap">

@@ -8,19 +8,45 @@ public class ContractPackage {
 	private String packageId;
 	private String packageName;
 	private String packageSubscription;
-	private String activationFee;
-	private String installationFee;
+
+	private String activationFeeNet;
+	private String activationFeeVatRate;
+	private String activationFeeVat;
+	private String activationFeeGross;
+
+	private String installationFeeNet;
+	private String installationFeeVatRate;
+	private String installationFeeVat;
+	private String installationFeeGross;
+
 	private List<Service> services;
 
 	public ContractPackage(){
 		services = Lists.newArrayList();
 	}
-
-	public String getActivationFee() {
-		return activationFee;
+	public String getActivationFeeGross() {
+		return activationFeeGross;
 	}
-	public String getInstallationFee() {
-		return installationFee;
+	public String getActivationFeeNet() {
+		return activationFeeNet;
+	}
+	public String getActivationFeeVat() {
+		return activationFeeVat;
+	}
+	public String getActivationFeeVatRate() {
+		return activationFeeVatRate;
+	}
+	public String getInstallationFeeGross() {
+		return installationFeeGross;
+	}
+	public String getInstallationFeeNet() {
+		return installationFeeNet;
+	}
+	public String getInstallationFeeVat() {
+		return installationFeeVat;
+	}
+	public String getInstallationFeeVatRate() {
+		return installationFeeVatRate;
 	}
 	public String getPackageId() {
 		return packageId;
@@ -34,11 +60,29 @@ public class ContractPackage {
 	public List<Service> getServices() {
 		return services;
 	}
-	public void setActivationFee(final String activationFee) {
-		this.activationFee = activationFee;
+	public void setActivationFeeGross(final String activationFeeGross) {
+		this.activationFeeGross = activationFeeGross;
 	}
-	public void setInstallationFee(final String installationFee) {
-		this.installationFee = installationFee;
+	public void setActivationFeeNet(final String activationFeeNet) {
+		this.activationFeeNet = activationFeeNet;
+	}
+	public void setActivationFeeVat(final String activationFeeVat) {
+		this.activationFeeVat = activationFeeVat;
+	}
+	public void setActivationFeeVatRate(final String activationFeeVatRate) {
+		this.activationFeeVatRate = activationFeeVatRate;
+	}
+	public void setInstallationFeeGross(final String installationFeeGross) {
+		this.installationFeeGross = installationFeeGross;
+	}
+	public void setInstallationFeeNet(final String installationFeeNet) {
+		this.installationFeeNet = installationFeeNet;
+	}
+	public void setInstallationFeeVat(final String installationFeeVat) {
+		this.installationFeeVat = installationFeeVat;
+	}
+	public void setInstallationFeeVatRate(final String installationFeeVatRate) {
+		this.installationFeeVatRate = installationFeeVatRate;
 	}
 	public void setPackageId(final String packageId) {
 		this.packageId = packageId;

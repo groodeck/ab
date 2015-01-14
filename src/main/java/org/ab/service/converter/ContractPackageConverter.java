@@ -28,11 +28,12 @@ public class ContractPackageConverter {
 			if(entity.getPackageSubscription() != null){
 				model.setPackageSubscription(entity.getPackageSubscription().toPlainString());
 			}
+			//TODO: gros, vat
 			if(entity.getActivationFee() != null){
-				model.setActivationFee(entity.getActivationFee().toPlainString());
+				model.setActivationFeeNet(entity.getActivationFee().toPlainString());
 			}
 			if(entity.getInstallationFee() != null){
-				model.setInstallationFee(entity.getInstallationFee().toPlainString());
+				model.setInstallationFeeNet(entity.getInstallationFee().toPlainString());
 			}
 			model.setServices(FluentIterable.from(entity.getServices()).transform(toServiceModel).toList());
 
@@ -101,12 +102,13 @@ public class ContractPackageConverter {
 				entity.setPackageSubscription(new BigDecimal(asNumber(model.getPackageSubscription())));
 			}
 
-			if(isNotBlank(model.getInstallationFee())){
-				entity.setInstallationFee(new BigDecimal(asNumber(model.getInstallationFee())));
+			//TODO: gross, vat
+			if(isNotBlank(model.getInstallationFeeNet())){
+				entity.setInstallationFee(new BigDecimal(asNumber(model.getInstallationFeeNet())));
 			}
 
-			if(isNotBlank(model.getActivationFee())){
-				entity.setActivationFee(new BigDecimal(asNumber(model.getActivationFee())));
+			if(isNotBlank(model.getActivationFeeNet())){
+				entity.setActivationFee(new BigDecimal(asNumber(model.getActivationFeeNet())));
 			}
 
 			entity.setServices(FluentIterable.from(model.getServices())
