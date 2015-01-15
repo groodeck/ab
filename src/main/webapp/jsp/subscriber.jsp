@@ -77,7 +77,7 @@
 	 			var packageId = $("#contract_pack").val();
 	 			$.getJSON( "/async/getPackageDetails/" + packageId, function(data) {
 	 				$("#activation_fee").val(data.activationFee)
-	 				$("#installation_fee").val(data.installationFee)
+	 				$("#installation_fee").val(data.installationFeeGross)
 	 				$("#contract_subscription").val(data.subscription)
 				})
 	 		}	

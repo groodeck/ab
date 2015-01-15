@@ -35,51 +35,40 @@ public class Service {
 	@Column(name="subscriptionGross")
 	private BigDecimal subscriptionGross;
 
-	@Column(name="disposable")
-	private boolean disposable;
-
 	@ManyToOne
 	@JoinColumn(name="packageId", insertable=false, updatable=false, nullable=false)
 	private ContractPackage contractPackage;
 
 	public ContractPackage getContractPackage() {
-		return contractPackage;
+		return this.contractPackage;
 	}
 
 	public Integer getServiceId() {
-		return serviceId;
+		return this.serviceId;
 	}
 
 	public String getServiceName() {
-		return serviceName;
+		return this.serviceName;
 	}
 
 	public BigDecimal getSubscriptionGross() {
-		return subscriptionGross;
+		return this.subscriptionGross;
 	}
 
 	public BigDecimal getSubscriptionNet() {
-		return subscriptionNet;
+		return this.subscriptionNet;
 	}
 
 	public BigDecimal getVatAmount() {
-		return vatAmount;
+		return this.vatAmount;
 	}
 
 	public Integer getVatRate() {
-		return vatRate;
-	}
-
-	public boolean isDisposable() {
-		return disposable;
+		return this.vatRate;
 	}
 
 	public void setContractPackage(final ContractPackage contractPackage) {
 		this.contractPackage = contractPackage;
-	}
-
-	public void setDisposable(final boolean disposable) {
-		this.disposable = disposable;
 	}
 
 	public void setServiceId(final Integer serviceId) {
@@ -99,7 +88,7 @@ public class Service {
 	}
 
 	public void setVatAmount(final BigDecimal vat) {
-		vatAmount = vat;
+		this.vatAmount = vat;
 	}
 
 	public void setVatRate(final Integer vatRate) {

@@ -15,103 +15,161 @@ public class Contract {
 	private String contractPeriod;
 	private String contractPack;
 	private String contractSubscription;
-	private String installationFee;
-	private String activationFee;
+	private String activationFeeNet;
+	private String activationFeeVatRate;
+	private String activationFeeVat;
+	private String activationFeeGross;
+	private String installationFeeNet;
+	private String installationFeeVatRate;
+	private String installationFeeVat;
+	private String installationFeeGross;
 	private List<Device> devices;
 	private String user;
 	private boolean active;
-	
+
 	public Contract(){
-		devices = Lists.newArrayList(new Device());
-		active = true;
+		this.devices = Lists.newArrayList(new Device());
+		this.active = true;
 	}
-	
+
 	public String getContractIdn() {
-		return contractIdn;
+		return this.contractIdn;
 	}
 	public String getContractStatus() {
-		return contractStatus;
+		return this.contractStatus;
 	}
 	public String getContractSignDate() {
-		return contractSignDate;
+		return this.contractSignDate;
 	}
 	public String getContractActivationDate() {
-		return contractActivationDate;
+		return this.contractActivationDate;
 	}
 	public String getContractPeriod() {
-		return contractPeriod;
+		return this.contractPeriod;
 	}
 	public String getContractPack() {
-		return contractPack;
+		return this.contractPack;
 	}
 	public String getContractSubscription() {
-		return contractSubscription;
+		return this.contractSubscription;
 	}
-	public String getInstallationFee() {
-		return installationFee;
-	}
-	public void setContractIdn(String contractIdn) {
+	public void setContractIdn(final String contractIdn) {
 		this.contractIdn = contractIdn;
 	}
-	public void setContractStatus(String contractStatus) {
+	public void setContractStatus(final String contractStatus) {
 		this.contractStatus = contractStatus;
 	}
-	public void setContractSignDate(String contractSignDate) {
+	public void setContractSignDate(final String contractSignDate) {
 		this.contractSignDate = contractSignDate;
 	}
-	public void setContractActivationDate(String contractActivationDate) {
+	public void setContractActivationDate(final String contractActivationDate) {
 		this.contractActivationDate = contractActivationDate;
 	}
-	public void setContractPeriod(String contractPeriod) {
+	public void setContractPeriod(final String contractPeriod) {
 		this.contractPeriod = contractPeriod;
 	}
-	public void setContractPack(String contractPack) {
+	public void setContractPack(final String contractPack) {
 		this.contractPack = contractPack;
 	}
-	public void setContractSubscription(String contractSubscription) {
+	public void setContractSubscription(final String contractSubscription) {
 		this.contractSubscription = contractSubscription;
 	}
-	public void setInstallationFee(String installationFee) {
-		this.installationFee = installationFee;
-	}
 	public String getContractEndDate() {
-		return contractEndDate;
+		return this.contractEndDate;
 	}
-	public void setContractEndDate(String contractEndDate) {
+	public void setContractEndDate(final String contractEndDate) {
 		this.contractEndDate = contractEndDate;
 	}
 	public String getContractId() {
-		return contractId;
+		return this.contractId;
 	}
-	public void setContractId(String contractId) {
+	public void setContractId(final String contractId) {
 		this.contractId = contractId;
 	}
-	public String getActivationFee() {
-		return activationFee;
-	}
-	public void setActivationFee(String activationFee) {
-		this.activationFee = activationFee;
-	}
 	public List<Device> getDevices() {
-		return devices;
+		return this.devices;
 	}
-	public void setDevices(List<Device> devices) {
+	public void setDevices(final List<Device> devices) {
 		this.devices = devices;
 	}
 
-	public void setUser(String user) {
+	public void setUser(final String user) {
 		this.user = user;
 	}
 
 	public String getUser() {
-		return user;
+		return this.user;
 	}
 
 	public boolean isActive() {
-		return active;
+		return this.active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(final boolean active) {
 		this.active = active;
+	}
+
+	public String getActivationFeeNet() {
+		return this.activationFeeNet;
+	}
+
+	public void setActivationFeeNet(final String activationFeeNet) {
+		this.activationFeeNet = activationFeeNet;
+	}
+
+	public String getActivationFeeVatRate() {
+		return this.activationFeeVatRate;
+	}
+
+	public void setActivationFeeVatRate(final String activationFeeVatRate) {
+		this.activationFeeVatRate = activationFeeVatRate;
+	}
+
+	public String getActivationFeeVat() {
+		return this.activationFeeVat;
+	}
+
+	public void setActivationFeeVat(final String activationFeeVat) {
+		this.activationFeeVat = activationFeeVat;
+	}
+
+	public String getActivationFeeGross() {
+		return this.activationFeeGross;
+	}
+
+	public void setActivationFeeGross(final String activationFeeGross) {
+		this.activationFeeGross = activationFeeGross;
+	}
+
+	public String getInstallationFeeNet() {
+		return this.installationFeeNet;
+	}
+
+	public void setInstallationFeeNet(final String installationFeeNet) {
+		this.installationFeeNet = installationFeeNet;
+	}
+
+	public String getInstallationFeeVatRate() {
+		return this.installationFeeVatRate;
+	}
+
+	public void setInstallationFeeVatRate(final String installationFeeVatRate) {
+		this.installationFeeVatRate = installationFeeVatRate;
+	}
+
+	public String getInstallationFeeVat() {
+		return this.installationFeeVat;
+	}
+
+	public void setInstallationFeeVat(final String installationFeeVat) {
+		this.installationFeeVat = installationFeeVat;
+	}
+
+	public String getInstallationFeeGross() {
+		return this.installationFeeGross;
+	}
+
+	public void setInstallationFeeGross(final String installationFeeGross) {
+		this.installationFeeGross = installationFeeGross;
 	}
 }

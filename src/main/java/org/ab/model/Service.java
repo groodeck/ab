@@ -1,8 +1,6 @@
 package org.ab.model;
 
 public class Service {
-	//TODO: remove
-	private boolean disposable;
 	private String serviceId;
 	private String serviceName;
 	private String subscriptionGross;
@@ -11,28 +9,22 @@ public class Service {
 	private String vatRate;
 
 	public String getServiceId() {
-		return serviceId;
+		return this.serviceId;
 	}
 	public String getServiceName() {
-		return serviceName;
+		return this.serviceName;
 	}
 	public String getSubscriptionGross() {
-		return subscriptionGross;
+		return this.subscriptionGross;
 	}
 	public String getSubscriptionNet() {
-		return subscriptionNet;
+		return this.subscriptionNet;
 	}
 	public String getVatAmount() {
-		return vatAmount;
+		return this.vatAmount;
 	}
 	public String getVatRate() {
-		return vatRate;
-	}
-	public boolean isDisposable() {
-		return disposable;
-	}
-	public void setDisposable(final boolean disposable) {
-		this.disposable = disposable;
+		return this.vatRate;
 	}
 	public void setServiceId(final String serviceId) {
 		this.serviceId = serviceId;

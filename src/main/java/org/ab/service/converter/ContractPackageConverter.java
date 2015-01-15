@@ -1,12 +1,12 @@
 package org.ab.service.converter;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.ab.util.Translator.toAmount;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.ab.entity.ContractPackage;
 import org.ab.model.Service;
+import org.ab.model.dictionary.VatRate;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -28,14 +28,34 @@ public class ContractPackageConverter {
 			if(entity.getPackageSubscription() != null){
 				model.setPackageSubscription(entity.getPackageSubscription().toPlainString());
 			}
-			//TODO: gros, vat
-			if(entity.getActivationFee() != null){
-				model.setActivationFeeNet(entity.getActivationFee().toPlainString());
+
+			if(entity.getActivationFeeNet() != null){
+				model.setActivationFeeNet(entity.getActivationFeeNet().toPlainString());
 			}
-			if(entity.getInstallationFee() != null){
-				model.setInstallationFeeNet(entity.getInstallationFee().toPlainString());
+			if(entity.getActivationFeeVatRate() != null){
+				model.setActivationFeeVatRate(entity.getActivationFeeVatRate().name());
 			}
-			model.setServices(FluentIterable.from(entity.getServices()).transform(toServiceModel).toList());
+			if(entity.getActivationFeeVat() != null){
+				model.setActivationFeeVat(entity.getActivationFeeVat().toPlainString());
+			}
+			if(entity.getActivationFeeGross() != null){
+				model.setActivationFeeGross(entity.getActivationFeeGross().toPlainString());
+			}
+
+			if(entity.getInstallationFeeNet() != null){
+				model.setInstallationFeeNet(entity.getInstallationFeeNet().toPlainString());
+			}
+			if(entity.getInstallationFeeVatRate() != null){
+				model.setInstallationFeeVatRate(entity.getInstallationFeeVatRate().name());
+			}
+			if(entity.getInstallationFeeVat() != null){
+				model.setInstallationFeeVat(entity.getInstallationFeeVat().toPlainString());
+			}
+			if(entity.getInstallationFeeGross() != null){
+				model.setInstallationFeeGross(entity.getInstallationFeeGross().toPlainString());
+			}
+
+			model.setServices(FluentIterable.from(entity.getServices()).transform(ContractPackageConverter.this.toServiceModel).toList());
 
 			return model;
 		}
@@ -48,7 +68,6 @@ public class ContractPackageConverter {
 			if(entity.getServiceId() != null){
 				model.setServiceId(entity.getServiceId().toString());
 			}
-			model.setDisposable(entity.isDisposable());
 			model.setServiceName(entity.getServiceName());
 			if(entity.getSubscriptionNet() != null){
 				model.setSubscriptionNet(entity.getSubscriptionNet().toPlainString());
@@ -73,17 +92,10 @@ public class ContractPackageConverter {
 		public org.ab.entity.Service apply(final Service model) {
 			final org.ab.entity.Service entity = new org.ab.entity.Service();
 			entity.setServiceName(model.getServiceName());
-			if(isNotBlank(model.getSubscriptionNet())){
-				entity.setSubscriptionNet(new BigDecimal(asNumber(model.getSubscriptionNet())));
-			}
+			entity.setSubscriptionNet(toAmount(model.getSubscriptionNet()));
 			entity.setVatRate(new VatRateConverter().convert(model.getVatRate()));
-			if(isNotBlank(model.getVatAmount())){
-				entity.setVatAmount(new BigDecimal(asNumber(model.getVatAmount())));
-			}
-			if(isNotBlank(model.getSubscriptionGross())){
-				entity.setSubscriptionGross(new BigDecimal(asNumber(model.getSubscriptionGross())));
-			}
-			entity.setDisposable(model.isDisposable());
+			entity.setVatAmount(toAmount(model.getVatAmount()));
+			entity.setSubscriptionGross(toAmount(model.getSubscriptionGross()));
 			return entity;
 		}
 	};
@@ -98,40 +110,35 @@ public class ContractPackageConverter {
 			}
 			entity.setPackageName(model.getPackageName());
 
-			if(isNotBlank(model.getPackageSubscription())){
-				entity.setPackageSubscription(new BigDecimal(asNumber(model.getPackageSubscription())));
-			}
+			entity.setPackageSubscription(toAmount(model.getPackageSubscription()));
 
-			//TODO: gross, vat
-			if(isNotBlank(model.getInstallationFeeNet())){
-				entity.setInstallationFee(new BigDecimal(asNumber(model.getInstallationFeeNet())));
-			}
+			entity.setActivationFeeNet(toAmount(model.getActivationFeeNet()));
+			entity.setActivationFeeVatRate(VatRate.valueOf(model.getActivationFeeVatRate()));
+			entity.setActivationFeeVat(toAmount(model.getActivationFeeVat()));
+			entity.setActivationFeeGross(toAmount(model.getActivationFeeGross()));
 
-			if(isNotBlank(model.getActivationFeeNet())){
-				entity.setActivationFee(new BigDecimal(asNumber(model.getActivationFeeNet())));
-			}
+			entity.setInstallationFeeNet(toAmount(model.getInstallationFeeNet()));
+			entity.setInstallationFeeVatRate(VatRate.valueOf(model.getInstallationFeeVatRate()));
+			entity.setInstallationFeeVat(toAmount(model.getInstallationFeeVat()));
+			entity.setInstallationFeeGross(toAmount(model.getInstallationFeeGross()));
 
 			entity.setServices(FluentIterable.from(model.getServices())
-					.transform(toServiceEntity).toList());
+					.transform(ContractPackageConverter.this.toServiceEntity).toList());
 			return entity;
 		}
 	};
 
-	private String asNumber(final String numericString) {
-		return numericString.replaceAll(",", ".");
-	}
-
 	public org.ab.model.ContractPackage convert(final ContractPackage contractPackage) {
-		return toContractPackageModel.apply(contractPackage);
+		return this.toContractPackageModel.apply(contractPackage);
 	}
 
 	public List<org.ab.model.ContractPackage> convert(final List<ContractPackage> entities) {
 		return FluentIterable.from(entities)
-				.transform(toContractPackageModel).toList();
+				.transform(this.toContractPackageModel).toList();
 	}
 
 	public ContractPackage convert(final org.ab.model.ContractPackage model) {
-		return toPackageEntity.apply(model);
+		return this.toPackageEntity.apply(model);
 	}
 
 }

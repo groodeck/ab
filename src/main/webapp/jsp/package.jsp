@@ -58,26 +58,26 @@
    <sf:form method="post" action="/package/save" modelAttribute="contractPackage" >
 		<fieldset>
 		
-		<div id="packageDetailsDiv" align="center" style="float:left; width: 50%;">
+		<div id="packageDetailsDiv" align="center" style="float:left; width: 70%;">
 		
 		<sf:hidden path="packageId"/>
 		<table width="100%">
 			<tr>
-				<th align="right" style="width: 40%"><label for="package_name">Nazwa pakietu:</label></th>
-				<td>
-					<sf:input path="packageName" size="15" id="package_name" />
+				<th align="right" style="width: 30%"><label for="package_name">Nazwa pakietu:</label></th>
+				<td colspan="4">
+					<sf:input path="packageName" size="30" id="package_name" />
 				</td>
 			</tr>
 			<tr>
 				<th align="right"><label for="subscription">Abonament:</label></th>
-				<td><sf:input path="packageSubscription" size="15" id="subscription" /></td>
+				<td colspan="4"><sf:input path="packageSubscription" size="15" id="subscription" /></td>
 			</tr>
 			<tr>
 				<td/>
-				<td>Netto</td>
-				<td>Stawka VAT</td>
-				<td>VAT</td>
-				<td>Brutto</td>
+				<th>Netto</th>
+				<th>Stawka VAT</th>
+				<th>VAT</th>
+				<th>Brutto</th>
 			</tr>
 			<tr>
 				<th align="right"><label for="activation_fee">Opłata aktywacyjna:</label></th>
@@ -95,7 +95,7 @@
 			</tr>
 		</table>
 		
-		<h3>Usługi</h3>
+		<h3 align="left">Usługi:</h3>
 		<table style="font-family:sans-serif;" width="100%" id="serviceTable" border="1">
 			<tr>
 				<td>Nazwa usługi</td>
@@ -107,7 +107,7 @@
 			<c:forEach var="service" items="${contractPackage.services}" varStatus="status">
 			<tr>
 				<td>
-					<sf:input path="services[${status.index}].serviceName" size="20"/></td>
+					<sf:input path="services[${status.index}].serviceName" size="25"/></td>
 				<td>
 					<sf:input path="services[${status.index}].subscriptionNet" size="15"/></td>
 				<td>
@@ -129,7 +129,7 @@
 		</table>
 		
 		</div>
-		
+
 		<div id="submitDiv" align="center" style="clear:both; width: 100%; height:50px; vertical-align: middle;">
 			<input type="submit" value="Zapisz"/>
 		</div>

@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.ab.model.dictionary.ContractStatus;
+import org.ab.model.dictionary.VatRate;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
@@ -58,11 +59,31 @@ public class Contract {
 	@Column(name="contractSubscription")
 	private BigDecimal contractSubscription;
 
-	@Column(name="installationFee")
-	private BigDecimal installationFee;
+	@Column(name="activationFeeNet")
+	private BigDecimal activationFeeNet;
 
-	@Column(name="activationFee")
-	private BigDecimal activationFee;
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name="activationFeeVatRate")
+	private VatRate activationFeeVatRate;
+
+	@Column(name="activationFeeVat")
+	private BigDecimal activationFeeVat;
+
+	@Column(name="activationFeeGross")
+	private BigDecimal activationFeeGross;
+
+	@Column(name="installationFeeNet")
+	private BigDecimal installationFeeNet;
+
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name="installationFeeVatRate")
+	private VatRate installationFeeVatRate;
+
+	@Column(name="installationFeeVat")
+	private BigDecimal installationFeeVat;
+
+	@Column(name="installationFeeGross")
+	private BigDecimal installationFeeGross;
 
 	@Column(name="disposableFeePaid")
 	private boolean disposableFeePaid;
@@ -118,10 +139,6 @@ public class Contract {
 		return this.contractSubscription;
 	}
 
-	public BigDecimal getInstallationFee() {
-		return this.installationFee;
-	}
-
 	public void setContractId(final Integer contractId) {
 		this.contractId = contractId;
 	}
@@ -156,18 +173,6 @@ public class Contract {
 
 	public void setContractSubscription(final BigDecimal contractSubscription) {
 		this.contractSubscription = contractSubscription;
-	}
-
-	public void setInstallationFee(final BigDecimal installationFee) {
-		this.installationFee = installationFee;
-	}
-
-	public BigDecimal getActivationFee() {
-		return this.activationFee;
-	}
-
-	public void setActivationFee(final BigDecimal activationFee) {
-		this.activationFee = activationFee;
 	}
 
 	public Subscriber getSubscriber() {
@@ -208,6 +213,70 @@ public class Contract {
 
 	public void setDisposableFeePaid(final boolean disposableFeePaid) {
 		this.disposableFeePaid = disposableFeePaid;
+	}
+
+	public BigDecimal getActivationFeeNet() {
+		return this.activationFeeNet;
+	}
+
+	public void setActivationFeeNet(final BigDecimal activationFeeNet) {
+		this.activationFeeNet = activationFeeNet;
+	}
+
+	public VatRate getActivationFeeVatRate() {
+		return this.activationFeeVatRate;
+	}
+
+	public void setActivationFeeVatRate(final VatRate activationFeeVatRate) {
+		this.activationFeeVatRate = activationFeeVatRate;
+	}
+
+	public BigDecimal getActivationFeeVat() {
+		return this.activationFeeVat;
+	}
+
+	public void setActivationFeeVat(final BigDecimal activationFeeVat) {
+		this.activationFeeVat = activationFeeVat;
+	}
+
+	public BigDecimal getActivationFeeGross() {
+		return this.activationFeeGross;
+	}
+
+	public void setActivationFeeGross(final BigDecimal activationFeeGross) {
+		this.activationFeeGross = activationFeeGross;
+	}
+
+	public BigDecimal getInstallationFeeNet() {
+		return this.installationFeeNet;
+	}
+
+	public void setInstallationFeeNet(final BigDecimal installationFeeNet) {
+		this.installationFeeNet = installationFeeNet;
+	}
+
+	public VatRate getInstallationFeeVatRate() {
+		return this.installationFeeVatRate;
+	}
+
+	public void setInstallationFeeVatRate(final VatRate installationFeeVatRate) {
+		this.installationFeeVatRate = installationFeeVatRate;
+	}
+
+	public BigDecimal getInstallationFeeVat() {
+		return this.installationFeeVat;
+	}
+
+	public void setInstallationFeeVat(final BigDecimal installationFeeVat) {
+		this.installationFeeVat = installationFeeVat;
+	}
+
+	public BigDecimal getInstallationFeeGross() {
+		return this.installationFeeGross;
+	}
+
+	public void setInstallationFeeGross(final BigDecimal installationFeeGross) {
+		this.installationFeeGross = installationFeeGross;
 	}
 
 }

@@ -25,27 +25,33 @@ public class ContractPackageService {
 
 	@Transactional
 	public List<org.ab.model.ContractPackage> getAllPackages() {
-		final List<ContractPackage> all = contractPackageDao.findAll();
-		return contractPackageConverter.convert(all);
+		final List<ContractPackage> all = this.contractPackageDao.findAll();
+		return this.contractPackageConverter.convert(all);
 	}
 
 	@Transactional
 	public org.ab.model.ContractPackage getContractPackage(final int packageId) {
-		final ContractPackage contractPackage = contractPackageDao.getById(String.valueOf(packageId));
-		return contractPackageConverter.convert(contractPackage);
+		final ContractPackage contractPackage = this.contractPackageDao.getById(String.valueOf(packageId));
+		return this.contractPackageConverter.convert(contractPackage);
 	}
 
 	public PackageDetails getPackage(final String packageId) {
-		final ContractPackage contractPackage = contractPackageDao.getById(packageId);
+		final ContractPackage contractPackage = this.contractPackageDao.getById(packageId);
 		final PackageDetails packageDetails = new PackageDetails();
 		packageDetails.setSubscription(contractPackage.getPackageSubscription().toPlainString());
-		packageDetails.setInstallationFee(contractPackage.getInstallationFee().toPlainString());
-		packageDetails.setActivationFee(contractPackage.getActivationFee().toPlainString());
+		packageDetails.setInstallationFeeNet(contractPackage.getInstallationFeeNet().toPlainString());
+		packageDetails.setInstallationFeeVatRate(contractPackage.getInstallationFeeVatRate().name());
+		packageDetails.setInstallationFeeVat(contractPackage.getInstallationFeeVat().toPlainString());
+		packageDetails.setInstallationFeeGross(contractPackage.getInstallationFeeGross().toPlainString());
+		packageDetails.setActivationFeeNet(contractPackage.getActivationFeeNet().toPlainString());
+		packageDetails.setActivationFeeVatRate(contractPackage.getActivationFeeVatRate().name());
+		packageDetails.setActivationFeeVat(contractPackage.getActivationFeeVat().toPlainString());
+		packageDetails.setActivationFeeGross(contractPackage.getActivationFeeGross().toPlainString());
 		return packageDetails;
 	}
 
 	public Map<String, String> getPackageDictionary(){
-		final List<ContractPackage> packages = contractPackageDao.findAll();
+		final List<ContractPackage> packages = this.contractPackageDao.findAll();
 		final Map<String, String> results = Maps.newHashMap();
 		for(final ContractPackage contractPackage : packages){
 			results.put(contractPackage.getPackageId().toString(),
@@ -55,7 +61,7 @@ public class ContractPackageService {
 	}
 
 	public void save(final org.ab.model.ContractPackage contractPackage, final String name) {
-		final org.ab.entity.ContractPackage entity = contractPackageConverter.convert(contractPackage);
-		contractPackageDao.save(entity);
+		final org.ab.entity.ContractPackage entity = this.contractPackageConverter.convert(contractPackage);
+		this.contractPackageDao.save(entity);
 	}
 }

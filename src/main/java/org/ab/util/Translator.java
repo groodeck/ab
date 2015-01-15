@@ -170,14 +170,23 @@ public class Translator {
 		return result;
 	}
 
-	public static BigDecimal getDecimal(final String vatAmount) {
+	private static String commaNumber(final String numericString) {
+		return numericString.replaceAll(",", ".");
+	}
 
+	public static BigDecimal toAmount(final String value) {
+		return toDecimal(value, 2);
+	}
+
+	public static BigDecimal toDecimal(final String value, final int scale) {
 		BigDecimal decimal = new BigDecimal(0);
-		try {
-			decimal = new BigDecimal(vatAmount);
-		} catch (final Exception e) {
-			log.warn("Cannot convert to decimal value: " + vatAmount);
+		if(StringUtils.isNotBlank(value)){
+			try {
+				decimal = new BigDecimal(commaNumber(value));
+			} catch (final Exception e) {
+				log.warn("Cannot convert to decimal value: " + value);
+			}
 		}
-		return decimal;
+		return decimal.setScale(scale);
 	}
 }

@@ -24,8 +24,11 @@
    <custom:message uiMessage="${uiMessage}"/>
    
    <h2>Pakiety</h2>
+		
+		<a href="/package/new"><button>Dodaj pakiet</button></a>
    
 		<c:if test="${not empty contractPackages}">
+			<br/><br/>
 			<table border="1" cellspacing="0" cellpadding="2">
 				<tr>
 					<td>lp</td>
@@ -33,15 +36,14 @@
 					<td>Abonent</td>
 					<td>Opłata instalacyjna</td>
 					<td>Opłata aktywacyjna</td>
-					<td><a href="/package/new"><button>Dodaj pakiet</button></a></td>
 				</tr>
 				<c:forEach var="package" items="${contractPackages}" varStatus="status" >
 					<tr>
 						<td onclick="editContractPackage(${package.packageId})"><c:out value="${status.index + 1}"/></td>
 						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.packageName}"/></td>
 						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.packageSubscription}"/></td>
-						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.installationFee}"/></td>
-						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.activationFee}"/></td>
+						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.installationFeeGross}"/></td>
+						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.activationFeeGross}"/></td>
 					</tr>
 				</c:forEach>
 			</table>
