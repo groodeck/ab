@@ -1,80 +1,19 @@
 package org.ab.util;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
 
 import com.google.common.base.Joiner;
 
 public class Translator {
 
-	private static Logger log = Logger.getLogger(Translator.class);
-	private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
-	private static final String TRUE = "true";
-
-	private Translator(){}
-
-	public static Date parseDate(final String dateStr){
-		return parseDate(dateStr, null);
+	private static String commaNumber(final String numericString) {
+		return numericString.replaceAll(",", ".");
 	}
-
-	public static Date parseDate(final String dateStr, String format){
-
-		if(dateStr == null || !dateStr.matches("\\d{4}-\\d{2}-\\d{2}")){
-			return null;
-		}
-
-		if(format == null){
-			format = DEFAULT_DATE_FORMAT;
-		}
-		final SimpleDateFormat sdf = new SimpleDateFormat(format);
-		Date date = null;
-		try {
-			final java.util.Date plainDate = sdf.parse(dateStr);
-			date = new Date(plainDate.getTime());
-		} catch (final ParseException e) {
-			log.error("Cannot convert date: " + dateStr, e);
-		}
-
-		return date;
-	}
-
-	public static String parseDecimalStr(final String source){
-		final String result;
-		final Double doubleValue = parseDoubleIfNotNull(source);
-		if(doubleValue == null){
-			result = null;
-		} else {
-			result = doubleValue.toString();
-		}
-		return result;
-	}
-
-	public static String parseIntegerStr(final String source){
-		final String result;
-		final Double doubleValue = parseDoubleIfNotNull(source);
-		if(doubleValue == null){
-			result = null;
-		} else {
-			result = "" + doubleValue.intValue();
-		}
-		return result;
-	}
-
-	public static String emptyAsNull(final String parameter) {
-
-		return (parameter == null || parameter.isEmpty()) ? null : parameter;
-	}
-
-	public static String join(final String... parts) {
-		return Joiner.on(" ").skipNulls().join(parts);
-	}
-
 	public static String complement(final String word, final char c, final int resultLenght) {
 
 		final StringBuilder sb = new StringBuilder(word != null ? word : "");
@@ -85,43 +24,13 @@ public class Translator {
 		}
 		return sb.toString();
 	}
+	public static String emptyAsNull(final String parameter) {
 
-	public static int parseInt(final String value) {
-		int result = 0;
-		if(value != null){
-			result = parseIntNotNull(value);
-		}
-		return result;
-	}
-
-	private static int parseIntNotNull(final String value) {
-		try {
-			return Integer.parseInt(value);
-		} catch (final NumberFormatException e) {
-			return -1;
-		}
+		return parameter == null || parameter.isEmpty() ? null : parameter;
 	}
 
 	public static boolean getBoolean(final String parameter) {
 		return StringUtils.isNotEmpty(parameter) && TRUE.equals(parameter);
-	}
-
-	public static Double parseDoubleIfNotNull(final String source){
-		final Double result;
-		if(StringUtils.isNotEmpty(source)){
-			result = parseDouble(source.replace(',', '.'));
-		} else {
-			result = null;
-		}
-		return result;
-	}
-
-	private static Double parseDouble(final String source) {
-		try{
-			return new BigDecimal(source).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-		} catch (final NumberFormatException e) {
-			return null;
-		}
 	}
 
 	public static String getCalendarMonthName(final Calendar calendarDayFrom) {
@@ -170,8 +79,64 @@ public class Translator {
 		return result;
 	}
 
-	private static String commaNumber(final String numericString) {
-		return numericString.replaceAll(",", ".");
+	public static String join(final String... parts) {
+		return Joiner.on(" ").skipNulls().join(parts);
+	}
+
+	public static String parseDecimalStr(final String source){
+		final String result;
+		final Double doubleValue = parseDoubleIfNotNull(source);
+		if(doubleValue == null){
+			result = null;
+		} else {
+			result = doubleValue.toString();
+		}
+		return result;
+	}
+
+	private static Double parseDouble(final String source) {
+		try{
+			return new BigDecimal(source).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		} catch (final NumberFormatException e) {
+			return null;
+		}
+	}
+
+	public static Double parseDoubleIfNotNull(final String source){
+		final Double result;
+		if(StringUtils.isNotEmpty(source)){
+			result = parseDouble(source.replace(',', '.'));
+		} else {
+			result = null;
+		}
+		return result;
+	}
+
+	public static int parseInt(final String value) {
+		int result = 0;
+		if(value != null){
+			result = parseIntNotNull(value);
+		}
+		return result;
+	}
+
+	public static String parseIntegerStr(final String source){
+		final String result;
+		final Double doubleValue = parseDoubleIfNotNull(source);
+		if(doubleValue == null){
+			result = null;
+		} else {
+			result = "" + doubleValue.intValue();
+		}
+		return result;
+	}
+
+	private static int parseIntNotNull(final String value) {
+		try {
+			return Integer.parseInt(value);
+		} catch (final NumberFormatException e) {
+			return -1;
+		}
 	}
 
 	public static BigDecimal toAmount(final String value) {
@@ -189,4 +154,20 @@ public class Translator {
 		}
 		return decimal.setScale(scale);
 	}
+
+	public static LocalDate toLocalDate(final String dateStr){
+		if(StringUtils.isBlank(dateStr)){
+			return null;
+		} else{
+			return LocalDate.parse(dateStr);
+		}
+	}
+
+	private static Logger log = Logger.getLogger(Translator.class);
+
+	private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+
+	private static final String TRUE = "true";
+
+	private Translator(){}
 }

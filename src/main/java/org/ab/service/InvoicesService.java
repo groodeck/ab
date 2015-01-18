@@ -47,8 +47,8 @@ public class InvoicesService {
 	@Autowired
 	private InvoiceFileGenerator invoiceFileGenerator;
 
-	public List<InvoiceModel> findInvoices(final LocalDate dateFrom, final LocalDate dateTo) {
-		final List<org.ab.entity.Invoice> invoices = invoiceDao.findAll();
+	public List<InvoiceModel> findInvoices(final String subscriberIdn, final LocalDate dateFrom, final LocalDate dateTo) {
+		final List<org.ab.entity.Invoice> invoices = invoiceDao.findInvoices(subscriberIdn, dateFrom, dateTo);
 		return invoiceConverter.convertEntities(invoices);
 	}
 
@@ -69,6 +69,11 @@ public class InvoicesService {
 
 	private LocalDate getFirstOfMonth(final InvoiceGenerationParams generationParams) {
 		return getLocalDate(generationParams).dayOfMonth().withMinimumValue();
+	}
+
+	public String getInvoiceHtmlContent(final int invoiceId) {
+		final org.ab.entity.Invoice invoice = invoiceDao.getInvoice(invoiceId);
+		return invoice.getInvoiceContent().getInvoiceHtml();
 	}
 
 	private LocalDate getLastOfMonth(final InvoiceGenerationParams generationParams) {

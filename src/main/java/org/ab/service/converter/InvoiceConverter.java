@@ -1,14 +1,15 @@
 package org.ab.service.converter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.ab.dao.ContractPackageDao;
 import org.ab.dao.UserDao;
 import org.ab.entity.InvoiceContent;
 import org.ab.entity.InvoiceRecord;
+import org.ab.entity.Subscriber;
 import org.ab.model.InvoiceModel;
 import org.ab.service.generator.Invoice;
+import org.ab.service.generator.InvoiceParticipant;
 import org.ab.service.generator.InvoiceServiceRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,7 +44,7 @@ public class InvoiceConverter {
 			entity.setSettlementPeriodEnd(input.getSettlementPeriodEnd());
 			entity.setInvoiceRecords(convertRecords(input.getServiceRecords()));
 			entity.setNetAmount(input.getNetAmount());
-			entity.setVatAmount(input.getNetAmount());
+			entity.setVatAmount(input.getVatAmount());
 			entity.setGrossAmount(input.getGrossAmount());
 			entity.setGrossAmountWords(input.getGrossAmountWords());
 			entity.setPaid(input.isPaid());
@@ -76,12 +77,41 @@ public class InvoiceConverter {
 		}
 	};
 
+	private final Function<org.ab.entity.Invoice, InvoiceModel> toModelInvoice =
+			new Function<org.ab.entity.Invoice, InvoiceModel>(){
+
+		@Override
+		public InvoiceModel apply(final org.ab.entity.Invoice input) {
+			final InvoiceModel model = new InvoiceModel.Builder()
+			.withInvoiceId(input.getInvoiceId().toString())
+			.withInvoiceNumber(input.getInvoiceNumber())
+			.withSubscriber(convertSubscriber(input.getContract().getSubscriber()))
+			.withCreateDate(input.getCreateDate().toString())
+			.withReceiveDate(input.getReceiveDate().toString())
+			.withSettlementPeriodStart(input.getSettlementPeriodStart().toString())
+			.withSettlementPeriodEnd(input.getSettlementPeriodEnd().toString())
+			.withNetAmount(input.getNetAmount().toPlainString())
+			.withVatAmount(input.getVatAmount().toPlainString())
+			.withGrossAmount(input.getGrossAmount().toPlainString())
+			.withPaid(input.isPaid())
+			.withPaymentDate(input.getPaymentDate().toString())
+			.withHtmlContent(input.getInvoiceContent().getInvoiceHtml())
+			.build();
+			return model;
+		}
+
+		private InvoiceParticipant convertSubscriber(final Subscriber subscriber) {
+			return new InvoiceParticipant.Builder()
+			.withName(subscriber.getEffectiveName())
+			.build();
+		}
+	};
+
 	public List<org.ab.entity.Invoice> convert(final List<Invoice> invoices) {
 		return FluentIterable.from(invoices).transform(toEntityInvoice).toList();
 	}
 
 	public List<InvoiceModel> convertEntities(final List<org.ab.entity.Invoice> invoices) {
-		// TODO Auto-generated method stub
-		return new ArrayList<InvoiceModel>();
+		return FluentIterable.from(invoices).transform(toModelInvoice).toList();
 	}
 }

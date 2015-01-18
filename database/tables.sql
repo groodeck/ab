@@ -112,7 +112,6 @@ create table service(
  	vat decimal not null,
  	subscriptionNet decimal not null,
  	subscriptionGross decimal not null,
- 	disposable bit not null,
  	packageId integer,
 );
 

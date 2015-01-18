@@ -17,8 +17,25 @@ public class InvoiceDao {
 	@PersistenceContext
 	private EntityManager em;
 
+	@SuppressWarnings("unchecked")
 	public List<Invoice> findAll() {
 		return em.createQuery("from Invoice").getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Invoice> findInvoices(final String userNumber, final LocalDate createDateFrom, final LocalDate createDateTo) {
+		return em.createQuery("from Invoice i where "
+				+ "(:userNumber = null OR i.contract.subscriber.subscriberIdn = :userNumber) "
+				+ "and (:dateFrom = null OR i.createDate >= :dateFrom) "
+				+ "and (:dateTo = null OR i.createDate <= :dateTo) ")
+				.setParameter("userNumber", userNumber)
+				.setParameter("dateFrom", createDateFrom)
+				.setParameter("dateTo", createDateTo)
+				.getResultList();
+	}
+
+	public Invoice getInvoice(final int invoiceId) {
+		return em.find(Invoice.class, invoiceId);
 	}
 
 	public long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {

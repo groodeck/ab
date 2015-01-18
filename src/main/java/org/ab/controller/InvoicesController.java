@@ -1,5 +1,7 @@
 package org.ab.controller;
 
+import static org.ab.util.Translator.toLocalDate;
+
 import java.util.List;
 
 import org.ab.model.InvoiceGenerationParams;
@@ -53,11 +55,12 @@ public class InvoicesController {
 	}
 
 	@RequestMapping("/search")
-	public String handleSearchAction(final @RequestParam("dateFrom") String dateFrom,
-			final @RequestParam("dateTo") String dateTo, final Model model) {
+	public String handleSearchAction(final @RequestParam("searchDateFrom") String searchDateFrom,
+			final @RequestParam("searchDateTo") String searchDateTo, final Model model) {
 		final List<InvoiceModel> invoices =
-				invoicesService.findInvoices(LocalDate.now(), LocalDate.now());
+				invoicesService.findInvoices(null/*TODO subscriberIdn from context*/, toLocalDate(searchDateFrom), toLocalDate(searchDateTo));
 		model.addAttribute("invoices", invoices);
+		handleInitEntry(model);
 		return "invoices";
 	}
 }

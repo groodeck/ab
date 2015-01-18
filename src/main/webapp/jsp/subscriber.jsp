@@ -76,8 +76,14 @@
 	 		refreshContractPack = function (){
 	 			var packageId = $("#contract_pack").val();
 	 			$.getJSON( "/async/getPackageDetails/" + packageId, function(data) {
-	 				$("#activation_fee").val(data.activationFee)
-	 				$("#installation_fee").val(data.installationFeeGross)
+	 				$("#activationFeeNet").val(data.activationFeeNet)
+	 				$("#activationFeeVatRate").val(data.activationFeeVatRate)
+	 				$("#activationFeeVat").val(data.activationFeeVat)
+	 				$("#activationFeeGross").val(data.activationFeeGross)
+	 				$("#installationFeeNet").val(data.installationFeeNet)
+	 				$("#installationFeeVatRate").val(data.installationFeeVatRate)
+	 				$("#installationFeeVat").val(data.installationFeeVat)
+	 				$("#installationFeeGross").val(data.installationFeeGross)
 	 				$("#contract_subscription").val(data.subscription)
 				})
 	 		}	
@@ -326,12 +332,18 @@
 				<td><sf:input path="currentContract.contractSubscription" size="15" id="contract_subscription" /></td>
 			</tr>
 			<tr>
-				<th align="right"><label for="activation_fee">Opłata aktywacyjna:</label></th>
-				<td><sf:input path="currentContract.activationFee" size="15" id="activation_fee" /></td>
+				<th align="right"><label for="activationFeeNet">Opłata aktywacyjna:</label></th>
+				<td>Netto:<sf:input path="currentContract.activationFeeNet" size="3" id="activationFeeNet" />
+				VAT:<sf:hidden path="currentContract.activationFeeVatRate" id="activationFeeVatRate" />
+					<sf:input path="currentContract.activationFeeVat" size="3" id="activationFeeVat" />
+				Brutto:<sf:input path="currentContract.activationFeeGross" size="3" id="activationFeeGross" /></td>
 			</tr>
 			<tr>
-				<th align="right"><label for="installation_fee">Opłata za wykonanie instalacji:</label></th>
-				<td><sf:input path="currentContract.installationFee" size="15" id="installation_fee" /></td>
+				<th align="right"><label for="installationFeeNet">Opłata instalacyjna:</label></th>
+				<td>Netto:<sf:input path="currentContract.installationFeeNet" size="3" id="installationFeeNet" />
+				VAT:<sf:hidden path="currentContract.installationFeeVatRate" id="installationFeeVatRate" />
+					<sf:input path="currentContract.installationFeeVat" size="3" id="installationFeeVat" />
+				Brutto:<sf:input path="currentContract.installationFeeGross" size="3" id="installationFeeGross" /></td>
 			</tr>
 			<tr>
 				<th align="right"><label for="balance">Saldo:</label></th>

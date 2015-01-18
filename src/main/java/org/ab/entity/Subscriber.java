@@ -2,7 +2,6 @@ package org.ab.entity;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,104 +12,127 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.ab.model.dictionary.ClientType;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 @Entity
 @Table(name="Subscriber")
 public class Subscriber {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="subscriberId")
 	private Integer subscriberId;
-	
+
 	@Column(name="subscriberIdn")
 	private String subscriberIdn;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name="clientType")
 	private ClientType clientType;
-	
+
 	@Column(name="name")
 	private String name;
-	
+
 	@Column(name="surname")
 	private String surname;
-	
+
 	@Column(name="companyName")
 	private String companyName;
-	
+
 	@Column(name="clientIdNumber")
 	private String clientIdNumber;
-	
+
 	@Column(name="pesel")
 	private String pesel;
-	
+
 	@Column(name="regon")
 	private String regon;
-	
+
 	@Column(name="nip")
 	private String nip;
 
 	@Column(name="balance")
 	private BigDecimal balance;
-	
+
 	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
-    @JoinColumn(name="subscriberId")
+	@JoinColumn(name="subscriberId")
 	private List<Contract> contracts;
-	
+
 	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
-    @JoinColumn(name="subscriberId")
+	@JoinColumn(name="subscriberId")
 	private List<Contact> contacts;
-	
+
 	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
-    @JoinColumn(name="subscriberId")
+	@JoinColumn(name="subscriberId")
 	private List<Address> addresses;
 
 	@Column(name="comment")
 	private String comment;
-	
+
 	@Column(name="additionalComment")
 	private String additionalComment;
-	
+
 	public Subscriber(){
 		contracts = Lists.newArrayList();
 		contacts = Lists.newArrayList();
 		addresses = Lists.newArrayList();
 	}
-	public Integer getSubscriberId() {
-		return subscriberId;
+	public String getAdditionalComment() {
+		return additionalComment;
 	}
 
-	public String getSubscriberIdn() {
-		return subscriberIdn;
+	public List<Address> getAddresses() {
+		return addresses;
+	}
+
+	public BigDecimal getBalance() {
+		return balance;
+	}
+
+	public String getClientIdNumber() {
+		return clientIdNumber;
 	}
 
 	public ClientType getClientType() {
 		return clientType;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getSurname() {
-		return surname;
+	public String getComment() {
+		return comment;
 	}
 
 	public String getCompanyName() {
 		return companyName;
 	}
 
-	public String getClientIdNumber() {
-		return clientIdNumber;
+	public List<Contact> getContacts() {
+		return contacts;
+	}
+
+	public List<Contract> getContracts() {
+		return contracts;
+	}
+
+	public String getEffectiveName() {
+		if(clientType == ClientType.INDIVIDUAL){
+			return Joiner.on(" ").skipNulls().join(name, surname);
+		} else {
+			return companyName;
+		}
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getNip() {
+		return nip;
 	}
 
 	public String getPesel() {
@@ -121,95 +143,79 @@ public class Subscriber {
 		return regon;
 	}
 
-	public String getNip() {
-		return nip;
+	public Integer getSubscriberId() {
+		return subscriberId;
 	}
 
-	public BigDecimal getBalance() {
-		return balance;
+	public String getSubscriberIdn() {
+		return subscriberIdn;
 	}
 
-	public List<Contract> getContracts() {
-		return contracts;
+	public String getSurname() {
+		return surname;
 	}
 
-	public void setSubscriberId(Integer subscriberId) {
-		this.subscriberId = subscriberId;
+	public void setAdditionalComment(final String additionalComment) {
+		this.additionalComment = additionalComment;
 	}
 
-	public void setSubscriberIdn(String subscriberIdn) {
-		this.subscriberIdn = subscriberIdn;
-	}
-
-	public void setClientType(ClientType clientType) {
-		this.clientType = clientType;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-
-	public void setClientIdNumber(String clientIdNumber) {
-		this.clientIdNumber = clientIdNumber;
-	}
-
-	public void setPesel(String pesel) {
-		this.pesel = pesel;
-	}
-
-	public void setRegon(String regon) {
-		this.regon = regon;
-	}
-
-	public void setNip(String nip) {
-		this.nip = nip;
-	}
-
-	public void setBalance(BigDecimal balance) {
-		this.balance = balance;
-	}
-
-	public void setContracts(List<Contract> contract) {
-		this.contracts = contract;
-	}
-
-	public List<Contact> getContacts() {
-		return contacts;
-	}
-
-	public void setContacts(List<Contact> contacts) {
-		this.contacts = contacts;
-	}
-
-	public List<Address> getAddresses() {
-		return addresses;
-	}
-
-	public void setAddresses(List<Address> addresses) {
+	public void setAddresses(final List<Address> addresses) {
 		this.addresses = addresses;
 	}
 
-	public String getComment() {
-		return comment;
+	public void setBalance(final BigDecimal balance) {
+		this.balance = balance;
 	}
 
-	public String getAdditionalComment() {
-		return additionalComment;
+	public void setClientIdNumber(final String clientIdNumber) {
+		this.clientIdNumber = clientIdNumber;
 	}
 
-	public void setComment(String comment) {
+	public void setClientType(final ClientType clientType) {
+		this.clientType = clientType;
+	}
+
+	public void setComment(final String comment) {
 		this.comment = comment;
 	}
 
-	public void setAdditionalComment(String additionalComment) {
-		this.additionalComment = additionalComment;
+	public void setCompanyName(final String companyName) {
+		this.companyName = companyName;
+	}
+
+	public void setContacts(final List<Contact> contacts) {
+		this.contacts = contacts;
+	}
+
+	public void setContracts(final List<Contract> contract) {
+		contracts = contract;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public void setNip(final String nip) {
+		this.nip = nip;
+	}
+
+	public void setPesel(final String pesel) {
+		this.pesel = pesel;
+	}
+
+	public void setRegon(final String regon) {
+		this.regon = regon;
+	}
+
+	public void setSubscriberId(final Integer subscriberId) {
+		this.subscriberId = subscriberId;
+	}
+
+	public void setSubscriberIdn(final String subscriberIdn) {
+		this.subscriberIdn = subscriberIdn;
+	}
+
+	public void setSurname(final String surname) {
+		this.surname = surname;
 	}
 }

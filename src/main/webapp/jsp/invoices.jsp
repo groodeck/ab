@@ -18,6 +18,16 @@
 	 			window.location.href = '/invoices/generate/'+year+'/'+month;
 	 		}	
 	 		
+	 		displayInvoice = function(invoiceId){
+	 			alert('jestem');
+	 			var subscribeRequest = $.ajax({
+				     url: "/async/getInvoiceContent/" + invoiceId
+				});
+				subscribeRequest.done(function(invoiceContent)	{
+	 				$("#invoiceContentDiv").html(invoiceContent);
+				});
+	 		}
+	 		
 	 	</script>
  	]]>
  </jsp:text>
@@ -31,18 +41,28 @@
 		<table style="font-family:sans-serif;" >
 			<tr>
 				<td>
-					<sf:form method="get" action="/invoices/search">
-						Znajdź fakturę: 
-						<input name="searchPhrase" value="${searchPhrase}"/>
-						<input type="submit" value="Znajdź"/>
-					</sf:form>
-				</td>
-				<td width="30"/>
-				<td>
 					<sf:form method="post" commandName="generationParams" action="/invoices/generate">
 						Miesiąc: <sf:select path="month" items="${months}" id="month" />
 						Rok: <sf:select path="year" items="${years}" id="year" />
 						<button>Generuj faktury</button>
+					</sf:form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<hr/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<sf:form method="get" action="/invoices/search">
+						Filtr: 
+						OD: <custom:date name="searchDateFrom" identifier="searchDateFrom" 
+								value="${searchDateFrom}" additionalAttributes="size='15'"/>
+						DO: <custom:date name="searchDateTo" identifier="searchDateTo" 
+								value="${searchDateTo}" additionalAttributes="size='15'"/>
+						<!-- <input name="searchPhrase" value="${searchPhrase}"/> -->
+						<input type="submit" value="Znajdź"/>
 					</sf:form>
 				</td>
 			</tr>
@@ -60,17 +80,17 @@
 				</tr>
 				<c:forEach var="invoice" items="${invoices}" varStatus="status" >
 					<tr>
-						<td onclick="editSubscriber(${invoice.invoiceId})"><c:out value="${status.index + 1}"/></td>
-						<td onclick="editSubscriber(${invoice.invoiceId})"><c:out value="${invoice.buyer.name}"/></td>
-						<td onclick="editSubscriber(${invoice.invoiceId})"><c:out value="${invoice.settlementPeriodStart} - ${invoice.settlementPeriodEnd}"/></td>
-						<td onclick="editSubscriber(${invoice.invoiceId})"><c:out value="${invoice.createDate}"/></td>
-						<td onclick="editSubscriber(${invoice.invoiceId})"><c:out value="${invoice.grossAmount}"/></td>
+						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${status.index + 1}"/></td>
+						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.subscriber.name}"/></td>
+						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.settlementPeriodStart} - ${invoice.settlementPeriodEnd}"/></td>
+						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.createDate}"/></td>
+						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.grossAmount}"/></td>
 					</tr>
 				</c:forEach>
 			</table>
 		</c:if>
 	
-		<div style="border: solid;">
+		<div id="invoiceContentDiv" style="border: solid;">
 			<c:out value="${invoice}" escapeXml="false"/>
 		</div>
 		
