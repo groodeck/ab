@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.ab.model.InvoiceModel;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.util.Lists;
@@ -24,9 +25,9 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
 @Transactional
 public class InvoiceFileGenerator {
 
-	public List<String> generatePdf(final List<Invoice> invoices) {
+	public List<String> generatePdf(final List<InvoiceModel> invoices) {
 		final List<String> filesToPrint = Lists.newArrayList();
-		for(final Invoice invoice : invoices){
+		for(final InvoiceModel invoice : invoices){
 			final String filePath = generateSingleInvoice(invoice);
 			if(shouldBePrinted(invoice)){
 				filesToPrint.add(filePath);
@@ -35,7 +36,7 @@ public class InvoiceFileGenerator {
 		return filesToPrint;
 	}
 
-	String generateSingleInvoice(final Invoice invoice) {
+	String generateSingleInvoice(final InvoiceModel invoice) {
 		try {
 			final Document document = new Document();
 			final String fileName = invoice.getInvoiceNumber().replace("/", "_");
@@ -65,7 +66,7 @@ public class InvoiceFileGenerator {
 		}
 	}
 
-	private boolean shouldBePrinted(final Invoice invoice) {
+	private boolean shouldBePrinted(final InvoiceModel invoice) {
 		// TODO resolve if subscriber need printed invoice
 		return true;
 	}

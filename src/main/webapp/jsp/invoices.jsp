@@ -4,7 +4,8 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:custom="urn:jsptagdir:/WEB-INF/tags">
    	<jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
-     
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
  <html xmlns="http://www.w3.org/1999/xhtml">
  
  <jsp:text>
@@ -19,9 +20,9 @@
 	 		}	
 	 		
 	 		displayInvoice = function(invoiceId){
-	 			alert('jestem');
 	 			var subscribeRequest = $.ajax({
-				     url: "/async/getInvoiceContent/" + invoiceId
+	 				//contentType: "application/x-www-form-urlencoded; charset=utf-8",
+				   	url: "/async/getInvoiceContent/" + invoiceId
 				});
 				subscribeRequest.done(function(invoiceContent)	{
 	 				$("#invoiceContentDiv").html(invoiceContent);
@@ -81,7 +82,7 @@
 				<c:forEach var="invoice" items="${invoices}" varStatus="status" >
 					<tr>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${status.index + 1}"/></td>
-						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.subscriber.name}"/></td>
+						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.buyer.name}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.settlementPeriodStart} - ${invoice.settlementPeriodEnd}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.createDate}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.grossAmount}"/></td>

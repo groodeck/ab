@@ -3,6 +3,7 @@ package org.ab.service.generator;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import org.ab.model.InvoiceModel;
 import org.springframework.stereotype.Component;
 
 import freemarker.template.Configuration;
@@ -13,7 +14,7 @@ import freemarker.template.TemplateException;
 @Component
 public class InvoiceContentGenerator {
 
-	public String generateHtml(final Invoice invoice) {
+	public String generateHtml(final InvoiceModel invoice) {
 		final StringWriter out = new StringWriter();
 		final Configuration cfg = new Configuration();
 		cfg.setObjectWrapper( new DefaultObjectWrapper());

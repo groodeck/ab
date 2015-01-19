@@ -2,6 +2,7 @@ package org.ab.service.generator;
 
 import java.math.BigDecimal;
 
+import org.ab.model.InvoiceModel;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class InvoiceContentGeneratorTest {
 			.withVatAmount(new BigDecimal("5"))
 			.withGrossAmount(new BigDecimal("15"))
 			.build();
-		final Invoice invoice = new Invoice.Builder()
+		final InvoiceModel invoice = new InvoiceModel.Builder()
 			.withServiceRecord(serviceRecord)
 			.withInvoiceNumber("1/2/2014")
 			.withCreateDate(LocalDate.now())

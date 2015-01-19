@@ -13,9 +13,10 @@ import org.ab.entity.Contract;
 import org.ab.entity.ContractPackage;
 import org.ab.entity.Service;
 import org.ab.entity.Subscriber;
+import org.ab.model.InvoiceModel;
+import org.ab.model.InvoiceModel.Builder;
 import org.ab.model.dictionary.AddressType;
 import org.ab.model.dictionary.ClientType;
-import org.ab.service.generator.Invoice.Builder;
 import org.ab.util.DecimalWriter;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
@@ -60,17 +61,17 @@ public class InvoicesGenerator {
 		}).first();
 	}
 
-	private String generateHtmlContent(final Invoice invoice) {
+	private String generateHtmlContent(final InvoiceModel invoice) {
 		return this.contentGenerator.generateHtml(invoice);
 	}
 
-	public List<Invoice> generateInvoices(final List<Contract> contracts, final LocalDate dateFrom, final LocalDate dateTo) {
+	public List<InvoiceModel> generateInvoices(final List<Contract> contracts, final LocalDate dateFrom, final LocalDate dateTo) {
 		final Properties props = loadProperties("companyDetails.properties");
 		final String city = props.getProperty("company.city");
 		final LocalDate currentDate = LocalDate.now();
-		final List<Invoice> results = Lists.newArrayList();
+		final List<InvoiceModel> results = Lists.newArrayList();
 		for(final Contract contract : contracts){
-			final Invoice.Builder invoiceBuilder = new Invoice.Builder()
+			final InvoiceModel.Builder invoiceBuilder = new InvoiceModel.Builder()
 				.withInvoiceNumber(getInvoiceNumber(dateFrom, dateTo))
 				.withContract(contract)
 				.withSettlementPeriodStart(dateFrom)
@@ -84,7 +85,7 @@ public class InvoicesGenerator {
 			final ContractPackage contractPackage = contract.getContractPackage();
 			final List<Service> services = contractPackage.getServices();
 			generateServices(services, contract, invoiceBuilder);
-			final Invoice invoice = invoiceBuilder.build();
+			final InvoiceModel invoice = invoiceBuilder.build();
 			final String html = generateHtmlContent(invoice);
 			invoice.setHtmlContent(html);
 			results.add(invoice);

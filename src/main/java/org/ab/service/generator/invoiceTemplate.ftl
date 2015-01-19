@@ -1,3 +1,4 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
 <html>
 	<body>	
 		<table border='1' style='font-size: 10px;'>

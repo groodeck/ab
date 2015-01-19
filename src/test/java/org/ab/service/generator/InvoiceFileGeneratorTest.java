@@ -1,6 +1,6 @@
 package org.ab.service.generator;
 
-import org.ab.service.generator.Invoice;
+import org.ab.model.InvoiceModel;
 import org.ab.service.generator.InvoiceFileGenerator;
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ public class InvoiceFileGeneratorTest {
 		// given
 
 		// when
-		service.generateSingleInvoice(new Invoice.Builder().build());
+		service.generateSingleInvoice(new InvoiceModel.Builder().build());
 
 		// then
 	}

@@ -8,7 +8,6 @@ import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
 import org.ab.model.dictionary.SelectValueService;
 import org.ab.service.InvoicesService;
-import org.ab.service.generator.Invoice;
 import org.assertj.core.util.Collections;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class InvoicesController {
 	@Autowired
 	private SelectValueService selectValuesService;
 
-	private String getGenerationResultsMessage(final List<Invoice> invoices) {
+	private String getGenerationResultsMessage(final List<InvoiceModel> invoices) {
 		if(Collections.isNullOrEmpty(invoices)){
 			return "Nie wygenerowano faktur";
 		} else {
@@ -46,7 +45,7 @@ public class InvoicesController {
 	@RequestMapping("/generate")
 	public String handleInvoicesGeneration(final @ModelAttribute("generationParams") InvoiceGenerationParams generationParams,
 			final Model model) {
-		final List<Invoice> invoices = invoicesService.generateInvoices(generationParams);
+		final List<InvoiceModel> invoices = invoicesService.generateInvoices(generationParams);
 		model.addAttribute("uiMessage", getGenerationResultsMessage(invoices));
 
 		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());

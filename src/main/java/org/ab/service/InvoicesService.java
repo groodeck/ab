@@ -19,7 +19,6 @@ import org.ab.entity.Contract;
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
 import org.ab.service.converter.InvoiceConverter;
-import org.ab.service.generator.Invoice;
 import org.ab.service.generator.InvoiceFileGenerator;
 import org.ab.service.generator.InvoicesGenerator;
 import org.joda.time.LocalDate;
@@ -53,11 +52,11 @@ public class InvoicesService {
 	}
 
 	@Transactional
-	public List<Invoice> generateInvoices(final InvoiceGenerationParams generationParams) {
+	public List<InvoiceModel> generateInvoices(final InvoiceGenerationParams generationParams) {
 		final LocalDate dateFrom = getFirstOfMonth(generationParams);
 		final LocalDate dateTo = getLastOfMonth(generationParams);
 		final List<Contract> contracts = contractDao.findContracts(dateFrom, dateTo);
-		final List<Invoice> invoices = invoicesGenerator.generateInvoices(contracts, dateFrom, dateTo);
+		final List<InvoiceModel> invoices = invoicesGenerator.generateInvoices(contracts, dateFrom, dateTo);
 		if(!CollectionUtils.isEmpty(invoices)){
 			persist(invoices);
 			final List<String> filesToPrint = invoiceFileGenerator.generatePdf(invoices);
@@ -86,7 +85,7 @@ public class InvoicesService {
 				.withMonthOfYear(Integer.parseInt(generationParams.getMonth()));
 	}
 
-	private void persist(final List<Invoice> invoices) {
+	private void persist(final List<InvoiceModel> invoices) {
 		final List<org.ab.entity.Invoice> entities = invoiceConverter.convert(invoices);
 		invoiceDao.save(entities);
 	}

@@ -8,7 +8,6 @@ import org.ab.entity.InvoiceContent;
 import org.ab.entity.InvoiceRecord;
 import org.ab.entity.Subscriber;
 import org.ab.model.InvoiceModel;
-import org.ab.service.generator.Invoice;
 import org.ab.service.generator.InvoiceParticipant;
 import org.ab.service.generator.InvoiceServiceRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +28,11 @@ public class InvoiceConverter {
 	@Autowired
 	private DeviceConverter deviceConverter;
 
-	private final Function<Invoice, org.ab.entity.Invoice> toEntityInvoice =
-			new Function<Invoice, org.ab.entity.Invoice>(){
+	private final Function<InvoiceModel, org.ab.entity.Invoice> toEntityInvoice =
+			new Function<InvoiceModel, org.ab.entity.Invoice>(){
 
 		@Override
-		public org.ab.entity.Invoice apply(final Invoice input) {
+		public org.ab.entity.Invoice apply(final InvoiceModel input) {
 			final org.ab.entity.Invoice entity = new org.ab.entity.Invoice();
 			entity.setInvoiceId(input.getInvoiceId());
 			entity.setContract(input.getContract());
@@ -83,19 +82,18 @@ public class InvoiceConverter {
 		@Override
 		public InvoiceModel apply(final org.ab.entity.Invoice input) {
 			final InvoiceModel model = new InvoiceModel.Builder()
-			.withInvoiceId(input.getInvoiceId().toString())
+			.withInvoiceId(input.getInvoiceId())
 			.withInvoiceNumber(input.getInvoiceNumber())
-			.withSubscriber(convertSubscriber(input.getContract().getSubscriber()))
-			.withCreateDate(input.getCreateDate().toString())
-			.withReceiveDate(input.getReceiveDate().toString())
-			.withSettlementPeriodStart(input.getSettlementPeriodStart().toString())
-			.withSettlementPeriodEnd(input.getSettlementPeriodEnd().toString())
-			.withNetAmount(input.getNetAmount().toPlainString())
-			.withVatAmount(input.getVatAmount().toPlainString())
-			.withGrossAmount(input.getGrossAmount().toPlainString())
+			.withBuyer(convertSubscriber(input.getContract().getSubscriber()))
+			.withCreateDate(input.getCreateDate())
+			.withReceiveDate(input.getReceiveDate())
+			.withSettlementPeriodStart(input.getSettlementPeriodStart())
+			.withSettlementPeriodEnd(input.getSettlementPeriodEnd())
+			.withNetAmount(input.getNetAmount())
+			.withVatAmount(input.getVatAmount())
+			.withGrossAmount(input.getGrossAmount())
 			.withPaid(input.isPaid())
-			.withPaymentDate(input.getPaymentDate().toString())
-			.withHtmlContent(input.getInvoiceContent().getInvoiceHtml())
+			.withPaymentDate(input.getPaymentDate())
 			.build();
 			return model;
 		}
@@ -107,7 +105,7 @@ public class InvoiceConverter {
 		}
 	};
 
-	public List<org.ab.entity.Invoice> convert(final List<Invoice> invoices) {
+	public List<org.ab.entity.Invoice> convert(final List<InvoiceModel> invoices) {
 		return FluentIterable.from(invoices).transform(toEntityInvoice).toList();
 	}
 
