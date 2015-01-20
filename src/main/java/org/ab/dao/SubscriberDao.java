@@ -14,6 +14,11 @@ public class SubscriberDao {
 	@PersistenceContext
 	private EntityManager em;
 
+	public String getLastSubscriberIdn() {
+		return (String) em.createQuery("select max(s.subscriberIdn) from Subscriber s")
+				.getSingleResult();
+	}
+
 	public Subscriber getSubscriber(final int subscriberId) {
 		return em.find(Subscriber.class, subscriberId);
 	}

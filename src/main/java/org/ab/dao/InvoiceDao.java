@@ -20,15 +20,16 @@ public class InvoiceDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findAll() {
-		return this.em.createQuery("from Invoice").getResultList();
+		return em.createQuery("from Invoice").getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findInvoices(final String userNumber, final LocalDate createDateFrom, final LocalDate createDateTo) {
-		final Query query = this.em.createQuery("from Invoice i where "
+		final Query query = em.createQuery("from Invoice i where "
 				+ "(:userNumber is null OR i.contract.subscriber.subscriberIdn = :userNumber) "
 				+ (createDateFrom == null ? "" : "AND i.createDate >= :dateFrom ")
-				+ (createDateTo == null ? "" : "AND i.createDate <= :dateTo "))
+				+ (createDateTo == null ? "" : "AND i.createDate <= :dateTo ")
+				+ "ORDER BY i.contract.subscriber.subscriberId, i.settlementPeriodStart ASC")
 				.setParameter("userNumber", userNumber);
 		if(createDateFrom != null){
 			query.setParameter("dateFrom", createDateFrom);
@@ -40,11 +41,11 @@ public class InvoiceDao {
 	}
 
 	public Invoice getInvoice(final int invoiceId) {
-		return this.em.find(Invoice.class, invoiceId);
+		return em.find(Invoice.class, invoiceId);
 	}
 
 	public long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
-		return (Long)this.em.createQuery("select count(*) "
+		return (Long)em.createQuery("select count(*) "
 				+ "from Invoice i where "
 				+ "i.settlementPeriodStart = :dateFrom "
 				+ "and i.settlementPeriodEnd = :dateTo ")
@@ -54,7 +55,7 @@ public class InvoiceDao {
 	}
 
 	public Integer save(final Invoice entity) {
-		this.em.persist(entity);
+		em.persist(entity);
 		return entity.getInvoiceId();
 	}
 }
