@@ -7,12 +7,15 @@
 	<span> 
 		<security:authorize access="isAuthenticated()"> 
 		
-			Jesteś zalogowany jako: <security:authentication property="principal.Username"/> 
-			<!-- <button type="button" onclick="/j_spring_security_logout">Wyloguj</button> -->
-			<a href="/j_spring_security_logout">
-    			<button>Wyloguj</button>
-			</a>
-			<br/>
+			<table>
+				<tr height="50px">
+					<td>Jesteś zalogowany jako:</td>
+					<td><security:authentication property="principal.Username"/></td>
+					<td><a href="/j_spring_security_logout"><button>Wyloguj</button></a></td>
+				</tr>
+			</table>
+			 
+			
 			
 		</security:authorize>
 	</span>

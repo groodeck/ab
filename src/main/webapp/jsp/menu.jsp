@@ -16,7 +16,7 @@
 					<td align="center"><a href="/packages">Pakiety</a></td>
 				</tr>
 			</table>
-			
+			<br/><hr/>
 		</security:authorize>
 	</span>
 

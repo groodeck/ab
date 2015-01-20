@@ -105,11 +105,11 @@ public class InvoiceConverter {
 		}
 	};
 
-	public List<org.ab.entity.Invoice> convert(final List<InvoiceModel> invoices) {
-		return FluentIterable.from(invoices).transform(toEntityInvoice).toList();
+	public org.ab.entity.Invoice convert(final InvoiceModel invoice) {
+		return this.toEntityInvoice.apply(invoice);
 	}
 
 	public List<InvoiceModel> convertEntities(final List<org.ab.entity.Invoice> invoices) {
-		return FluentIterable.from(invoices).transform(toModelInvoice).toList();
+		return FluentIterable.from(invoices).transform(this.toModelInvoice).toList();
 	}
 }

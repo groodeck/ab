@@ -4,8 +4,12 @@ import static org.ab.util.Translator.toLocalDate;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
+import org.ab.model.SubscriberModel;
 import org.ab.model.dictionary.SelectValueService;
 import org.ab.service.InvoicesService;
 import org.assertj.core.util.Collections;
@@ -38,28 +42,37 @@ public class InvoicesController {
 	@RequestMapping
 	public String handleInitEntry(final Model model) {
 		model.addAttribute("generationParams", new InvoiceGenerationParams(LocalDate.now()));
-		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());
+		model.addAllAttributes(this.selectValuesService.getInvoicesDictionaries());
 		return "invoices";
 	}
 
 	@RequestMapping("/generate")
 	public String handleInvoicesGeneration(final @ModelAttribute("generationParams") InvoiceGenerationParams generationParams,
 			final Model model) {
-		final List<InvoiceModel> invoices = invoicesService.generateInvoices(generationParams);
+		final List<InvoiceModel> invoices = this.invoicesService.generateInvoices(generationParams);
 		model.addAttribute("uiMessage", getGenerationResultsMessage(invoices));
 
-		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());
+		model.addAllAttributes(this.selectValuesService.getInvoicesDictionaries());
 		model.addAttribute("invoices", invoices);
 		return "invoices";
 	}
 
 	@RequestMapping("/search")
 	public String handleSearchAction(final @RequestParam("searchDateFrom") String searchDateFrom,
-			final @RequestParam("searchDateTo") String searchDateTo, final Model model) {
-		final List<InvoiceModel> invoices =
-				invoicesService.findInvoices(null/*TODO subscriberIdn from context*/, toLocalDate(searchDateFrom), toLocalDate(searchDateTo));
+			final @RequestParam("searchDateTo") String searchDateTo, final Model model, final HttpServletRequest request) {
+		final String subscriberIdn = getSubscriberIdn(request.getSession());
+		final List<InvoiceModel> invoices = this.invoicesService.findInvoices(subscriberIdn, toLocalDate(searchDateFrom), toLocalDate(searchDateTo));
 		model.addAttribute("invoices", invoices);
 		handleInitEntry(model);
 		return "invoices";
+	}
+
+	private String getSubscriberIdn(final HttpSession session) {
+		final SubscriberModel subscriber = (SubscriberModel)session.getAttribute("subscriber");
+		if(subscriber == null){
+			return null;
+		} else {
+			return subscriber.getSubscriberIdn();
+		}
 	}
 }

@@ -2,6 +2,8 @@ package org.ab.controller;
 
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.ab.model.js.PackageDetails;
 import org.ab.service.ContractPackageService;
 import org.ab.service.InvoicesService;
@@ -25,13 +27,20 @@ public class AsyncController {
 	@RequestMapping(value="/getInvoiceContent/{id}",  produces = "text/html; charset=utf-8")
 	@ResponseBody
 	public String getInvoiceContent(@PathVariable final int id) {
-		return invoiceService.getInvoiceHtmlContent(id);
+		return this.invoiceService.getInvoiceHtmlContent(id);
 	}
 
 	@RequestMapping(value="/getPackageDetails/{id}", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String getPackageDetails(@PathVariable final int id) {
-		final PackageDetails packageDetails = packageService.getPackage(String.valueOf(id));
+		final PackageDetails packageDetails = this.packageService.getPackage(String.valueOf(id));
 		return packageDetails.serialize();
+	}
+
+	@RequestMapping(value="/clearSubscriberContext",  produces = "text/html; charset=utf-8")
+	@ResponseBody
+	public void getInvoiceContent(final HttpServletRequest request) {
+		request.getSession().removeAttribute("subscriber");
+
 	}
 }

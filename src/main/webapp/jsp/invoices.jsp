@@ -39,13 +39,19 @@
    
    <h2>Faktury</h2>
    
+   <div style="float:left; width: 50%;">
 		<table style="font-family:sans-serif;" >
 			<tr>
 				<td>
 					<sf:form method="post" commandName="generationParams" action="/invoices/generate">
-						Miesiąc: <sf:select path="month" items="${months}" id="month" />
-						Rok: <sf:select path="year" items="${years}" id="year" />
-						<button>Generuj faktury</button>
+						<table>
+						<tr>
+							<td>Generuj faktury na: <sf:select path="month" items="${months}" id="month" />
+								<sf:select path="year" items="${years}" id="year" /></td>
+							<td width="5px"/>
+							<td><button>Generuj</button></td>
+						</tr>
+						</table>
 					</sf:form>
 				</td>
 			</tr>
@@ -57,13 +63,17 @@
 			<tr>
 				<td>
 					<sf:form method="get" action="/invoices/search">
-						Filtr: 
-						OD: <custom:date name="searchDateFrom" identifier="searchDateFrom" 
-								value="${searchDateFrom}" additionalAttributes="size='15'"/>
-						DO: <custom:date name="searchDateTo" identifier="searchDateTo" 
-								value="${searchDateTo}" additionalAttributes="size='15'"/>
-						<!-- <input name="searchPhrase" value="${searchPhrase}"/> -->
-						<input type="submit" value="Znajdź"/>
+						<table>
+						<tr valign="middle">
+							<td>Filtr:</td> 
+							<td>OD: <custom:date name="searchDateFrom" identifier="searchDateFrom" 
+								value="${searchDateFrom}" additionalAttributes="size='15'"/></td>
+							<td>DO: <custom:date name="searchDateTo" identifier="searchDateTo" 
+								value="${searchDateTo}" additionalAttributes="size='15'"/></td>
+							<td width="10px"/>
+							<td><input type="submit" value="Znajdź"/></td>
+						</tr>
+						</table>
 					</sf:form>
 				</td>
 			</tr>
@@ -90,11 +100,12 @@
 				</c:forEach>
 			</table>
 		</c:if>
+	</div>
 	
-		<div id="invoiceContentDiv" style="border: solid;">
-			<c:out value="${invoice}" escapeXml="false"/>
-		</div>
-		
+	<div id="invoiceContentDiv" style="float:left; width: 50%">
+		<c:out value="${invoice}" escapeXml="false"/>
+	</div>
+	
 </body>
 </html>
 	

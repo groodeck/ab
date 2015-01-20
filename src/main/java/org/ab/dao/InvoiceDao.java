@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.ab.entity.Invoice;
 import org.joda.time.LocalDate;
@@ -19,27 +20,31 @@ public class InvoiceDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findAll() {
-		return em.createQuery("from Invoice").getResultList();
+		return this.em.createQuery("from Invoice").getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findInvoices(final String userNumber, final LocalDate createDateFrom, final LocalDate createDateTo) {
-		return em.createQuery("from Invoice i where "
-				+ "(:userNumber = null OR i.contract.subscriber.subscriberIdn = :userNumber) "
-				+ "and (:dateFrom = null OR i.createDate >= :dateFrom) "
-				+ "and (:dateTo = null OR i.createDate <= :dateTo) ")
-				.setParameter("userNumber", userNumber)
-				.setParameter("dateFrom", createDateFrom)
-				.setParameter("dateTo", createDateTo)
-				.getResultList();
+		final Query query = this.em.createQuery("from Invoice i where "
+				+ "(:userNumber is null OR i.contract.subscriber.subscriberIdn = :userNumber) "
+				+ (createDateFrom == null ? "" : "AND i.createDate >= :dateFrom ")
+				+ (createDateTo == null ? "" : "AND i.createDate <= :dateTo "))
+				.setParameter("userNumber", userNumber);
+		if(createDateFrom != null){
+			query.setParameter("dateFrom", createDateFrom);
+		}
+		if(createDateTo != null){
+			query.setParameter("dateTo", createDateTo);
+		}
+		return query.getResultList();
 	}
 
 	public Invoice getInvoice(final int invoiceId) {
-		return em.find(Invoice.class, invoiceId);
+		return this.em.find(Invoice.class, invoiceId);
 	}
 
 	public long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
-		return (Long)em.createQuery("select count(*) "
+		return (Long)this.em.createQuery("select count(*) "
 				+ "from Invoice i where "
 				+ "i.settlementPeriodStart = :dateFrom "
 				+ "and i.settlementPeriodEnd = :dateTo ")
@@ -48,9 +53,8 @@ public class InvoiceDao {
 				.getSingleResult();
 	}
 
-	public void save(final List<Invoice> entities) {
-		for(final Invoice singleObject : entities){
-			em.persist(singleObject);
-		}
+	public Integer save(final Invoice entity) {
+		this.em.persist(entity);
+		return entity.getInvoiceId();
 	}
 }

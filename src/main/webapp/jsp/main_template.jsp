@@ -26,6 +26,9 @@
 	<div id="menu">
 		<tiles:insertAttribute name="menu" />
 	</div>
+	<div id="menu">
+		<tiles:insertAttribute name="subscriberDetails" />
+	</div>
 	<div id="page">
 		<tiles:insertAttribute name="content" />
 	</div>

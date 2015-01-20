@@ -8,6 +8,7 @@
 		<definition name="template" template="/jsp/main_template.jsp">
 			<put-attribute name="header" value="/jsp/header.jsp"/>
 			<put-attribute name="menu" value="/jsp/menu.jsp"/>
+			<put-attribute name="subscriberDetails" value="/jsp/subscriberDetailsBar.jsp"/>
 		</definition>
 		
 		<definition name="subscribers" extends="template">

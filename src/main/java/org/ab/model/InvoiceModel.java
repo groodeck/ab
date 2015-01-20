@@ -66,7 +66,7 @@ public class InvoiceModel {
 		}
 
 		public Builder withHtmlContent(final String invoiceHtml) {
-			htmlContent = invoiceHtml;
+			this.htmlContent = invoiceHtml;
 			return this;
 		}
 
@@ -91,7 +91,7 @@ public class InvoiceModel {
 		}
 
 		public Builder withPaymentDate(final LocalDate date) {
-			paymentDate = date;
+			this.paymentDate = date;
 			return this;
 		}
 
@@ -106,7 +106,7 @@ public class InvoiceModel {
 		}
 
 		public Builder withServiceRecord(final InvoiceServiceRecord serviceRecord) {
-			serviceRecords.add(serviceRecord);
+			this.serviceRecords.add(serviceRecord);
 			return this;
 		}
 
@@ -116,12 +116,12 @@ public class InvoiceModel {
 		}
 
 		public Builder withSettlementPeriodEnd(final LocalDate date) {
-			settlementPeriodEnd = date;
+			this.settlementPeriodEnd = date;
 			return this;
 		}
 
 		public Builder withSettlementPeriodStart(final LocalDate date) {
-			settlementPeriodStart = date;
+			this.settlementPeriodStart = date;
 			return this;
 		}
 
@@ -130,7 +130,7 @@ public class InvoiceModel {
 			return this;
 		}
 	}
-	private final Integer invoiceId;
+	private Integer invoiceId;
 	private final InvoiceParticipant seller;
 	private final InvoiceParticipant buyer;
 	private final String invoiceNumber;
@@ -150,99 +150,103 @@ public class InvoiceModel {
 	private String htmlContent;
 
 	private InvoiceModel(final Builder builder){
-		seller = builder.seller;
-		buyer = builder.buyer;
-		invoiceNumber = builder.invoiceNumber;
-		dateHeader = builder.dateHeader;
-		createDate = builder.createDate;
-		receiveDate = builder.receiveDate;
-		serviceRecords = builder.serviceRecords;
-		netAmount = builder.netAmount;
-		vatAmount = builder.vatAmount;
-		grossAmount = builder.grossAmount;
-		grossAmountWords = builder.grossAmountWords;
-		contract = builder.contract;
-		settlementPeriodStart = builder.settlementPeriodStart;
-		settlementPeriodEnd = builder.settlementPeriodEnd;
-		invoiceId = builder.invoiceId;
-		paymentDate = builder.paymentDate;
-		htmlContent = builder.htmlContent;
-		paid = builder.paid;
+		this.seller = builder.seller;
+		this.buyer = builder.buyer;
+		this.invoiceNumber = builder.invoiceNumber;
+		this.dateHeader = builder.dateHeader;
+		this.createDate = builder.createDate;
+		this.receiveDate = builder.receiveDate;
+		this.serviceRecords = builder.serviceRecords;
+		this.netAmount = builder.netAmount;
+		this.vatAmount = builder.vatAmount;
+		this.grossAmount = builder.grossAmount;
+		this.grossAmountWords = builder.grossAmountWords;
+		this.contract = builder.contract;
+		this.settlementPeriodStart = builder.settlementPeriodStart;
+		this.settlementPeriodEnd = builder.settlementPeriodEnd;
+		this.invoiceId = builder.invoiceId;
+		this.paymentDate = builder.paymentDate;
+		this.htmlContent = builder.htmlContent;
+		this.paid = builder.paid;
 	}
 
 	public InvoiceParticipant getBuyer() {
-		return buyer;
+		return this.buyer;
 	}
 
 	public Contract getContract() {
-		return contract;
+		return this.contract;
 	}
 
 	public LocalDate getCreateDate() {
-		return createDate;
+		return this.createDate;
 	}
 
 	public String getDateHeader() {
-		return dateHeader;
+		return this.dateHeader;
 	}
 
 	public BigDecimal getGrossAmount() {
-		return grossAmount;
+		return this.grossAmount;
 	}
 
 	public String getGrossAmountWords() {
-		return grossAmountWords;
+		return this.grossAmountWords;
 	}
 
 	public String getHtmlContent() {
-		return htmlContent;
+		return this.htmlContent;
 	}
 
 	public Integer getInvoiceId() {
-		return invoiceId;
+		return this.invoiceId;
 	}
 
 	public String getInvoiceNumber() {
-		return invoiceNumber;
+		return this.invoiceNumber;
 	}
 
 	public BigDecimal getNetAmount() {
-		return netAmount;
+		return this.netAmount;
 	}
 
 	public LocalDate getPaymentDate() {
-		return paymentDate;
+		return this.paymentDate;
 	}
 
 	public LocalDate getReceiveDate() {
-		return receiveDate;
+		return this.receiveDate;
 	}
 
 	public InvoiceParticipant getSeller() {
-		return seller;
+		return this.seller;
 	}
 
 	public List<InvoiceServiceRecord> getServiceRecords() {
-		return serviceRecords;
+		return this.serviceRecords;
 	}
 
 	public LocalDate getSettlementPeriodEnd() {
-		return settlementPeriodEnd;
+		return this.settlementPeriodEnd;
 	}
 
 	public LocalDate getSettlementPeriodStart() {
-		return settlementPeriodStart;
+		return this.settlementPeriodStart;
 	}
 
 	public BigDecimal getVatAmount() {
-		return vatAmount;
+		return this.vatAmount;
 	}
 
 	public boolean isPaid() {
-		return paid;
+		return this.paid;
 	}
 
-	public void setHtmlContent(final String html) {
-		htmlContent = html;
+	public void setInvoiceId(final Integer invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+
+	public void setHtmlContent(final String htmlContent) {
+		this.htmlContent = htmlContent;
 	}
 }
