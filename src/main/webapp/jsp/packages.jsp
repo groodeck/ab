@@ -33,16 +33,22 @@
 				<tr>
 					<td>lp</td>
 					<td>Nazwa pakietu</td>
-					<td>Abonent</td>
-					<td>Opłata instalacyjna</td>
-					<td>Opłata aktywacyjna</td>
+					<td>Typ klienta</td>
+					<td>Abonament</td>
+					<td>Opłata instalacyjna netto</td>
+					<td>Opłata instalacyjna brutto</td>
+					<td>Opłata aktywacyjna netto</td>
+					<td>Opłata aktywacyjna brutto</td>
 				</tr>
 				<c:forEach var="package" items="${contractPackages}" varStatus="status" >
 					<tr>
 						<td onclick="editContractPackage(${package.packageId})"><c:out value="${status.index + 1}"/></td>
 						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.packageName}"/></td>
+						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.clientTypeDesc}"/></td>
 						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.packageSubscription}"/></td>
+						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.installationFeeNet}"/></td>
 						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.installationFeeGross}"/></td>
+						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.activationFeeNet}"/></td>
 						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.activationFeeGross}"/></td>
 					</tr>
 				</c:forEach>

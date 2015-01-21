@@ -42,14 +42,25 @@
 				}
 	 		}
 	 		
-	 		function changeRowsVisible(select){
-	 			if(select.value == 'INDIVIDUAL'){
+	 		function refreshClientType(){
+	 			var select = $("#clientType");
+	 			if(select.val() == 'INDIVIDUAL'){
 	 				$(".individualRow").show();
 	 				$(".companyRow").hide();
 	 			} else {
 	 				$(".individualRow").hide();
 	 				$(".companyRow").show();
 	 			}
+	 			$.getJSON( "/async/getPackages/" + select.val(), function(packages) {
+	 				var packageSelect = $("#contract_pack"); 
+	 				var packageSelected = packageSelect.val();                      
+				    packageSelect.find('option').remove();                          
+				    $.each(packages, function(key, value) {              
+				        $('<option>').val(key).text(value).appendTo(packageSelect);     
+				    });
+				   	packageSelect.val(packageSelected);
+					refreshContractPack();
+				});
 	 		}
 	 		
 	 		function changeAddressVisible(checkbox, tableId){
@@ -89,12 +100,12 @@
 	 		}	
 	 		
 	 		$(document).ready(function() {
-			    changeRowsVisible($( "#client_type" ));
+			    refreshClientType();
 			    changeAddressVisible($( "#correspAddressCheckbox" ), 'correspondenceAddressTable');
 			    changeAddressVisible($( "#serviceAddressSet" ), 'serviceAddressTable');
 			    refreshContractEndDate();
-			    refreshContractPack();
 			});
+			
 	 	</script>
  	]]>
  </jsp:text>
@@ -123,7 +134,7 @@
 			<tr>
 				<th align="right"><label for="client_type">Typ klienta:</label></th>
 				<td>
-					<sf:select path="clientType" items="${clientTypes}" id="client_type" onchange="changeRowsVisible(this)"/>
+					<sf:select path="clientType" items="${clientTypes}" id="clientType" onchange="refreshClientType()"/>
 				</td>
 			</tr>
 			<tr class="individualRow">
@@ -398,5 +409,5 @@
 	
 </body>
 </html>
-	
+
 </jsp:root>

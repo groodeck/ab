@@ -35,6 +35,7 @@ public class SelectValueService {
 	public Map<String, ?> getPackageDictionaries() {
 		final Map<String, Map> results = Maps.newHashMap();
 		results.put("vatRates", VatRate.asValueMap());
+		results.put("clientTypes", ClientType.asValueMap());
 		return results;
 	}
 

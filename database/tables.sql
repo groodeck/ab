@@ -67,6 +67,7 @@ create table subscriber(
 create table contractPackage(
  	packageId integer not null IDENTITY PRIMARY KEY,
  	packageName varchar(100) not null,
+ 	clientType varchar(50) not null,
 	packageSubscription numeric(12,2),
 	activationFeeNet numeric(12,2),
 	activationFeeVatRate varchar(30),

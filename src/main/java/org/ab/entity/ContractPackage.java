@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.ab.model.dictionary.ClientType;
 import org.ab.model.dictionary.VatRate;
 
 @Entity
@@ -28,6 +29,10 @@ public class ContractPackage {
 
 	@Column(name="packageName")
 	private String packageName;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="clientType")
+	private ClientType clientType;
 
 	@Column(name="packageSubscription")
 	private BigDecimal packageSubscription;
@@ -62,20 +67,92 @@ public class ContractPackage {
 	@JoinColumn(name="packageId")
 	private List<Service> services;
 
+	public BigDecimal getActivationFeeGross() {
+		return activationFeeGross;
+	}
+
+	public BigDecimal getActivationFeeNet() {
+		return activationFeeNet;
+	}
+
+	public BigDecimal getActivationFeeVat() {
+		return activationFeeVat;
+	}
+
+	public VatRate getActivationFeeVatRate() {
+		return activationFeeVatRate;
+	}
+
+	public ClientType getClientType() {
+		return clientType;
+	}
+
+	public BigDecimal getInstallationFeeGross() {
+		return installationFeeGross;
+	}
+
+	public BigDecimal getInstallationFeeNet() {
+		return installationFeeNet;
+	}
+
+	public BigDecimal getInstallationFeeVat() {
+		return installationFeeVat;
+	}
+
+	public VatRate getInstallationFeeVatRate() {
+		return installationFeeVatRate;
+	}
+
 	public Integer getPackageId() {
-		return this.packageId;
+		return packageId;
 	}
 
 	public String getPackageName() {
-		return this.packageName;
+		return packageName;
 	}
 
 	public BigDecimal getPackageSubscription() {
-		return this.packageSubscription;
+		return packageSubscription;
 	}
 
 	public List<Service> getServices() {
-		return this.services;
+		return services;
+	}
+
+	public void setActivationFeeGross(final BigDecimal activationFeeGross) {
+		this.activationFeeGross = activationFeeGross;
+	}
+
+	public void setActivationFeeNet(final BigDecimal activationFeeNet) {
+		this.activationFeeNet = activationFeeNet;
+	}
+
+	public void setActivationFeeVat(final BigDecimal activationFeeVat) {
+		this.activationFeeVat = activationFeeVat;
+	}
+
+	public void setActivationFeeVatRate(final VatRate activationFeeVatRate) {
+		this.activationFeeVatRate = activationFeeVatRate;
+	}
+
+	public void setClientType(final ClientType clientType) {
+		this.clientType = clientType;
+	}
+
+	public void setInstallationFeeGross(final BigDecimal installationFeeGross) {
+		this.installationFeeGross = installationFeeGross;
+	}
+
+	public void setInstallationFeeNet(final BigDecimal installationFeeNet) {
+		this.installationFeeNet = installationFeeNet;
+	}
+
+	public void setInstallationFeeVat(final BigDecimal installationFeeVat) {
+		this.installationFeeVat = installationFeeVat;
+	}
+
+	public void setInstallationFeeVatRate(final VatRate installationFeeVatRate) {
+		this.installationFeeVatRate = installationFeeVatRate;
 	}
 
 	public void setPackageId(final Integer packageId) {
@@ -92,70 +169,6 @@ public class ContractPackage {
 
 	public void setServices(final List<Service> services) {
 		this.services = services;
-	}
-
-	public BigDecimal getActivationFeeNet() {
-		return this.activationFeeNet;
-	}
-
-	public void setActivationFeeNet(final BigDecimal activationFeeNet) {
-		this.activationFeeNet = activationFeeNet;
-	}
-
-	public VatRate getActivationFeeVatRate() {
-		return this.activationFeeVatRate;
-	}
-
-	public void setActivationFeeVatRate(final VatRate activationFeeVatRate) {
-		this.activationFeeVatRate = activationFeeVatRate;
-	}
-
-	public BigDecimal getActivationFeeVat() {
-		return this.activationFeeVat;
-	}
-
-	public void setActivationFeeVat(final BigDecimal activationFeeVat) {
-		this.activationFeeVat = activationFeeVat;
-	}
-
-	public BigDecimal getActivationFeeGross() {
-		return this.activationFeeGross;
-	}
-
-	public void setActivationFeeGross(final BigDecimal activationFeeGross) {
-		this.activationFeeGross = activationFeeGross;
-	}
-
-	public BigDecimal getInstallationFeeNet() {
-		return this.installationFeeNet;
-	}
-
-	public void setInstallationFeeNet(final BigDecimal installationFeeNet) {
-		this.installationFeeNet = installationFeeNet;
-	}
-
-	public VatRate getInstallationFeeVatRate() {
-		return this.installationFeeVatRate;
-	}
-
-	public void setInstallationFeeVatRate(final VatRate installationFeeVatRate) {
-		this.installationFeeVatRate = installationFeeVatRate;
-	}
-
-	public BigDecimal getInstallationFeeVat() {
-		return this.installationFeeVat;
-	}
-
-	public void setInstallationFeeVat(final BigDecimal installationFeeVat) {
-		this.installationFeeVat = installationFeeVat;
-	}
-
-	public BigDecimal getInstallationFeeGross() {
-		return this.installationFeeGross;
-	}
-
-	public void setInstallationFeeGross(final BigDecimal installationFeeGross) {
-		this.installationFeeGross = installationFeeGross;
 	}
 
 }

@@ -24,7 +24,7 @@ public class ContractPackagesController {
 	@RequestMapping
 	public String handleInitEntry(final Model model) {
 		model.addAttribute("contractPackages", contractPackageService.getAllPackages());
-		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());
+		model.addAllAttributes(selectValuesService.getPackageDictionaries());
 		return "packages";
 	}
 }

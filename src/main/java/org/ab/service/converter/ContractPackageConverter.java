@@ -1,11 +1,13 @@
 package org.ab.service.converter;
 
 import static org.ab.util.Translator.toAmount;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.util.List;
 
 import org.ab.entity.ContractPackage;
 import org.ab.model.Service;
+import org.ab.model.dictionary.ClientType;
 import org.ab.model.dictionary.VatRate;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,8 @@ public class ContractPackageConverter {
 				model.setPackageId(entity.getPackageId().toString());
 			}
 			model.setPackageName(entity.getPackageName());
+			model.setClientType(entity.getClientType().name());
+			model.setClientTypeDesc(entity.getClientType().getDesc());
 			if(entity.getPackageSubscription() != null){
 				model.setPackageSubscription(entity.getPackageSubscription().toPlainString());
 			}
@@ -55,7 +59,7 @@ public class ContractPackageConverter {
 				model.setInstallationFeeGross(entity.getInstallationFeeGross().toPlainString());
 			}
 
-			model.setServices(FluentIterable.from(entity.getServices()).transform(ContractPackageConverter.this.toServiceModel).toList());
+			model.setServices(FluentIterable.from(entity.getServices()).transform(toServiceModel).toList());
 
 			return model;
 		}
@@ -109,7 +113,10 @@ public class ContractPackageConverter {
 				entity.setPackageId(Integer.valueOf(model.getPackageId()));
 			}
 			entity.setPackageName(model.getPackageName());
-
+			if(isNotBlank(model.getClientType())){
+				final ClientType clientType = ClientType.valueOf(model.getClientType());
+				entity.setClientType(clientType);
+			}
 			entity.setPackageSubscription(toAmount(model.getPackageSubscription()));
 
 			entity.setActivationFeeNet(toAmount(model.getActivationFeeNet()));
@@ -123,22 +130,22 @@ public class ContractPackageConverter {
 			entity.setInstallationFeeGross(toAmount(model.getInstallationFeeGross()));
 
 			entity.setServices(FluentIterable.from(model.getServices())
-					.transform(ContractPackageConverter.this.toServiceEntity).toList());
+					.transform(toServiceEntity).toList());
 			return entity;
 		}
 	};
 
 	public org.ab.model.ContractPackage convert(final ContractPackage contractPackage) {
-		return this.toContractPackageModel.apply(contractPackage);
+		return toContractPackageModel.apply(contractPackage);
 	}
 
 	public List<org.ab.model.ContractPackage> convert(final List<ContractPackage> entities) {
 		return FluentIterable.from(entities)
-				.transform(this.toContractPackageModel).toList();
+				.transform(toContractPackageModel).toList();
 	}
 
 	public ContractPackage convert(final org.ab.model.ContractPackage model) {
-		return this.toPackageEntity.apply(model);
+		return toPackageEntity.apply(model);
 	}
 
 }

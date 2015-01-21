@@ -7,6 +7,8 @@ import org.assertj.core.util.Lists;
 public class ContractPackage {
 	private String packageId;
 	private String packageName;
+	private String clientType;
+	private String clientTypeDesc;
 	private String packageSubscription;
 
 	private String activationFeeNet;
@@ -35,6 +37,12 @@ public class ContractPackage {
 	}
 	public String getActivationFeeVatRate() {
 		return activationFeeVatRate;
+	}
+	public String getClientType() {
+		return clientType;
+	}
+	public String getClientTypeDesc() {
+		return clientTypeDesc;
 	}
 	public String getInstallationFeeGross() {
 		return installationFeeGross;
@@ -71,6 +79,12 @@ public class ContractPackage {
 	}
 	public void setActivationFeeVatRate(final String activationFeeVatRate) {
 		this.activationFeeVatRate = activationFeeVatRate;
+	}
+	public void setClientType(final String clientType) {
+		this.clientType = clientType;
+	}
+	public void setClientTypeDesc(final String desc) {
+		clientTypeDesc = desc;
 	}
 	public void setInstallationFeeGross(final String installationFeeGross) {
 		this.installationFeeGross = installationFeeGross;

@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.ab.dao.ContractPackageDao;
 import org.ab.entity.ContractPackage;
+import org.ab.model.dictionary.ClientType;
 import org.ab.model.js.PackageDetails;
 import org.ab.service.converter.ContractPackageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,17 @@ public class ContractPackageService {
 
 	public Map<String, String> getPackageDictionary(){
 		final List<ContractPackage> packages = contractPackageDao.findAll();
+		final Map<String, String> results = Maps.newHashMap();
+		for(final ContractPackage contractPackage : packages){
+			results.put(contractPackage.getPackageId().toString(),
+					contractPackage.getPackageName());
+		}
+		return results;
+	}
+
+	public Map<String, String> getPackageDictionary(final String clientTypeName) {
+		final ClientType clientType = ClientType.valueOf(clientTypeName);
+		final List<ContractPackage> packages = contractPackageDao.findAllOfClientType(clientType);
 		final Map<String, String> results = Maps.newHashMap();
 		for(final ContractPackage contractPackage : packages){
 			results.put(contractPackage.getPackageId().toString(),

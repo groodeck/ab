@@ -18,7 +18,7 @@ public class SubscribersDao {
 
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	public List<Subscriber> findSubscribers(final String phrase, final LocalDate dateFrom, final LocalDate dateTo) {
 		final StringBuilder sb = new StringBuilder("select object(s) from Subscriber s, Contract c ");
 		final Query query;
@@ -33,17 +33,19 @@ public class SubscribersDao {
 					+ "or s.pesel like '%:phrase%' "
 					+ "or s.regon like '%:phrase%' "
 					+ "or s.nip like '%:phrase%') ");
-			sb.append("and c.contractSignDate between :dateFrom and :dateTo ");
+			sb.append("and c.contractSignDate between :dateFrom and :dateTo "
+					+ "ORDER BY s.subscriberId ");
 			query = em.createQuery(sb.toString())
-				.setParameter("phrase", phrase);
+					.setParameter("phrase", phrase);
 		} else {
 			sb.append("where c.subscriber = s "
-					+ "and c.contractSignDate between :dateFrom and :dateTo ");
+					+ "and c.contractSignDate between :dateFrom and :dateTo "
+					+ "ORDER BY s.subscriberId ");
 			query = em.createQuery(sb.toString());
 		}
 		return query.setParameter("dateFrom", dateFrom)
 				.setParameter("dateTo", dateTo)
 				.getResultList();
 	}
-	
+
 }
