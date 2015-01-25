@@ -1,5 +1,6 @@
 package org.ab.model.dictionary;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.ab.service.CityService;
@@ -37,6 +38,11 @@ public class SelectValueService {
 		results.put("vatRates", VatRate.asValueMap());
 		results.put("clientTypes", ClientType.asValueMap());
 		return results;
+	}
+
+	public Collection<?> getPaymentDictionaries() {
+		// TODO zrob to
+		return null;
 	}
 
 	public Map<String, Map<String, String>> getSubscriberDictionaries() {

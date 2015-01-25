@@ -28,60 +28,6 @@ public class ContractConverter {
 	@Autowired
 	private DeviceConverter deviceConverter;
 
-	public Contract convert(final org.ab.model.Contract model, final String userName) {
-		final Contract entity = new Contract();
-
-		entity.setContractIdn(model.getContractIdn());
-
-		final String contractSignDate = model.getContractSignDate();
-		if(isNotBlank(contractSignDate)){
-			entity.setContractSignDate(LocalDate.parse(contractSignDate));
-		}
-
-		final String contractActivationDate = model.getContractActivationDate();
-		if(isNotBlank(contractActivationDate)){
-			entity.setContractActivationDate(LocalDate.parse(contractActivationDate));
-		}
-
-		final String contractEndDate = model.getContractEndDate();
-		if(isNotBlank(contractEndDate)){
-			entity.setContractEndDate(LocalDate.parse(contractEndDate));
-		}
-
-		entity.setContractStatus(ContractStatus.valueOf(model.getContractStatus()));
-
-		final String contractPack = model.getContractPack();
-		if(isNotBlank(contractPack)){
-			final ContractPackage contractPackage = this.packageDao.getById(contractPack);
-			entity.setContractPackage(contractPackage);
-		}
-
-		entity.setContractPeriod(model.getContractPeriod());
-
-		final String contractSubscription = model.getContractSubscription();
-		if(isNotBlank(contractSubscription)){
-			entity.setContractSubscription(new BigDecimal(asNumber(contractSubscription)));
-		}
-
-		entity.setActivationFeeNet(toAmount(model.getActivationFeeNet()));
-		entity.setActivationFeeVatRate(VatRate.valueOf(model.getActivationFeeVatRate()));
-		entity.setActivationFeeVat(toAmount(model.getActivationFeeVat()));
-		entity.setActivationFeeGross(toAmount(model.getActivationFeeGross()));
-
-		entity.setInstallationFeeNet(toAmount(model.getInstallationFeeNet()));
-		entity.setInstallationFeeVatRate(VatRate.valueOf(model.getInstallationFeeVatRate()));
-		entity.setInstallationFeeVat(toAmount(model.getInstallationFeeVat()));
-		entity.setInstallationFeeGross(toAmount(model.getInstallationFeeGross()));
-
-		entity.setDevices(this.deviceConverter.convert(model.getDevices()));
-
-		entity.setActive(model.isActive());
-
-		entity.setUser(this.userDao.findByName(userName));
-
-		return entity;
-	}
-
 	private String asNumber(final String numericString) {
 		return numericString.replaceAll(",", ".");
 	}
@@ -107,6 +53,7 @@ public class ContractConverter {
 		model.setContractPeriod(entity.getContractPeriod());
 		if(entity.getContractPackage() != null){
 			model.setContractPack(entity.getContractPackage().getPackageId().toString());
+			model.setContractPackName(entity.getContractPackage().getPackageName());
 		}
 		if(entity.getActivationFeeNet() != null){
 			model.setActivationFeeNet(entity.getActivationFeeNet().toPlainString());
@@ -139,9 +86,63 @@ public class ContractConverter {
 		if(entity.getUser() != null){
 			model.setUser(entity.getUser().getName());
 		}
-		model.setDevices(this.deviceConverter.convertToModel(entity.getDevices()));
+		model.setDevices(deviceConverter.convertToModel(entity.getDevices()));
 
 		return model;
+	}
+
+	public Contract convert(final org.ab.model.Contract model, final String userName) {
+		final Contract entity = new Contract();
+
+		entity.setContractIdn(model.getContractIdn());
+
+		final String contractSignDate = model.getContractSignDate();
+		if(isNotBlank(contractSignDate)){
+			entity.setContractSignDate(LocalDate.parse(contractSignDate));
+		}
+
+		final String contractActivationDate = model.getContractActivationDate();
+		if(isNotBlank(contractActivationDate)){
+			entity.setContractActivationDate(LocalDate.parse(contractActivationDate));
+		}
+
+		final String contractEndDate = model.getContractEndDate();
+		if(isNotBlank(contractEndDate)){
+			entity.setContractEndDate(LocalDate.parse(contractEndDate));
+		}
+
+		entity.setContractStatus(ContractStatus.valueOf(model.getContractStatus()));
+
+		final String contractPack = model.getContractPack();
+		if(isNotBlank(contractPack)){
+			final ContractPackage contractPackage = packageDao.getById(contractPack);
+			entity.setContractPackage(contractPackage);
+		}
+
+		entity.setContractPeriod(model.getContractPeriod());
+
+		final String contractSubscription = model.getContractSubscription();
+		if(isNotBlank(contractSubscription)){
+			entity.setContractSubscription(new BigDecimal(asNumber(contractSubscription)));
+		}
+
+		entity.setActivationFeeNet(toAmount(model.getActivationFeeNet()));
+		entity.setActivationFeeVatRate(VatRate.valueOf(model.getActivationFeeVatRate()));
+		entity.setActivationFeeVat(toAmount(model.getActivationFeeVat()));
+		entity.setActivationFeeGross(toAmount(model.getActivationFeeGross()));
+
+		entity.setInstallationFeeNet(toAmount(model.getInstallationFeeNet()));
+		entity.setInstallationFeeVatRate(VatRate.valueOf(model.getInstallationFeeVatRate()));
+		entity.setInstallationFeeVat(toAmount(model.getInstallationFeeVat()));
+		entity.setInstallationFeeGross(toAmount(model.getInstallationFeeGross()));
+
+		entity.setDevices(deviceConverter.convert(model.getDevices()));
+
+		entity.setActive(model.isActive());
+
+		entity.setUser(userDao.findByName(userName));
+
+		return entity;
 	}
 
 }
