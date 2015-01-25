@@ -13,6 +13,8 @@
 					<td width="20px" />
 					<td align="center"><a href="/invoices">Faktury</a></td>
 					<td width="20px" />
+					<td align="center"><a href="/payments">Wpłaty</a></td>
+					<td width="20px" />
 					<td align="center"><a href="/packages">Pakiety</a></td>
 				</tr>
 			</table>

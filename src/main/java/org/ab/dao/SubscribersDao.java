@@ -25,18 +25,18 @@ public class SubscribersDao {
 		if(StringUtils.isNotBlank(phrase)){
 			sb.append("where "
 					+ "c.subscriber = s "
-					+ "and (s.name like '%:phrase%' "
-					+ "or s.surname like '%:phrase%' "
-					+ "or s.companyName like '%:phrase%' "
-					+ "or s.subscriberIdn like '%:phrase%' "
-					+ "or s.clientIdNumber like '%:phrase%' "
-					+ "or s.pesel like '%:phrase%' "
-					+ "or s.regon like '%:phrase%' "
-					+ "or s.nip like '%:phrase%') ");
+					+ "and (lower(s.name) like lower(:phrase) "
+					+ "or lower(s.surname) like lower(:phrase) "
+					+ "or lower(s.companyName) like lower(:phrase) "
+					+ "or lower(s.subscriberIdn) like lower(:phrase) "
+					+ "or lower(s.clientIdNumber) like lower(:phrase) "
+					+ "or s.pesel like :phrase "
+					+ "or s.regon like :phrase "
+					+ "or s.nip like :phrase) ");
 			sb.append("and c.contractSignDate between :dateFrom and :dateTo "
 					+ "ORDER BY s.subscriberId ");
 			query = em.createQuery(sb.toString())
-					.setParameter("phrase", phrase);
+					.setParameter("phrase", "%"+phrase+"%");
 		} else {
 			sb.append("where c.subscriber = s "
 					+ "and c.contractSignDate between :dateFrom and :dateTo "

@@ -8,10 +8,11 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 public class SubscriberModel {
-	
+
 	private String subscriberId;
 	private String subscriberIdn;
 	private String clientType;
+	private String clientTypeDesc;
 	private String name;
 	private String surname;
 	private String companyName;
@@ -24,168 +25,176 @@ public class SubscriberModel {
 	private String balance;
 	private String comment;
 	private String additionalComment;
-	
+
 	private Address mainAddress;
 	private Address serviceAddress;
 	private boolean serviceAddressSet;
 	private Address correspondenceAddress;
 	private boolean correspondenceAddressSet;
-	
+
 	private List<String> phoneNumbers;
 	private List<String> emails;
-	
+
 	public SubscriberModel(){
 		phoneNumbers = Lists.newArrayList("");
 		emails = Lists.newArrayList("");
 		currentContract = new Contract();
 	}
-	
-	public String getSubscriberId() {
-		return subscriberId;
-	}
-	public String getClientType() {
-		return clientType;
-	}
-	public String getName() {
-		return name;
-	}
-	public String getSurname() {
-		return surname;
-	}
-	public String getCompanyName() {
-		return companyName;
-	}
-	public String getClientIdNumber() {
-		return clientIdNumber;
-	}
-	public String getPesel() {
-		return pesel;
-	}
-	public String getRegon() {
-		return regon;
-	}
-	public String getNip() {
-		return nip;
-	}
-	public Contract getCurrentContract() {
-		return currentContract;
-	}
-	public Address getMainAddress() {
-		return mainAddress;
-	}
-	public Address getServiceAddress() {
-		return serviceAddress;
-	}
-	public Address getCorrespondenceAddress() {
-		return correspondenceAddress;
-	}
-	public List<String> getPhoneNumbers() {
-		return phoneNumbers;
-	}
-	public List<String> getEmails() {
-		return emails;
-	}
-	public void setSubscriberId(String subscriberId) {
-		this.subscriberId = subscriberId;
-	}
-	public void setClientType(String clientType) {
-		this.clientType = clientType;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-	public void setClientIdNumber(String clientIdNumber) {
-		this.clientIdNumber = clientIdNumber;
-	}
-	public void setPesel(String pesel) {
-		this.pesel = pesel;
-	}
-	public void setRegon(String regon) {
-		this.regon = regon;
-	}
-	public void setNip(String nip) {
-		this.nip = nip;
-	}
-	public void setCurrentContract(Contract currentContract) {
-		this.currentContract = currentContract;
-	}
-	public void setMainAddress(Address mainAddress) {
-		this.mainAddress = mainAddress;
-	}
-	public void setServiceAddress(Address serviceAddress) {
-		this.serviceAddress = serviceAddress;
-	}
-	public void setCorrespondenceAddress(Address correspondenceAddress) {
-		this.correspondenceAddress = correspondenceAddress;
-	}
-	public void setPhoneNumbers(List<String> phoneNumbers) {
-		this.phoneNumbers = phoneNumbers;
-	}
-	public void setEmails(List<String> emails) {
-		this.emails = emails;
-	}
-	public String getBalance() {
-		return balance;
-	}
-	public void setBalance(String balance) {
-		this.balance = balance;
-	}
-
-	public boolean isServiceAddressSet() {
-		return serviceAddressSet;
-	}
-
-	public void setServiceAddressSet(boolean serviceAddressSet) {
-		this.serviceAddressSet = serviceAddressSet;
-	}
-
-	public boolean isCorrespondenceAddressSet() {
-		return correspondenceAddressSet;
-	}
-
-	public void setCorrespondenceAddressSet(boolean correspondenceAddressSet) {
-		this.correspondenceAddressSet = correspondenceAddressSet;
-	}
-
-	public String getSubscriberIdn() {
-		return subscriberIdn;
-	}
-
-	public void setSubscriberIdn(String subscriberIdn) {
-		this.subscriberIdn = subscriberIdn;
-	}
-
-	public String getComment() {
-		return comment;
-	}
 
 	public String getAdditionalComment() {
 		return additionalComment;
 	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
+	public String getBalance() {
+		return balance;
 	}
-
-	public void setAdditionalComment(String additionalComment) {
-		this.additionalComment = additionalComment;
+	public String getClientIdNumber() {
+		return clientIdNumber;
 	}
-
+	public String getClientType() {
+		return clientType;
+	}
+	public String getClientTypeDesc() {
+		return clientTypeDesc;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public Address getCorrespondenceAddress() {
+		return correspondenceAddress;
+	}
+	public Contract getCurrentContract() {
+		return currentContract;
+	}
 	public String getEffectiveName(){
 		if(StringUtils.isNotBlank(companyName)){
 			return companyName;
 		} else {
-			return Joiner.on(" ").join(name, surname);  
+			return Joiner.on(" ").join(name, surname);
 		}
 	}
-	
+	public List<String> getEmails() {
+		return emails;
+	}
+	public Address getMainAddress() {
+		return mainAddress;
+	}
+	public String getName() {
+		return name;
+	}
+	public String getNip() {
+		return nip;
+	}
+	public String getPesel() {
+		return pesel;
+	}
 	public String getPhoneList(){
 		return Joiner.on("<br/>").join(phoneNumbers);
+	}
+	public List<String> getPhoneNumbers() {
+		return phoneNumbers;
+	}
+	public String getRegon() {
+		return regon;
+	}
+	public Address getServiceAddress() {
+		return serviceAddress;
+	}
+	public String getSubscriberId() {
+		return subscriberId;
+	}
+	public String getSubscriberIdn() {
+		return subscriberIdn;
+	}
+	public String getSurname() {
+		return surname;
+	}
+	public boolean isCorrespondenceAddressSet() {
+		return correspondenceAddressSet;
+	}
+	public boolean isServiceAddressSet() {
+		return serviceAddressSet;
+	}
+	public void setAdditionalComment(final String additionalComment) {
+		this.additionalComment = additionalComment;
+	}
+	public void setBalance(final String balance) {
+		this.balance = balance;
+	}
+	public void setClientIdNumber(final String clientIdNumber) {
+		this.clientIdNumber = clientIdNumber;
+	}
+	public void setClientType(final String clientType) {
+		this.clientType = clientType;
+	}
+	public void setClientTypeDesc(final String clientTypeDesc) {
+		this.clientTypeDesc = clientTypeDesc;
+	}
+	public void setComment(final String comment) {
+		this.comment = comment;
+	}
+	public void setCompanyName(final String companyName) {
+		this.companyName = companyName;
+	}
+	public void setCorrespondenceAddress(final Address correspondenceAddress) {
+		this.correspondenceAddress = correspondenceAddress;
+	}
+
+	public void setCorrespondenceAddressSet(final boolean correspondenceAddressSet) {
+		this.correspondenceAddressSet = correspondenceAddressSet;
+	}
+
+	public void setCurrentContract(final Contract currentContract) {
+		this.currentContract = currentContract;
+	}
+
+	public void setEmails(final List<String> emails) {
+		this.emails = emails;
+	}
+
+	public void setMainAddress(final Address mainAddress) {
+		this.mainAddress = mainAddress;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public void setNip(final String nip) {
+		this.nip = nip;
+	}
+
+	public void setPesel(final String pesel) {
+		this.pesel = pesel;
+	}
+
+	public void setPhoneNumbers(final List<String> phoneNumbers) {
+		this.phoneNumbers = phoneNumbers;
+	}
+
+	public void setRegon(final String regon) {
+		this.regon = regon;
+	}
+
+	public void setServiceAddress(final Address serviceAddress) {
+		this.serviceAddress = serviceAddress;
+	}
+
+	public void setServiceAddressSet(final boolean serviceAddressSet) {
+		this.serviceAddressSet = serviceAddressSet;
+	}
+
+	public void setSubscriberId(final String subscriberId) {
+		this.subscriberId = subscriberId;
+	}
+
+	public void setSubscriberIdn(final String subscriberIdn) {
+		this.subscriberIdn = subscriberIdn;
+	}
+
+	public void setSurname(final String surname) {
+		this.surname = surname;
 	}
 }

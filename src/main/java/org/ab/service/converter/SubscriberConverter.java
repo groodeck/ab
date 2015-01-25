@@ -29,14 +29,14 @@ public class SubscriberConverter {
 
 	@Autowired
 	private ContractConverter contractConverter;
-	
+
 	@Autowired
 	private ContactConverter contactConverter;
-	
+
 	@Autowired
 	private AddressConverter addressConverter;
 
-	private Function<Subscriber, SubscriberModel> entityToModel = new Function<Subscriber, SubscriberModel>(){
+	private final Function<Subscriber, SubscriberModel> entityToModel = new Function<Subscriber, SubscriberModel>(){
 		@Override
 		public SubscriberModel apply(final Subscriber entity) {
 			final SubscriberModel model = new SubscriberModel();
@@ -46,6 +46,7 @@ public class SubscriberConverter {
 			model.setSurname(entity.getSurname());
 			model.setCompanyName(entity.getCompanyName());
 			model.setClientType(entity.getClientType().name());
+			model.setClientTypeDesc(entity.getClientType().getDesc());
 			model.setPesel(entity.getPesel());
 			model.setRegon(entity.getRegon());
 			model.setNip(entity.getNip());
@@ -68,30 +69,15 @@ public class SubscriberConverter {
 			return model;
 		}
 
-		private List<String> getContactValues(final List<Contact> contacts, final ContactType contactType) {
-			return FluentIterable.from(contacts).filter(new Predicate<Contact>(){
-				@Override
-				public boolean apply(Contact input) {
-					return input.getContactType() == contactType;
-				}
-			}).transform(new Function<Contact, String>(){
-				@Override
-				public String apply(Contact input) {
-					return input.getContact();
-				}
-				
-			}).toList();
-		}
-
 		private Address getAddress(final List<org.ab.entity.Address> addresses, final AddressType addressType) {
 			final Optional<org.ab.entity.Address> address = FluentIterable.from(addresses)
 					.filter(new Predicate<org.ab.entity.Address>(){
-				@Override
-				public boolean apply(org.ab.entity.Address input) {
-					return input.getAddressType() == addressType;
-				}
-				
-			}).first();
+						@Override
+						public boolean apply(final org.ab.entity.Address input) {
+							return input.getAddressType() == addressType;
+						}
+
+					}).first();
 			final Address result;
 			if(address.isPresent()){
 				result = addressConverter.convert(address.get());
@@ -101,15 +87,30 @@ public class SubscriberConverter {
 			return result;
 		}
 
+		private List<String> getContactValues(final List<Contact> contacts, final ContactType contactType) {
+			return FluentIterable.from(contacts).filter(new Predicate<Contact>(){
+				@Override
+				public boolean apply(final Contact input) {
+					return input.getContactType() == contactType;
+				}
+			}).transform(new Function<Contact, String>(){
+				@Override
+				public String apply(final Contact input) {
+					return input.getContact();
+				}
+
+			}).toList();
+		}
+
 		private org.ab.model.Contract getCurrentContract(final List<Contract> contracts) {
 			final Optional<Contract> entity = FluentIterable.from(contracts)
 					.filter(new Predicate<Contract>(){
-				@Override
-				public boolean apply(final Contract input) {
-					return input.isActive();
-				}
-				
-			}).first();
+						@Override
+						public boolean apply(final Contract input) {
+							return input.isActive();
+						}
+
+					}).first();
 			final org.ab.model.Contract model;
 			if(entity.isPresent()){
 				model = contractConverter.convert(entity.get());
@@ -118,23 +119,28 @@ public class SubscriberConverter {
 			}
 			return model;
 		}
-		
+
 	};
-	
-	public Subscriber convert(org.ab.model.SubscriberModel model, final String userName) {
+
+	@Transactional
+	public List<SubscriberModel> convert(final List<Subscriber> subscribers) {
+		return FluentIterable.from(subscribers).transform(entityToModel).toList();
+	}
+
+	public Subscriber convert(final org.ab.model.SubscriberModel model, final String userName) {
 		final Subscriber entity = new Subscriber();
 		final String subscriberId = model.getSubscriberId();
 		if(isNotBlank(subscriberId)){
 			entity.setSubscriberId(Integer.parseInt(subscriberId));
 		}
 		entity.setSubscriberIdn(model.getSubscriberIdn());
-		
+
 		final String clientTypeName = model.getClientType();
 		if(isNotBlank(clientTypeName)){
 			final ClientType clientType = ClientType.valueOf(clientTypeName);
 			entity.setClientType(clientType);
 		}
-		
+
 		entity.setName(model.getName());
 		entity.setSurname(model.getSurname());
 		entity.setCompanyName(model.getCompanyName());
@@ -143,36 +149,40 @@ public class SubscriberConverter {
 		entity.setPesel(model.getPesel());
 		entity.setRegon(model.getRegon());
 		entity.setNip(model.getNip());
-		
+
 		final String balance = model.getBalance();
 		if(isNotBlank(balance)){
 			entity.setBalance(new BigDecimal(balance.replaceAll(",", ".")));
 		}
-		
+
 		final List<Contract> contracts = Lists.newArrayList();
-		org.ab.model.Contract currentContract = model.getCurrentContract();
+		final org.ab.model.Contract currentContract = model.getCurrentContract();
 		if(currentContract != null){
 			contracts.add(contractConverter.convert(currentContract, userName));
 		}
 		entity.getContracts().clear();
 		entity.getContracts().addAll(contracts);
-		
+
 		final List<String> phones = model.getPhoneNumbers();
 		final List<String> emails = model.getEmails();
 		entity.getContacts().clear();
 		entity.getContacts().addAll(contactConverter.convert(phones, emails));
-		
+
 		final Address mainAddress = model.getMainAddress();
 		final Address serviceAddress = getServiceAddressIfSet(model);
 		final Address correspondanceAddress = getCorrespondenceAddressIfSet(model);
 		entity.getAddresses().clear();
 		entity.getAddresses().addAll(
 				addressConverter.convert(mainAddress, serviceAddress, correspondanceAddress));
-		
+
 		entity.setComment(model.getComment());
 		entity.setAdditionalComment(model.getAdditionalComment());
-		
+
 		return entity;
+	}
+
+	public SubscriberModel convert(final Subscriber subscriber) {
+		return entityToModel.apply(subscriber);
 	}
 
 	private Address getCorrespondenceAddressIfSet(final org.ab.model.SubscriberModel model) {
@@ -189,15 +199,6 @@ public class SubscriberConverter {
 		} else {
 			return null;
 		}
-	}
-
-	@Transactional
-	public List<SubscriberModel> convert(final List<Subscriber> subscribers) {
-		return FluentIterable.from(subscribers).transform(entityToModel).toList();
-	}
-
-	public SubscriberModel convert(final Subscriber subscriber) {
-		return entityToModel.apply(subscriber);
 	}
 
 }
