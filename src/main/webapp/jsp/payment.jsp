@@ -65,7 +65,7 @@
 			<tr>
 				<th align="right" style="width: 30%"><label for="subscriber_number">Numer abonenta:</label></th>
 				<td colspan="4">
-					<c:out value="subscriber.subscriberIdn"/>
+					<sf:label path="subscriber.subscriberIdn"></sf:label>
 				</td>
 			</tr>
 			<tr>
@@ -87,7 +87,8 @@
 					<c:forEach var="invoice" items="${invoices}" varStatus="status">
 						<tr>	
 							<td><sf:checkbox path="${invoice.shouldBePaid}"/></td>
-							<td colspan="4"><c:out value="${invoice.invoiceNumber}: ${invoice.settlementPeriod}"/></td>
+							<td><c:out value="${invoice.invoiceNumber}: ${invoice.settlementPeriod}"/></td>
+							<td><sf:input path="${invoice.paymentAmount}"/></td>
 						</tr>
 					</c:forEach>
 					</table>

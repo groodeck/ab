@@ -6,9 +6,8 @@ import org.ab.dao.ContractPackageDao;
 import org.ab.dao.UserDao;
 import org.ab.entity.InvoiceContent;
 import org.ab.entity.InvoiceRecord;
-import org.ab.entity.Subscriber;
 import org.ab.model.InvoiceModel;
-import org.ab.service.generator.InvoiceParticipant;
+import org.ab.model.InvoicePaymentModel;
 import org.ab.service.generator.InvoiceServiceRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 
 @Component
-public class InvoiceConverter {
+public class InvoicePaymentConverter {
 
 	@Autowired
 	private ContractPackageDao packageDao;
@@ -76,32 +75,17 @@ public class InvoiceConverter {
 		}
 	};
 
-	private final Function<org.ab.entity.Invoice, InvoiceModel> toModelInvoice =
-			new Function<org.ab.entity.Invoice, InvoiceModel>(){
+	private final Function<org.ab.entity.Invoice, InvoicePaymentModel> toModelInvoicePayment =
+			new Function<org.ab.entity.Invoice, InvoicePaymentModel>(){
 
 		@Override
-		public InvoiceModel apply(final org.ab.entity.Invoice input) {
-			final InvoiceModel model = new InvoiceModel.Builder()
-			.withInvoiceId(input.getInvoiceId())
-			.withInvoiceNumber(input.getInvoiceNumber())
-			.withBuyer(convertSubscriber(input.getContract().getSubscriber()))
-			.withCreateDate(input.getCreateDate())
-			.withReceiveDate(input.getReceiveDate())
-			.withSettlementPeriodStart(input.getSettlementPeriodStart())
-			.withSettlementPeriodEnd(input.getSettlementPeriodEnd())
-			.withNetAmount(input.getNetAmount())
-			.withVatAmount(input.getVatAmount())
-			.withGrossAmount(input.getGrossAmount())
-			.withPaidAmount(input.getPaidAmount())
-			.withPaymentDate(input.getPaymentDate())
-			.build();
+		public InvoicePaymentModel apply(final org.ab.entity.Invoice input) {
+			final InvoicePaymentModel model = new InvoicePaymentModel();
+			model.setInvoiceId(input.getInvoiceId().toString());
+			model.setSettlementPeriod(String.format(
+					"%s - %s",input.getSettlementPeriodStart(), input.getSettlementPeriodEnd()));
+			model.setInvoiceNumber(input.getInvoiceNumber());
 			return model;
-		}
-
-		private InvoiceParticipant convertSubscriber(final Subscriber subscriber) {
-			return new InvoiceParticipant.Builder()
-			.withName(subscriber.getEffectiveName())
-			.build();
 		}
 	};
 
@@ -109,7 +93,7 @@ public class InvoiceConverter {
 		return toEntityInvoice.apply(invoice);
 	}
 
-	public List<InvoiceModel> convertEntities(final List<org.ab.entity.Invoice> invoices) {
-		return FluentIterable.from(invoices).transform(toModelInvoice).toList();
+	public List<InvoicePaymentModel> convertEntities(final List<org.ab.entity.Invoice> invoices) {
+		return FluentIterable.from(invoices).transform(toModelInvoicePayment).toList();
 	}
 }

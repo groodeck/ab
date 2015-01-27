@@ -62,7 +62,7 @@ public class InvoicesGenerator {
 	}
 
 	private String generateHtmlContent(final InvoiceModel invoice) {
-		return this.contentGenerator.generateHtml(invoice);
+		return contentGenerator.generateHtml(invoice);
 	}
 
 	public List<InvoiceModel> generateInvoices(final List<Contract> contracts, final LocalDate dateFrom, final LocalDate dateTo) {
@@ -72,16 +72,17 @@ public class InvoicesGenerator {
 		final List<InvoiceModel> results = Lists.newArrayList();
 		for(final Contract contract : contracts){
 			final InvoiceModel.Builder invoiceBuilder = new InvoiceModel.Builder()
-				.withInvoiceNumber(getInvoiceNumber(dateFrom, dateTo))
-				.withContract(contract)
-				.withSettlementPeriodStart(dateFrom)
-				.withSettlementPeriodEnd(dateTo)
-				.withSeller(getSeller(contract, props))
-				.withBuyer(getBuyer(contract))
-				.withCreateDate(currentDate)
-				.withReceiveDate(currentDate)
-				.withDateHeader(city + ", " + currentDate)
-				.withPaymentDate(currentDate.plusWeeks(2));
+			.withInvoiceNumber(getInvoiceNumber(dateFrom, dateTo))
+			.withContract(contract)
+			.withSettlementPeriodStart(dateFrom)
+			.withSettlementPeriodEnd(dateTo)
+			.withSeller(getSeller(contract, props))
+			.withBuyer(getBuyer(contract))
+			.withCreateDate(currentDate)
+			.withReceiveDate(currentDate)
+			.withDateHeader(city + ", " + currentDate)
+			.withPaymentDate(currentDate.plusWeeks(2))
+			.withPaidAmount(BigDecimal.ZERO.setScale(2));
 			final ContractPackage contractPackage = contract.getContractPackage();
 			final List<Service> services = contractPackage.getServices();
 			generateServices(services, contract, invoiceBuilder);
@@ -106,13 +107,13 @@ public class InvoicesGenerator {
 			final BigDecimal vatAmount = service.getVatAmount().setScale(2);
 			final BigDecimal grossAmount = netAmount.add(vatAmount);
 			final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
-				.withLp(serviceCounter++)
-				.withServiceName(service.getServiceName())
-				.withQuantity(ONE)
-				.withVatRate(vatRate)
-				.withNetAmount(netAmount)
-				.withVatAmount(vatAmount)
-				.withGrossAmount(grossAmount);
+			.withLp(serviceCounter++)
+			.withServiceName(service.getServiceName())
+			.withQuantity(ONE)
+			.withVatRate(vatRate)
+			.withNetAmount(netAmount)
+			.withVatAmount(vatAmount)
+			.withGrossAmount(grossAmount);
 			invoiceBuilder.withServiceRecord(serviceBuilder.build());
 			totalNetAmount = totalNetAmount.add(netAmount);
 			totalVatAmount = totalVatAmount.add(vatAmount);
@@ -122,8 +123,8 @@ public class InvoicesGenerator {
 			final InvoiceServiceRecord installationFeeRecord = getInstallationFeeRecord(contract, serviceCounter++);
 			final InvoiceServiceRecord activationFeeRecord = getActivationFeeRecord(contract, serviceCounter++);
 			invoiceBuilder
-				.withServiceRecord(installationFeeRecord)
-				.withServiceRecord(activationFeeRecord);
+			.withServiceRecord(installationFeeRecord)
+			.withServiceRecord(activationFeeRecord);
 			totalNetAmount = totalNetAmount.add(installationFeeRecord.getNetAmount()).add(activationFeeRecord.getNetAmount());
 			totalVatAmount = totalVatAmount.add(installationFeeRecord.getVatAmount()).add(activationFeeRecord.getVatAmount());
 			totalGrossAmount = totalGrossAmount.add(installationFeeRecord.getGrossAmount()).add(activationFeeRecord.getGrossAmount());
@@ -136,27 +137,15 @@ public class InvoicesGenerator {
 		.withGrossAmountWords(DecimalWriter.getDecimalSpoken(totalGrossAmount.toPlainString()));
 	}
 
-	private InvoiceServiceRecord getInstallationFeeRecord(final Contract contract, final int serviceNumber) {
-		final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
-			.withLp(serviceNumber)
-			.withServiceName("Op³ata instalacyjna")
-			.withQuantity(ONE)
-			.withVatRate(contract.getInstallationFeeVatRate().getRate())
-			.withNetAmount(contract.getInstallationFeeNet())
-			.withVatAmount(contract.getInstallationFeeVat())
-			.withGrossAmount(contract.getInstallationFeeGross());
-		return serviceBuilder.build();
-	}
-
 	private InvoiceServiceRecord getActivationFeeRecord(final Contract contract, final int serviceNumber) {
 		final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
-			.withLp(serviceNumber)
-			.withServiceName("Op³ata aktywacyjna")
-			.withQuantity(ONE)
-			.withVatRate(contract.getActivationFeeVatRate().getRate())
-			.withNetAmount(contract.getActivationFeeNet())
-			.withVatAmount(contract.getActivationFeeVat())
-			.withGrossAmount(contract.getActivationFeeGross());
+		.withLp(serviceNumber)
+		.withServiceName("Op³ata aktywacyjna")
+		.withQuantity(ONE)
+		.withVatRate(contract.getActivationFeeVatRate().getRate())
+		.withNetAmount(contract.getActivationFeeNet())
+		.withVatAmount(contract.getActivationFeeVat())
+		.withGrossAmount(contract.getActivationFeeGross());
 		return serviceBuilder.build();
 	}
 
@@ -193,8 +182,20 @@ public class InvoicesGenerator {
 		return builder.build();
 	}
 
+	private InvoiceServiceRecord getInstallationFeeRecord(final Contract contract, final int serviceNumber) {
+		final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
+		.withLp(serviceNumber)
+		.withServiceName("Op³ata instalacyjna")
+		.withQuantity(ONE)
+		.withVatRate(contract.getInstallationFeeVatRate().getRate())
+		.withNetAmount(contract.getInstallationFeeNet())
+		.withVatAmount(contract.getInstallationFeeVat())
+		.withGrossAmount(contract.getInstallationFeeGross());
+		return serviceBuilder.build();
+	}
+
 	String getInvoiceNumber(final LocalDate dateFrom, final LocalDate dateTo) {
-		final long invoicesGenerated = this.invoiceDao.getInvoiceCount(dateFrom, dateTo);
+		final long invoicesGenerated = invoiceDao.getInvoiceCount(dateFrom, dateTo);
 
 		final String sequenceNumber = String.format("%06d", invoicesGenerated+1);
 		final String month = String.format("%02d", dateFrom.getMonthOfYear());

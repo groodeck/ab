@@ -2,12 +2,14 @@ package org.ab.model;
 
 import java.util.List;
 
+import org.assertj.core.util.Lists;
+
 public class PaymentModel {
 
 	private String paymentId;
 	private SubscriberModel subscriber;
 	private String paymentAmount;
-	private List<InvoicePaymentModel> invoices;
+	private List<InvoicePaymentModel> invoices = Lists.newArrayList();
 
 	public List<InvoicePaymentModel> getInvoices() {
 		return invoices;

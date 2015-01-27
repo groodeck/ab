@@ -40,6 +40,16 @@ public class InvoiceDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Invoice> findUnpaidInvoices(final String subscriberId) {
+		return em.createQuery("FROM Invoice i WHERE "
+				+ "i.contract.subscriber.subscriberId = :subscriberId "
+				+ "AND i.paidAmount <> i.grossAmount "
+				+ "ORDER BY i.settlementPeriodStart")
+				.setParameter("subscriberId", Integer.getInteger(subscriberId))
+				.getResultList();
+	}
+
 	public Invoice getInvoice(final int invoiceId) {
 		return em.find(Invoice.class, invoiceId);
 	}

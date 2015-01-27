@@ -24,8 +24,12 @@
    <custom:message uiMessage="${uiMessage}"/>
    
    <h2>Wpłaty</h2>
+		<c:set var="disabledStr" value=""/>
+		<c:if test="${sessionScope.subscriber == null}">
+			<c:set var="disabledStr" value="disabled='disabled'" />
+		</c:if>
 		
-		<a href="/payment/new"><button>Dodaj wpłatę</button></a>
+		<a href="/payment/new"><![CDATA[<button ${disabledStr}>Dodaj wpłatę</button>]]></a>
    
    		<hr/>
    		<sf:form method="get" action="/payments/search">

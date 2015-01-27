@@ -129,7 +129,7 @@ create table invoice(
  	grossAmount numeric(12,2),
  	grossAmountWords varchar(150),
  	paymentDate date,
- 	paid bit,
+ 	paidAmount numeric(12,2),
 );
 
 create table invoiceRecord(
