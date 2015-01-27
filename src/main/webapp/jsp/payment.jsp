@@ -84,10 +84,10 @@
 				<th align="right"><label for="invoices">Rozlicz faktury:</label></th>
 				<td>
 					<table>
-					<c:forEach var="invoice" items="${invoices}" varStatus="status">
+					<c:forEach var="service" items="${invoices}" varStatus="status">
 						<tr>	
-							<td><sf:checkbox path="${invoice.shouldBePaid}"/></td>
-							<td colspan="4"><c:out value="${invoice.invoiceNumber}: ${invoice.settlementPeriod}"/></td>
+							<td><sf:checkbox path="${invoices.shouldBePaid}"/></td>
+							<td colspan="4"><c:out value="${invoices.invoiceNumber}: ${invoices.settlementPeriod}"/></td>
 						</tr>
 					</c:forEach>
 					</table>

@@ -7,7 +7,6 @@ import org.ab.model.InvoicePaymentModel;
 import org.ab.model.PaymentModel;
 import org.ab.model.dictionary.SelectValueService;
 import org.ab.service.ContractPackageService;
-import org.ab.service.PaymentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +19,6 @@ public class PaymentController {
 
 	@Autowired
 	private ContractPackageService contractPackageService;
-
-	@Autowired
-	private PaymentsService paymentService;
 
 	@Autowired
 	private SelectValueService selectValuesService;
