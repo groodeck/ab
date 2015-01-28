@@ -1,15 +1,12 @@
 package org.ab.controller;
 
-import java.util.List;
+import java.security.Principal;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import org.ab.model.ContractPackage;
 import org.ab.model.InvoicePaymentModel;
 import org.ab.model.PaymentModel;
-import org.ab.model.SubscriberModel;
 import org.ab.model.dictionary.SelectValueService;
-import org.ab.service.PaymentsService;
+import org.ab.service.ContractPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,49 +18,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PaymentController {
 
 	@Autowired
-	private PaymentsService paymentsService;
+	private ContractPackageService contractPackageService;
 
 	@Autowired
 	private SelectValueService selectValuesService;
 
-	private SubscriberModel getSubscriber(final HttpSession session) {
-		return (SubscriberModel)session.getAttribute("subscriber");
-	}
-
-	@RequestMapping("/edit/{paymentId}")
-	public String handleEditPackage(@PathVariable final int paymentId, final Model model) {
-		final PaymentModel payment = paymentsService.getPayment(paymentId);
-		if(payment == null){
-			model.addAttribute("uiMessage", "Nie mo¿na pobraæ szczegó³ów wp³aty");
-			return "payments";
+	@RequestMapping("/edit/{packageId}")
+	public String handleEditPackage(@PathVariable final int packageId, final Model model) {
+		final ContractPackage contractPackage = contractPackageService.getContractPackage(packageId);
+		if(contractPackage == null){
+			model.addAttribute("uiMessage", "Nie mo¿na pobraæ danych pakietu");
+			return "packages";
 		} else {
-			model.addAttribute("payment", payment);
-			return "payment";
+			model.addAttribute("contractPackage", contractPackage);
+			model.addAllAttributes(selectValuesService.getPackageDictionaries());
+			return "package";
 		}
 	}
 
 	@RequestMapping("/new")
-	public String handleInitEntry(final Model model,  final HttpServletRequest request) {
-		final SubscriberModel subscriber = getSubscriber(request.getSession());
-		if(subscriber == null){
-			model.addAttribute("uiMessage", "Nie wybrano abonenta");
-			return "payments";
-		}
+	public String handleInitEntry(final Model model) {
 		final PaymentModel payment = new PaymentModel();
-		payment.setSubscriber(subscriber);
-		final List<InvoicePaymentModel> invoicesToPay =
-				paymentsService.getUnpaidInvoices(subscriber.getSubscriberId());
-		payment.getInvoices().addAll(invoicesToPay);
+		initPayment(payment);
 		model.addAttribute("payment", payment);
+		model.addAllAttributes(selectValuesService.getPaymentDictionaries());
 		return "payment";
 	}
 
 	@RequestMapping("/save")
-	public String handleSaveAction(final PaymentModel payment, final Model model) {
-		System.out.println("saving payment " + payment);
-		paymentsService.save(payment, null /*chyba user nie bedzie potrzebny*/);
-		model.addAttribute("payment", payment);
+	public String handleSaveAction(final ContractPackage contractPackage, final Model model,
+			final Principal principal) {
+		System.out.println("saving subscriber " + contractPackage);
+		contractPackageService.save(contractPackage, principal.getName());
+		model.addAttribute("contractPackage", contractPackage);
+		model.addAllAttributes(selectValuesService.getPackageDictionaries());
 		model.addAttribute("uiMessage", "Zapisano pakiet");
-		return "payment";
+		return "package";
+	}
+
+	private void initPayment(final PaymentModel payment) {
+		payment.getInvoices().add(new InvoicePaymentModel());
 	}
 }

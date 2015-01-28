@@ -24,28 +24,9 @@
    <custom:message uiMessage="${uiMessage}"/>
    
    <h2>Wpłaty</h2>
-		<c:set var="disabledStr" value=""/>
-		<c:if test="${sessionScope.subscriber == null}">
-			<c:set var="disabledStr" value="disabled='disabled'" />
-		</c:if>
 		
-		<a href="/payment/new"><![CDATA[<button ${disabledStr}>Dodaj wpłatę</button>]]></a>
+		<a href="/payment/new"><button>Dodaj wpłatę</button></a>
    
-   		<hr/>
-   		<sf:form method="get" action="/payments/search">
-		<table>
-			<tr valign="middle">
-				<td>Pokaż pakiety</td> 
-				<td>od: <custom:date name="searchDateFrom" identifier="searchDateFrom" 
-					value="${searchDateFrom}" additionalAttributes="size='8'"/></td>
-				<td>do: <custom:date name="searchDateTo" identifier="searchDateTo" 
-					value="${searchDateTo}" additionalAttributes="size='8'"/></td>
-				<td width="10px"/>
-				<td><input type="submit" value="Znajdź"/></td>
-			</tr>
-		</table>
-		</sf:form>
-					
 		<c:if test="${not empty payments}">
 			<br/><br/>
 			<table border="1" cellspacing="0" cellpadding="2">
