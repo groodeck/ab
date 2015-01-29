@@ -65,13 +65,13 @@
 			<tr>
 				<th align="right" style="width: 30%"><label for="subscriber_number">Numer abonenta:</label></th>
 				<td colspan="4">
-					<sf:label path="subscriber.subscriberIdn"></sf:label>
+					<c:out value="${payment.subscriber.subscriberIdn}" />
 				</td>
 			</tr>
 			<tr>
 				<th align="right" style="width: 30%"><label for="subscriber_name">Abonent:</label></th>
 				<td colspan="4">
-					<c:out value="subscriber.effectiveName"/>
+					<c:out value="${payment.subscriber.effectiveName}"/>
 				</td>
 			</tr>
 			<tr>
@@ -84,11 +84,12 @@
 				<th align="right"><label for="invoices">Rozlicz faktury:</label></th>
 				<td>
 					<table>
-					<c:forEach var="invoice" items="${invoices}" varStatus="status">
+					<c:forEach var="invoice" items="${payment.invoices}" varStatus="status">
 						<tr>	
-							<td><sf:checkbox path="${invoice.shouldBePaid}"/></td>
+						<sf:select path="currentContract.devices[${status.index}].deviceType" items="${deviceTypes}" id="devices_${status.index}_deviceType" /></td>
+							<td><sf:checkbox path="invoices[${status.index}].shouldBePaid"/></td>
 							<td><c:out value="${invoice.invoiceNumber}: ${invoice.settlementPeriod}"/></td>
-							<td><sf:input path="${invoice.paymentAmount}"/></td>
+							<td><sf:input path="invoices[${status.index}].paymentAmount"/></td>
 						</tr>
 					</c:forEach>
 					</table>

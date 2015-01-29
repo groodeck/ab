@@ -32,7 +32,7 @@ public class PaymentController {
 
 	@RequestMapping("/edit/{paymentId}")
 	public String handleEditPackage(@PathVariable final int paymentId, final Model model) {
-		final PaymentModel payment = paymentsService.getPayment(paymentId);
+		final PaymentModel payment = this.paymentsService.getPayment(paymentId);
 		if(payment == null){
 			model.addAttribute("uiMessage", "Nie mo¿na pobraæ szczegó³ów wp³aty");
 			return "payments";
@@ -52,7 +52,7 @@ public class PaymentController {
 		final PaymentModel payment = new PaymentModel();
 		payment.setSubscriber(subscriber);
 		final List<InvoicePaymentModel> invoicesToPay =
-				paymentsService.getUnpaidInvoices(subscriber.getSubscriberId());
+				this.paymentsService.getUnpaidInvoices(subscriber.getSubscriberId());
 		payment.getInvoices().addAll(invoicesToPay);
 		model.addAttribute("payment", payment);
 		return "payment";
@@ -61,7 +61,7 @@ public class PaymentController {
 	@RequestMapping("/save")
 	public String handleSaveAction(final PaymentModel payment, final Model model) {
 		System.out.println("saving payment " + payment);
-		paymentsService.save(payment, null /*chyba user nie bedzie potrzebny*/);
+		this.paymentsService.save(payment, null /*chyba user nie bedzie potrzebny*/);
 		model.addAttribute("payment", payment);
 		model.addAttribute("uiMessage", "Zapisano pakiet");
 		return "payment";

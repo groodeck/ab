@@ -20,12 +20,12 @@ public class InvoiceDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findAll() {
-		return em.createQuery("from Invoice").getResultList();
+		return this.em.createQuery("from Invoice").getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findInvoices(final String userNumber, final LocalDate createDateFrom, final LocalDate createDateTo) {
-		final Query query = em.createQuery("from Invoice i where "
+		final Query query = this.em.createQuery("from Invoice i where "
 				+ "(:userNumber is null OR i.contract.subscriber.subscriberIdn = :userNumber) "
 				+ (createDateFrom == null ? "" : "AND i.createDate >= :dateFrom ")
 				+ (createDateTo == null ? "" : "AND i.createDate <= :dateTo ")
@@ -42,20 +42,20 @@ public class InvoiceDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findUnpaidInvoices(final String subscriberId) {
-		return em.createQuery("FROM Invoice i WHERE "
-				+ "i.contract.subscriber.subscriberId = :subscriberId "
-				+ "AND i.paidAmount <> i.grossAmount "
+		return this.em.createQuery("FROM Invoice i "
+				+ "WHERE i.contract.subscriber.subscriberId = :subscriberId "
+				+ "AND i.paidAmount != i.grossAmount "
 				+ "ORDER BY i.settlementPeriodStart")
-				.setParameter("subscriberId", Integer.getInteger(subscriberId))
+				.setParameter("subscriberId", Integer.parseInt(subscriberId))
 				.getResultList();
 	}
 
 	public Invoice getInvoice(final int invoiceId) {
-		return em.find(Invoice.class, invoiceId);
+		return this.em.find(Invoice.class, invoiceId);
 	}
 
 	public long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
-		return (Long)em.createQuery("select count(*) "
+		return (Long)this.em.createQuery("select count(*) "
 				+ "from Invoice i where "
 				+ "i.settlementPeriodStart = :dateFrom "
 				+ "and i.settlementPeriodEnd = :dateTo ")
@@ -65,7 +65,7 @@ public class InvoiceDao {
 	}
 
 	public Integer save(final Invoice entity) {
-		em.persist(entity);
+		this.em.persist(entity);
 		return entity.getInvoiceId();
 	}
 }

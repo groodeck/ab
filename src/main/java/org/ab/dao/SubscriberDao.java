@@ -15,19 +15,20 @@ public class SubscriberDao {
 	private EntityManager em;
 
 	public String getLastSubscriberIdn() {
-		return (String) em.createQuery("select max(s.subscriberIdn) from Subscriber s")
+		final String maxIdn = (String) this.em.createQuery("select max(s.subscriberIdn) from Subscriber s")
 				.getSingleResult();
+		return maxIdn == null ? "0" : maxIdn;
 	}
 
 	public Subscriber getSubscriber(final int subscriberId) {
-		return em.find(Subscriber.class, subscriberId);
+		return this.em.find(Subscriber.class, subscriberId);
 	}
 
 	public Integer save(final Subscriber subscriber) {
 		if(subscriber.getSubscriberId() != null){
-			em.merge(subscriber);
+			this.em.merge(subscriber);
 		} else {
-			em.persist(subscriber);
+			this.em.persist(subscriber);
 		}
 		return subscriber.getSubscriberId();
 	}
