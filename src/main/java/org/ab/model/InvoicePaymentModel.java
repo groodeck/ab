@@ -5,27 +5,29 @@ public class InvoicePaymentModel {
 	private String paymentId;
 	private String invoiceId;
 	private String invoiceNumber;
+	private String invoiceGrossAmount;
+	private String invoiceLeftToPay;
 	private String settlementPeriod;
 	private String paymentAmount;
 	private boolean shouldBePaid;
 
 	public String getInvoiceId() {
-		return invoiceId;
+		return this.invoiceId;
 	}
 	public String getInvoiceNumber() {
-		return invoiceNumber;
+		return this.invoiceNumber;
 	}
 	public String getPaymentAmount() {
-		return paymentAmount;
+		return this.paymentAmount;
 	}
 	public String getPaymentId() {
-		return paymentId;
+		return this.paymentId;
 	}
 	public String getSettlementPeriod() {
-		return settlementPeriod;
+		return this.settlementPeriod;
 	}
 	public boolean isShouldBePaid() {
-		return shouldBePaid;
+		return this.shouldBePaid;
 	}
 	public void setInvoiceId(final String invoiceId) {
 		this.invoiceId = invoiceId;
@@ -44,5 +46,17 @@ public class InvoicePaymentModel {
 	}
 	public void setShouldBePaid(final boolean shouldBePaid) {
 		this.shouldBePaid = shouldBePaid;
+	}
+	public String getInvoiceGrossAmount() {
+		return this.invoiceGrossAmount;
+	}
+	public void setInvoiceGrossAmount(final String invoiceGrossAmount) {
+		this.invoiceGrossAmount = invoiceGrossAmount;
+	}
+	public String getInvoiceLeftToPay() {
+		return this.invoiceLeftToPay;
+	}
+	public void setInvoiceLeftToPay(final String invoiceLeftToPay) {
+		this.invoiceLeftToPay = invoiceLeftToPay;
 	}
 }

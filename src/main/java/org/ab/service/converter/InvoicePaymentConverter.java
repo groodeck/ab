@@ -1,5 +1,6 @@
 package org.ab.service.converter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.ab.dao.ContractPackageDao;
@@ -85,15 +86,19 @@ public class InvoicePaymentConverter {
 			model.setSettlementPeriod(String.format(
 					"%s - %s",input.getSettlementPeriodStart(), input.getSettlementPeriodEnd()));
 			model.setInvoiceNumber(input.getInvoiceNumber());
+			final BigDecimal grossAmount = input.getGrossAmount();
+			model.setInvoiceGrossAmount(grossAmount.toPlainString());
+			final BigDecimal leftToPay = grossAmount.subtract(input.getPaidAmount());
+			model.setInvoiceLeftToPay(leftToPay.toPlainString());
 			return model;
 		}
 	};
 
 	public org.ab.entity.Invoice convert(final InvoiceModel invoice) {
-		return toEntityInvoice.apply(invoice);
+		return this.toEntityInvoice.apply(invoice);
 	}
 
 	public List<InvoicePaymentModel> convertEntities(final List<org.ab.entity.Invoice> invoices) {
-		return FluentIterable.from(invoices).transform(toModelInvoicePayment).toList();
+		return FluentIterable.from(invoices).transform(this.toModelInvoicePayment).toList();
 	}
 }

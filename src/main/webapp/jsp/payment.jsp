@@ -84,11 +84,19 @@
 				<th align="right"><label for="invoices">Rozlicz faktury:</label></th>
 				<td>
 					<table>
+						<tr>
+							<td>Rozlicz</td>
+							<td>Okres rozliczeniowy</td>
+							<td>Wartość faktury</td>
+							<td>Do spłaty</td>
+							<td>Kwota spłaty</td>
+						</tr>
 					<c:forEach var="invoice" items="${payment.invoices}" varStatus="status">
 						<tr>	
-						<sf:select path="currentContract.devices[${status.index}].deviceType" items="${deviceTypes}" id="devices_${status.index}_deviceType" /></td>
 							<td><sf:checkbox path="invoices[${status.index}].shouldBePaid"/></td>
 							<td><c:out value="${invoice.invoiceNumber}: ${invoice.settlementPeriod}"/></td>
+							<td><c:out value="${invoice.invoiceGrossAmount}"/></td>
+							<td><c:out value="${invoice.invoiceLeftToPay}"/></td>
 							<td><sf:input path="invoices[${status.index}].paymentAmount"/></td>
 						</tr>
 					</c:forEach>
