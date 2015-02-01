@@ -32,7 +32,7 @@ public class PaymentController {
 
 	@RequestMapping("/edit/{paymentId}")
 	public String handleEditPackage(@PathVariable final int paymentId, final Model model) {
-		final PaymentModel payment = this.paymentsService.getPayment(paymentId);
+		final PaymentModel payment = paymentsService.getPayment(paymentId);
 		if(payment == null){
 			model.addAttribute("uiMessage", "Nie mo¿na pobraæ szczegó³ów wp³aty");
 			return "payments";
@@ -52,18 +52,21 @@ public class PaymentController {
 		final PaymentModel payment = new PaymentModel();
 		payment.setSubscriber(subscriber);
 		final List<InvoicePaymentModel> invoicesToPay =
-				this.paymentsService.getUnpaidInvoices(subscriber.getSubscriberId());
+				paymentsService.getUnpaidInvoices(subscriber.getSubscriberId());
 		payment.getInvoices().addAll(invoicesToPay);
 		model.addAttribute("payment", payment);
 		return "payment";
 	}
 
 	@RequestMapping("/save")
-	public String handleSaveAction(final PaymentModel payment, final Model model) {
+	public String handleSaveAction(final PaymentModel payment, final Model model,
+			final HttpServletRequest request) {
+		final SubscriberModel subscriber = getSubscriber(request.getSession());
+		payment.setSubscriber(subscriber);
 		System.out.println("saving payment " + payment);
-		this.paymentsService.save(payment, null /*chyba user nie bedzie potrzebny*/);
+		paymentsService.save(payment, null /*chyba user nie bedzie potrzebny*/);
 		model.addAttribute("payment", payment);
-		model.addAttribute("uiMessage", "Zapisano pakiet");
+		model.addAttribute("uiMessage", "Zapisano wp³atê");
 		return "payment";
 	}
 }

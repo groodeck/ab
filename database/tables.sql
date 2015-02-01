@@ -1,4 +1,4 @@
--- nie testowane
+\-- nie testowane
 create table Users(
 	userId integer(10) not null,
 	username varchar(45) not null,
@@ -147,4 +147,15 @@ create table invoiceRecord(
 create table invoiceContent(
  	invoiceId integer not null IDENTITY PRIMARY KEY,
 	invoiceHtml clob not null,
+);
+
+create table Payment(
+ 	paymentId integer not null IDENTITY PRIMARY KEY,
+ 	createDate date,
+	paymentAmount numeric(12,2) not null,
+);
+
+create table invoicePayment(
+ 	invoiceId integer not null,
+	paymentId integer not null,
 );

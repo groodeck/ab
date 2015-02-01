@@ -52,9 +52,9 @@ public class PaymentsController {
 	public String handleSearchAction(final @RequestParam("searchDateFrom") String searchDateFrom,
 			final @RequestParam("searchDateTo") String searchDateTo, final Model model, final HttpServletRequest request) {
 		final String subscriberIdn = getSubscriberIdn(request.getSession());
-		final List<PaymentModel> invoices =
+		final List<PaymentModel> payments =
 				paymentsService.findPayments(subscriberIdn, toLocalDate(searchDateFrom), toLocalDate(searchDateTo));
-		model.addAttribute("invoices", invoices);
+		model.addAttribute("payments", payments);
 		handleInitEntry(model);
 		return "payments";
 	}

@@ -7,17 +7,22 @@ import org.ab.dao.ContractPackageDao;
 import org.ab.dao.UserDao;
 import org.ab.entity.InvoiceContent;
 import org.ab.entity.InvoiceRecord;
+import org.ab.entity.Payment;
+import org.ab.entity.Subscriber;
 import org.ab.model.InvoiceModel;
 import org.ab.model.InvoicePaymentModel;
+import org.ab.model.PaymentModel;
+import org.ab.model.SubscriberModel;
 import org.ab.service.generator.InvoiceServiceRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
 
 @Component
-public class InvoicePaymentConverter {
+public class PaymentConverter {
 
 	@Autowired
 	private ContractPackageDao packageDao;
@@ -27,6 +32,9 @@ public class InvoicePaymentConverter {
 
 	@Autowired
 	private DeviceConverter deviceConverter;
+
+	@Autowired
+	private SubscriberConverter subscriberConverter;
 
 	private final Function<InvoiceModel, org.ab.entity.Invoice> toEntityInvoice =
 			new Function<InvoiceModel, org.ab.entity.Invoice>(){
@@ -94,11 +102,44 @@ public class InvoicePaymentConverter {
 		}
 	};
 
+	private final Function<org.ab.entity.Payment, PaymentModel> toModelPayment =
+			new Function<org.ab.entity.Payment, PaymentModel>(){
+
+		@Override
+		public PaymentModel apply(final org.ab.entity.Payment input) {
+			final PaymentModel model = new PaymentModel();
+			model.setPaymentId(input.getPaymentId().toString());
+			model.setPaymentAmount(input.getPaymentAmount().toPlainString());
+			final Subscriber subscriber = Iterables.getFirst(input.getInvoices(), null)
+					.getContract().getSubscriber();
+			final SubscriberModel subscriberModel = convertSubscriber(subscriber);
+			model.setSubscriber(subscriberModel);
+			final List<InvoicePaymentModel> invoicePayments =
+					FluentIterable.from(input.getInvoices()).transform(toModelInvoicePayment).toList();
+			model.setInvoices(invoicePayments);
+			return model;
+		}
+
+		private SubscriberModel convertSubscriber(final Subscriber subscriber) {
+			final SubscriberModel subscriberModel = new SubscriberModel();
+			subscriberModel.setSubscriberId(subscriber.getSubscriberId().toString());
+			subscriberModel.setSubscriberIdn(subscriber.getSubscriberIdn());
+			subscriberModel.setName(subscriber.getName());
+			subscriberModel.setSurname(subscriber.getSurname());
+			subscriberModel.setCompanyName(subscriber.getCompanyName());
+			return subscriberModel;
+		}
+	};
+
 	public org.ab.entity.Invoice convert(final InvoiceModel invoice) {
-		return this.toEntityInvoice.apply(invoice);
+		return toEntityInvoice.apply(invoice);
 	}
 
-	public List<InvoicePaymentModel> convertEntities(final List<org.ab.entity.Invoice> invoices) {
-		return FluentIterable.from(invoices).transform(this.toModelInvoicePayment).toList();
+	public List<InvoicePaymentModel> convertInvoicePaymentEntities(final List<org.ab.entity.Invoice> invoices) {
+		return FluentIterable.from(invoices).transform(toModelInvoicePayment).toList();
+	}
+
+	public List<PaymentModel> convertPaymentEntities(final List<Payment> invoices) {
+		return FluentIterable.from(invoices).transform(toModelPayment).toList();
 	}
 }

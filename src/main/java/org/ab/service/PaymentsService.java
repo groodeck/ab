@@ -2,13 +2,15 @@ package org.ab.service;
 
 import java.util.List;
 
-import org.ab.dao.ContractDao;
 import org.ab.dao.InvoiceDao;
+import org.ab.dao.PaymentDao;
 import org.ab.entity.Invoice;
+import org.ab.entity.Payment;
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoicePaymentModel;
 import org.ab.model.PaymentModel;
-import org.ab.service.converter.InvoicePaymentConverter;
+import org.ab.service.converter.PaymentConverter;
+import org.ab.util.Translator;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,19 +21,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentsService {
 
 	@Autowired
-	public ContractDao contractDao;
+	public InvoiceDao invoiceDao;
 
 	@Autowired
-	private InvoicePaymentConverter invoicePaymentConverter;
+	private PaymentConverter paymentConverter;
 
 	@Autowired
-	private InvoiceDao invoiceDao;
+	private PaymentDao paymentDao;
 
 	public List<PaymentModel> findPayments(final String subscriberIdn, final LocalDate dateFrom, final LocalDate dateTo) {
-		final List<org.ab.entity.Invoice> invoices = invoiceDao.findInvoices(subscriberIdn, dateFrom, dateTo);
-		//TODO
-		//return this.invoiceConverter.convertEntities(invoices);
-		return null;
+		final List<Payment> invoices = paymentDao.findPayments(subscriberIdn, dateFrom, dateTo);
+		return paymentConverter.convertPaymentEntities(invoices);
 	}
 
 	private LocalDate getFirstOfMonth(final InvoiceGenerationParams generationParams) {
@@ -60,11 +60,18 @@ public class PaymentsService {
 
 	public List<InvoicePaymentModel> getUnpaidInvoices(final String subscriberId) {
 		final List<Invoice> invoices = invoiceDao.findUnpaidInvoices(subscriberId);
-		return invoicePaymentConverter.convertEntities(invoices);
+		return paymentConverter.convertInvoicePaymentEntities(invoices);
 	}
 
-	public void save(final PaymentModel payment, final String name) {
-		// TODO Auto-generated method stub
-
+	public void save(final PaymentModel paymentModel, final String name) {
+		final List<InvoicePaymentModel> invoicesModel = paymentModel.getInvoices();
+		for(final InvoicePaymentModel invoiceModel : invoicesModel){
+			if(invoiceModel.isShouldBePaid()){
+				final Invoice invoice = invoiceDao.getInvoice(Integer.parseInt(invoiceModel.getInvoiceId()));
+				final Payment payment = new Payment();
+				payment.setPaymentAmount(Translator.toAmount(invoiceModel.getPaymentAmount()));
+				invoice.addPayment(payment);
+			}
+		}
 	}
 }

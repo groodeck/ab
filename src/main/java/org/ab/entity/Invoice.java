@@ -2,6 +2,7 @@ package org.ab.entity;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -77,6 +80,17 @@ public class Invoice {
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "invoice", cascade = CascadeType.ALL)
 	private InvoiceContent invoiceContent;
 
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "InvoicePayment",
+	joinColumns = {@JoinColumn(name = "invoiceId", nullable = false, updatable = false) },
+	inverseJoinColumns = { @JoinColumn(name = "paymentId", nullable = false, updatable = false) })
+	private Set<Payment> payments;
+
+	public void addPayment(final Payment payment) {
+		paidAmount = paidAmount.add(payment.getPaymentAmount()).setScale(2);
+		payments.add(payment);
+	}
+
 	public Contract getContract() {
 		return contract;
 	}
@@ -109,8 +123,16 @@ public class Invoice {
 		return netAmount;
 	}
 
+	public BigDecimal getPaidAmount() {
+		return paidAmount;
+	}
+
 	public LocalDate getPaymentDate() {
 		return paymentDate;
+	}
+
+	public Set<Payment> getPayments() {
+		return payments;
 	}
 
 	public LocalDate getReceiveDate() {
@@ -131,10 +153,6 @@ public class Invoice {
 
 	public String isGrossAmountWords() {
 		return grossAmountWords;
-	}
-
-	public BigDecimal getPaidAmount() {
-		return paidAmount;
 	}
 
 	public void setContract(final Contract contract) {
@@ -179,6 +197,10 @@ public class Invoice {
 
 	public void setPaymentDate(final LocalDate paymentDate) {
 		this.paymentDate = paymentDate;
+	}
+
+	public void setPayments(final Set<Payment> payments) {
+		this.payments = payments;
 	}
 
 	public void setReceiveDate(final LocalDate receiveDate) {
