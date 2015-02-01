@@ -75,6 +75,13 @@
 				</td>
 			</tr>
 			<tr>
+				<th align="right" style="width: 25%"><label for="create_date">Data wpłaty:</label></th>
+				<td colspan="4">
+					<custom:date name="createDate" identifier="createDate" 
+						value="${payment.createDate}" additionalAttributes="size='15'"/>
+				</td>
+			</tr>
+			<tr>
 				<th align="right" style="width: 25%"><label for="payment_amount">Kwota wpłaty:</label></th>
 				<td colspan="4">
 					<sf:input path="paymentAmount" size="8" id="payment_amount" />

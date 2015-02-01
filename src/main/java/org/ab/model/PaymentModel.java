@@ -9,8 +9,12 @@ public class PaymentModel {
 	private String paymentId;
 	private SubscriberModel subscriber;
 	private String paymentAmount;
+	private String createDate;
 	private List<InvoicePaymentModel> invoices = Lists.newArrayList();
 
+	public String getCreateDate() {
+		return createDate;
+	}
 	public List<InvoicePaymentModel> getInvoices() {
 		return invoices;
 	}
@@ -22,6 +26,9 @@ public class PaymentModel {
 	}
 	public SubscriberModel getSubscriber() {
 		return subscriber;
+	}
+	public void setCreateDate(final String createDate) {
+		this.createDate = createDate;
 	}
 	public void setInvoices(final List<InvoicePaymentModel> invoices) {
 		this.invoices = invoices;

@@ -69,6 +69,7 @@ public class PaymentsService {
 			if(invoiceModel.isShouldBePaid()){
 				final Invoice invoice = invoiceDao.getInvoice(Integer.parseInt(invoiceModel.getInvoiceId()));
 				final Payment payment = new Payment();
+				payment.setCreateDate(Translator.toLocalDate(paymentModel.getCreateDate()));
 				payment.setPaymentAmount(Translator.toAmount(invoiceModel.getPaymentAmount()));
 				invoice.addPayment(payment);
 			}
