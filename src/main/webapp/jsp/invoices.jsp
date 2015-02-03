@@ -84,6 +84,7 @@
 			<table border="1" cellspacing="0" cellpadding="2">
 				<tr>
 					<td>lp</td>
+					<td>Numer faktury</td>
 					<td>Abonent</td>
 					<td>Okres rozliczeniowy</td>
 					<td>Data utworzenia</td>
@@ -92,6 +93,7 @@
 				<c:forEach var="invoice" items="${invoices}" varStatus="status" >
 					<tr>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${status.index + 1}"/></td>
+						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.invoiceNumber}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.buyer.name}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.settlementPeriodStart} - ${invoice.settlementPeriodEnd}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.createDate}"/></td>

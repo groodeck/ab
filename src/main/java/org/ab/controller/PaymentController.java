@@ -10,6 +10,7 @@ import org.ab.model.PaymentModel;
 import org.ab.model.SubscriberModel;
 import org.ab.model.dictionary.SelectValueService;
 import org.ab.service.PaymentsService;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,6 +52,7 @@ public class PaymentController {
 		}
 		final PaymentModel payment = new PaymentModel();
 		payment.setSubscriber(subscriber);
+		payment.setCreateDate(LocalDate.now().toString());
 		final List<InvoicePaymentModel> invoicesToPay =
 				paymentsService.getUnpaidInvoices(subscriber.getSubscriberId());
 		payment.getInvoices().addAll(invoicesToPay);

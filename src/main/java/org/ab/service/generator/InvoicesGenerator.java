@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Properties;
 
+import javax.transaction.Transactional;
+
 import org.ab.dao.InvoiceDao;
 import org.ab.entity.Address;
 import org.ab.entity.Contract;
@@ -30,6 +32,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 @Component
+@Transactional
 public class InvoicesGenerator {
 
 	@Autowired
@@ -65,14 +68,22 @@ public class InvoicesGenerator {
 		return contentGenerator.generateHtml(invoice);
 	}
 
+	String generateInvoiceNumber(final long invoiceCount, final LocalDate dateFrom) {
+		final String sequenceNumber = String.format("%06d", invoiceCount+1);
+		final String month = String.format("%02d", dateFrom.getMonthOfYear());
+		return String.format("FVAT/%s/%s/%s", sequenceNumber, month, dateFrom.getYear());
+	}
+
+	@Transactional
 	public List<InvoiceModel> generateInvoices(final List<Contract> contracts, final LocalDate dateFrom, final LocalDate dateTo) {
 		final Properties props = loadProperties("companyDetails.properties");
 		final String city = props.getProperty("company.city");
 		final LocalDate currentDate = LocalDate.now();
+		final long invoiceCount = getInvoiceCount(dateFrom, dateTo);
 		final List<InvoiceModel> results = Lists.newArrayList();
 		for(final Contract contract : contracts){
 			final InvoiceModel.Builder invoiceBuilder = new InvoiceModel.Builder()
-			.withInvoiceNumber(getInvoiceNumber(dateFrom, dateTo))
+			.withInvoiceNumber(generateInvoiceNumber(invoiceCount, dateFrom))
 			.withContract(contract)
 			.withSettlementPeriodStart(dateFrom)
 			.withSettlementPeriodEnd(dateTo)
@@ -194,12 +205,8 @@ public class InvoicesGenerator {
 		return serviceBuilder.build();
 	}
 
-	String getInvoiceNumber(final LocalDate dateFrom, final LocalDate dateTo) {
-		final long invoicesGenerated = invoiceDao.getInvoiceCount(dateFrom, dateTo);
-
-		final String sequenceNumber = String.format("%06d", invoicesGenerated+1);
-		final String month = String.format("%02d", dateFrom.getMonthOfYear());
-		return String.format("FVAT/%s/%s/%s", sequenceNumber, month, dateFrom.getYear());
+	private long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
+		return invoiceDao.getInvoiceCount(dateFrom, dateTo);
 	}
 
 	private InvoiceParticipant getSeller(final Contract contract, final Properties props) {

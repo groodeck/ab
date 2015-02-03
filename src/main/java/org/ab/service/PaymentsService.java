@@ -1,5 +1,6 @@
 package org.ab.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.ab.dao.InvoiceDao;
@@ -30,8 +31,8 @@ public class PaymentsService {
 	private PaymentDao paymentDao;
 
 	public List<PaymentModel> findPayments(final String subscriberIdn, final LocalDate dateFrom, final LocalDate dateTo) {
-		final List<Payment> invoices = paymentDao.findPayments(subscriberIdn, dateFrom, dateTo);
-		return paymentConverter.convertPaymentEntities(invoices);
+		final List<Payment> payments = paymentDao.findPayments(subscriberIdn, dateFrom, dateTo);
+		return paymentConverter.convertPaymentEntities(payments);
 	}
 
 	private LocalDate getFirstOfMonth(final InvoiceGenerationParams generationParams) {
@@ -65,13 +66,14 @@ public class PaymentsService {
 
 	public void save(final PaymentModel paymentModel, final String name) {
 		final List<InvoicePaymentModel> invoicesModel = paymentModel.getInvoices();
+		final Payment payment = new Payment();
+		payment.setCreateDate(Translator.toLocalDate(paymentModel.getCreateDate()));
+		payment.setPaymentAmount(Translator.toAmount(paymentModel.getPaymentAmount()));
 		for(final InvoicePaymentModel invoiceModel : invoicesModel){
 			if(invoiceModel.isShouldBePaid()){
 				final Invoice invoice = invoiceDao.getInvoice(Integer.parseInt(invoiceModel.getInvoiceId()));
-				final Payment payment = new Payment();
-				payment.setCreateDate(Translator.toLocalDate(paymentModel.getCreateDate()));
-				payment.setPaymentAmount(Translator.toAmount(invoiceModel.getPaymentAmount()));
-				invoice.addPayment(payment);
+				final BigDecimal invoicePaymentAmount = Translator.toAmount(invoiceModel.getPaymentAmount());
+				invoice.addPayment(payment, invoicePaymentAmount);
 			}
 		}
 	}

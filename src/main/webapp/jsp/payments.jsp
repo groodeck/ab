@@ -12,8 +12,8 @@
  		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> 
  		<script type="text/javascript">
-	 		editContractPackage = function (packageId){
-	 			window.location.href = '/package/edit/'+packageId;
+	 		editPayment = function (paymentId){
+	 			window.location.href = '/payment/edit/'+paymentId;
 	 		}	
 	 	</script>
  	]]>
@@ -51,16 +51,18 @@
 			<table border="1" cellspacing="0" cellpadding="2">
 				<tr>
 					<td>lp</td>
+					<td>Data wpłaty</td>
 					<td>Klient</td>
 					<td>Kwota wpłaty</td>
 					<td>Rozliczone faktury</td>
 				</tr>
 				<c:forEach var="payment" items="${payments}" varStatus="status" >
 					<tr>
-						<td onclick="editContractPackage(${payment.paymentId})"><c:out value="${status.index + 1}"/></td>
-						<td onclick="editContractPackage(${payment.paymentId})"><c:out value="${payment.subscriber.effectiveName}"/></td>
-						<td onclick="editContractPackage(${payment.paymentId})"><c:out value="${payment.paymentAmount}"/></td>
-						<td onclick="editContractPackage(${payment.paymentId})">
+						<td onclick="editPayment(${payment.paymentId})"><c:out value="${status.index + 1}"/></td>
+						<td onclick="editPayment(${payment.paymentId})"><c:out value="${payment.createDate}"/></td>
+						<td onclick="editPayment(${payment.paymentId})"><c:out value="${payment.subscriber.effectiveName}"/></td>
+						<td onclick="editPayment(${payment.paymentId})"><c:out value="${payment.paymentAmount}"/></td>
+						<td onclick="editPayment(${payment.paymentId})">
 							<c:forEach var="invoice" items="${payment.invoices}" >
 								<c:out value="${invoice.invoiceNumber}"/>
 								<br/>

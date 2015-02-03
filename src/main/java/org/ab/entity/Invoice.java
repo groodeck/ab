@@ -86,8 +86,8 @@ public class Invoice {
 	inverseJoinColumns = { @JoinColumn(name = "paymentId", nullable = false, updatable = false) })
 	private Set<Payment> payments;
 
-	public void addPayment(final Payment payment) {
-		paidAmount = paidAmount.add(payment.getPaymentAmount()).setScale(2);
+	public void addPayment(final Payment payment, final BigDecimal paymentAmount) {
+		paidAmount = paidAmount.add(paymentAmount).setScale(2);
 		payments.add(payment);
 	}
 

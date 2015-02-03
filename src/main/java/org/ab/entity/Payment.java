@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
 @Entity
@@ -27,6 +28,7 @@ public class Payment {
 	private BigDecimal paymentAmount;
 
 	@Column(name = "createDate")
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate createDate;
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "payments")

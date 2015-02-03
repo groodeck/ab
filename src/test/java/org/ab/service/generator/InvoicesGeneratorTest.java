@@ -25,10 +25,10 @@ public class InvoicesGeneratorTest {
 		// given
 		final LocalDate dateFrom = LocalDate.parse("2014-01-01");
 		final LocalDate dateTo = LocalDate.parse("2014-01-31");
-		given(this.invoiceDao.getInvoiceCount(dateFrom, dateTo)).willReturn(3l);
+		given(invoiceDao.getInvoiceCount(dateFrom, dateTo)).willReturn(3l);
 
 		// when
-		final String invoiceNumber = this.generator.getInvoiceNumber(dateFrom, dateTo);
+		final String invoiceNumber = generator.generateInvoiceNumber(3, dateFrom);
 
 		// then
 		assertThat(invoiceNumber).isEqualTo("FVAT/000004/01/2014");
