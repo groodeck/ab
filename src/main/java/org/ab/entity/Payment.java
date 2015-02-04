@@ -1,7 +1,7 @@
 package org.ab.entity;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,13 +32,13 @@ public class Payment {
 	private LocalDate createDate;
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "payments")
-	private Set<Invoice> invoices;
+	private List<Invoice> invoices;
 
 	public LocalDate getCreateDate() {
 		return createDate;
 	}
 
-	public Set<Invoice> getInvoices() {
+	public List<Invoice> getInvoices() {
 		return invoices;
 	}
 
@@ -54,7 +54,7 @@ public class Payment {
 		this.createDate = createDate;
 	}
 
-	public void setInvoices(final Set<Invoice> invoices) {
+	public void setInvoices(final List<Invoice> invoices) {
 		this.invoices = invoices;
 	}
 

@@ -55,8 +55,8 @@ public class PaymentsService {
 	}
 
 	public PaymentModel getPayment(final int paymentId) {
-		// TODO Auto-generated method stub
-		return null;
+		final Payment payment = paymentDao.getPayment(paymentId);
+		return paymentConverter.convertPaymentEntity(payment);
 	}
 
 	public List<InvoicePaymentModel> getUnpaidInvoices(final String subscriberId) {

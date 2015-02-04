@@ -79,11 +79,11 @@ public class InvoicesGenerator {
 		final Properties props = loadProperties("companyDetails.properties");
 		final String city = props.getProperty("company.city");
 		final LocalDate currentDate = LocalDate.now();
-		final long invoiceCount = getInvoiceCount(dateFrom, dateTo);
+		long invoiceCount = getInvoiceCount(dateFrom, dateTo);
 		final List<InvoiceModel> results = Lists.newArrayList();
 		for(final Contract contract : contracts){
 			final InvoiceModel.Builder invoiceBuilder = new InvoiceModel.Builder()
-			.withInvoiceNumber(generateInvoiceNumber(invoiceCount, dateFrom))
+			.withInvoiceNumber(generateInvoiceNumber(invoiceCount++, dateFrom))
 			.withContract(contract)
 			.withSettlementPeriodStart(dateFrom)
 			.withSettlementPeriodEnd(dateTo)

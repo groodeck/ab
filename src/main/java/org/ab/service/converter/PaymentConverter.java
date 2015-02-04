@@ -96,7 +96,10 @@ public class PaymentConverter {
 			model.setInvoiceNumber(input.getInvoiceNumber());
 			final BigDecimal grossAmount = input.getGrossAmount();
 			model.setInvoiceGrossAmount(grossAmount.toPlainString());
-			final BigDecimal leftToPay = grossAmount.subtract(input.getPaidAmount());
+			final BigDecimal paymentAmount = input.getPaidAmount();
+			model.setPaymentAmount(paymentAmount.toPlainString());
+			model.setShouldBePaid(true);
+			final BigDecimal leftToPay = grossAmount.subtract(paymentAmount);
 			model.setInvoiceLeftToPay(leftToPay.toPlainString());
 			return model;
 		}
@@ -110,6 +113,7 @@ public class PaymentConverter {
 			final PaymentModel model = new PaymentModel();
 			model.setPaymentId(input.getPaymentId().toString());
 			model.setPaymentAmount(input.getPaymentAmount().toPlainString());
+			model.setCreateDate(input.getCreateDate().toString());
 			final Subscriber subscriber = Iterables.getFirst(input.getInvoices(), null)
 					.getContract().getSubscriber();
 			final SubscriberModel subscriberModel = convertSubscriber(subscriber);
@@ -141,5 +145,9 @@ public class PaymentConverter {
 
 	public List<PaymentModel> convertPaymentEntities(final List<Payment> invoices) {
 		return FluentIterable.from(invoices).transform(toModelPayment).toList();
+	}
+
+	public PaymentModel convertPaymentEntity(final Payment invoice) {
+		return toModelPayment.apply(invoice);
 	}
 }
