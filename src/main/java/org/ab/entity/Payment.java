@@ -5,11 +5,10 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -31,15 +30,15 @@ public class Payment {
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate createDate;
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "payments")
-	private List<Invoice> invoices;
+	@OneToMany(mappedBy="payment")
+	private List<InvoicePayment> invoicePayments;
 
 	public LocalDate getCreateDate() {
 		return createDate;
 	}
 
-	public List<Invoice> getInvoices() {
-		return invoices;
+	public List<InvoicePayment> getInvoicePayments() {
+		return invoicePayments;
 	}
 
 	public BigDecimal getPaymentAmount() {
@@ -54,8 +53,8 @@ public class Payment {
 		this.createDate = createDate;
 	}
 
-	public void setInvoices(final List<Invoice> invoices) {
-		this.invoices = invoices;
+	public void setInvoicePayments(final List<InvoicePayment> invoicePayments) {
+		this.invoicePayments = invoicePayments;
 	}
 
 	public void setPaymentAmount(final BigDecimal paymentAmount) {
@@ -65,4 +64,5 @@ public class Payment {
 	public void setPaymentId(final Integer paymentId) {
 		this.paymentId = paymentId;
 	}
+
 }

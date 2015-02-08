@@ -1,9 +1,9 @@
 package org.ab.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.ab.dao.InvoiceDao;
+import org.ab.dao.InvoicePaymentDao;
 import org.ab.dao.PaymentDao;
 import org.ab.entity.Invoice;
 import org.ab.entity.Payment;
@@ -30,6 +30,9 @@ public class PaymentsService {
 	@Autowired
 	private PaymentDao paymentDao;
 
+	@Autowired
+	private InvoicePaymentDao invoicePaymentDao;
+
 	public List<PaymentModel> findPayments(final String subscriberIdn, final LocalDate dateFrom, final LocalDate dateTo) {
 		final List<Payment> payments = paymentDao.findPayments(subscriberIdn, dateFrom, dateTo);
 		return paymentConverter.convertPaymentEntities(payments);
@@ -54,6 +57,14 @@ public class PaymentsService {
 				.withMonthOfYear(Integer.parseInt(generationParams.getMonth()));
 	}
 
+	private Payment getOrCreatePayment(final String paymentId) {
+		if(paymentId == null){
+			return new Payment();
+		} else {
+			return paymentDao.getPayment(Integer.parseInt(paymentId));
+		}
+	}
+
 	public PaymentModel getPayment(final int paymentId) {
 		final Payment payment = paymentDao.getPayment(paymentId);
 		return paymentConverter.convertPaymentEntity(payment);
@@ -61,20 +72,26 @@ public class PaymentsService {
 
 	public List<InvoicePaymentModel> getUnpaidInvoices(final String subscriberId) {
 		final List<Invoice> invoices = invoiceDao.findUnpaidInvoices(subscriberId);
-		return paymentConverter.convertInvoicePaymentEntities(invoices);
+		return paymentConverter.convertInvoiceEntities(invoices);
 	}
 
 	public void save(final PaymentModel paymentModel, final String name) {
-		final List<InvoicePaymentModel> invoicesModel = paymentModel.getInvoices();
-		final Payment payment = new Payment();
+		final Payment payment = getOrCreatePayment(paymentModel.getPaymentId());
 		payment.setCreateDate(Translator.toLocalDate(paymentModel.getCreateDate()));
 		payment.setPaymentAmount(Translator.toAmount(paymentModel.getPaymentAmount()));
+		saveInvoicePayments(payment, paymentModel.getInvoices());
+	}
+
+	private void saveInvoicePayments(final Payment payment, final List<InvoicePaymentModel> invoicesModel) {
 		for(final InvoicePaymentModel invoiceModel : invoicesModel){
-			if(invoiceModel.isShouldBePaid()){
-				final Invoice invoice = invoiceDao.getInvoice(Integer.parseInt(invoiceModel.getInvoiceId()));
-				final BigDecimal invoicePaymentAmount = Translator.toAmount(invoiceModel.getPaymentAmount());
-				invoice.addPayment(payment, invoicePaymentAmount);
-			}
+			final Invoice invoice = invoiceDao.getInvoice(Integer.parseInt(invoiceModel.getInvoiceId()));
+			//			final InvoicePayment invoice = invoicePaymentDao.getByInvoiceAndPayment(invoiceId);
+			//			final BigDecimal invoicePaymentAmount = Translator.toAmount(invoiceModel.getPaymentAmount());
+			//			if(invoiceModel.isShouldBePaid()){
+			//				invoice.addPayment(payment, invoicePaymentAmount);
+			//			} else {
+			//				invoice.removePayment(payment, invoicePaymentAmount);
+			//			}
 		}
 	}
 }

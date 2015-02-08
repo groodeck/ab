@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.ab.dao.ContractPackageDao;
 import org.ab.dao.UserDao;
+import org.ab.entity.Invoice;
 import org.ab.entity.InvoiceContent;
+import org.ab.entity.InvoicePayment;
 import org.ab.entity.InvoiceRecord;
 import org.ab.entity.Payment;
 import org.ab.entity.Subscriber;
@@ -84,7 +86,28 @@ public class PaymentConverter {
 		}
 	};
 
-	private final Function<org.ab.entity.Invoice, InvoicePaymentModel> toModelInvoicePayment =
+	private final Function<org.ab.entity.InvoicePayment, InvoicePaymentModel> toModelInvoicePayment =
+			new Function<org.ab.entity.InvoicePayment, InvoicePaymentModel>(){
+
+		@Override
+		public InvoicePaymentModel apply(final org.ab.entity.InvoicePayment input) {
+			final InvoicePaymentModel model = new InvoicePaymentModel();
+			final Invoice invoice = input.getInvoice();
+			model.setInvoiceId(invoice.getInvoiceId().toString());
+			model.setSettlementPeriod(String.format(
+					"%s - %s", invoice.getSettlementPeriodStart(), invoice.getSettlementPeriodEnd()));
+			model.setInvoiceNumber(invoice.getInvoiceNumber());
+			final BigDecimal grossAmount = invoice.getGrossAmount();
+			model.setInvoiceGrossAmount(grossAmount.toPlainString());
+			final BigDecimal paymentAmount = input.getPaymentAmount();
+			model.setPaymentAmount(paymentAmount.toPlainString());
+			model.setShouldBePaid(true);
+			model.setInvoiceLeftToPay(sumPayments(invoice.getInvoicePayments()));
+			return model;
+		}
+	};
+
+	private final Function<org.ab.entity.Invoice, InvoicePaymentModel> toModelInvoice =
 			new Function<org.ab.entity.Invoice, InvoicePaymentModel>(){
 
 		@Override
@@ -92,15 +115,11 @@ public class PaymentConverter {
 			final InvoicePaymentModel model = new InvoicePaymentModel();
 			model.setInvoiceId(input.getInvoiceId().toString());
 			model.setSettlementPeriod(String.format(
-					"%s - %s",input.getSettlementPeriodStart(), input.getSettlementPeriodEnd()));
+					"%s - %s", input.getSettlementPeriodStart(), input.getSettlementPeriodEnd()));
 			model.setInvoiceNumber(input.getInvoiceNumber());
 			final BigDecimal grossAmount = input.getGrossAmount();
 			model.setInvoiceGrossAmount(grossAmount.toPlainString());
-			final BigDecimal paymentAmount = input.getPaidAmount();
-			model.setPaymentAmount(paymentAmount.toPlainString());
-			model.setShouldBePaid(true);
-			final BigDecimal leftToPay = grossAmount.subtract(paymentAmount);
-			model.setInvoiceLeftToPay(leftToPay.toPlainString());
+			model.setInvoiceLeftToPay(sumPayments(input.getInvoicePayments()));
 			return model;
 		}
 	};
@@ -114,12 +133,12 @@ public class PaymentConverter {
 			model.setPaymentId(input.getPaymentId().toString());
 			model.setPaymentAmount(input.getPaymentAmount().toPlainString());
 			model.setCreateDate(input.getCreateDate().toString());
-			final Subscriber subscriber = Iterables.getFirst(input.getInvoices(), null)
-					.getContract().getSubscriber();
+			final Subscriber subscriber = Iterables.getFirst(input.getInvoicePayments(), null)
+					.getInvoice().getContract().getSubscriber();
 			final SubscriberModel subscriberModel = convertSubscriber(subscriber);
 			model.setSubscriber(subscriberModel);
 			final List<InvoicePaymentModel> invoicePayments =
-					FluentIterable.from(input.getInvoices()).transform(toModelInvoicePayment).toList();
+					FluentIterable.from(input.getInvoicePayments()).transform(toModelInvoicePayment).toList();
 			model.setInvoices(invoicePayments);
 			return model;
 		}
@@ -139,7 +158,11 @@ public class PaymentConverter {
 		return toEntityInvoice.apply(invoice);
 	}
 
-	public List<InvoicePaymentModel> convertInvoicePaymentEntities(final List<org.ab.entity.Invoice> invoices) {
+	public List<InvoicePaymentModel> convertInvoiceEntities(final List<org.ab.entity.Invoice> invoices) {
+		return FluentIterable.from(invoices).transform(toModelInvoice).toList();
+	}
+
+	public List<InvoicePaymentModel> convertInvoicePaymentEntities(final List<org.ab.entity.InvoicePayment> invoices) {
 		return FluentIterable.from(invoices).transform(toModelInvoicePayment).toList();
 	}
 
@@ -149,5 +172,13 @@ public class PaymentConverter {
 
 	public PaymentModel convertPaymentEntity(final Payment invoice) {
 		return toModelPayment.apply(invoice);
+	}
+
+	private String sumPayments(final List<InvoicePayment> invoicePayments) {
+		BigDecimal sum = BigDecimal.ZERO;
+		for(final InvoicePayment payment : invoicePayments){
+			sum = sum.add(payment.getPaymentAmount());
+		}
+		return sum.toPlainString();
 	}
 }

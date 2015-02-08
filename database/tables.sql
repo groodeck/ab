@@ -156,6 +156,8 @@ create table Payment(
 );
 
 create table invoicePayment(
+	invoicePaymentId integer not null,
  	invoiceId integer not null,
 	paymentId integer not null,
+	paymentAmount numeric(12,2) not null,
 );
