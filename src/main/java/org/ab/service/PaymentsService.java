@@ -1,11 +1,13 @@
 package org.ab.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.ab.dao.InvoiceDao;
 import org.ab.dao.InvoicePaymentDao;
 import org.ab.dao.PaymentDao;
 import org.ab.entity.Invoice;
+import org.ab.entity.InvoicePayment;
 import org.ab.entity.Payment;
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoicePaymentModel;
@@ -47,6 +49,10 @@ public class PaymentsService {
 		return invoice.getInvoiceContent().getInvoiceHtml();
 	}
 
+	private InvoicePayment getInvoicePayment(final Payment payment, final Invoice invoice) {
+		return invoicePaymentDao.getByInvoiceAndPayment(invoice, payment);
+	}
+
 	private LocalDate getLastOfMonth(final InvoiceGenerationParams generationParams) {
 		return getLocalDate(generationParams).dayOfMonth().withMaximumValue();
 	}
@@ -75,6 +81,14 @@ public class PaymentsService {
 		return paymentConverter.convertInvoiceEntities(invoices);
 	}
 
+	private InvoicePayment orCreate(final InvoicePayment invoicePayment) {
+		if(invoicePayment == null){
+			return new InvoicePayment();
+		} else {
+			return invoicePayment;
+		}
+	}
+
 	public void save(final PaymentModel paymentModel, final String name) {
 		final Payment payment = getOrCreatePayment(paymentModel.getPaymentId());
 		payment.setCreateDate(Translator.toLocalDate(paymentModel.getCreateDate()));
@@ -85,13 +99,16 @@ public class PaymentsService {
 	private void saveInvoicePayments(final Payment payment, final List<InvoicePaymentModel> invoicesModel) {
 		for(final InvoicePaymentModel invoiceModel : invoicesModel){
 			final Invoice invoice = invoiceDao.getInvoice(Integer.parseInt(invoiceModel.getInvoiceId()));
-			//			final InvoicePayment invoice = invoicePaymentDao.getByInvoiceAndPayment(invoiceId);
-			//			final BigDecimal invoicePaymentAmount = Translator.toAmount(invoiceModel.getPaymentAmount());
-			//			if(invoiceModel.isShouldBePaid()){
-			//				invoice.addPayment(payment, invoicePaymentAmount);
-			//			} else {
-			//				invoice.removePayment(payment, invoicePaymentAmount);
-			//			}
+			final InvoicePayment invoicePayment = getInvoicePayment(payment, invoice);
+			if(invoiceModel.isShouldBePaid()){
+				final BigDecimal invoicePaymentAmount = Translator.toAmount(invoiceModel.getPaymentAmount());
+				final InvoicePayment newInvoicePayment = orCreate(invoicePayment);
+				newInvoicePayment.setInvoice(invoice);
+				newInvoicePayment.setPayment(payment);
+				invoicePayment.setPaymentAmount(invoicePaymentAmount);
+			} else if (invoicePayment != null){
+				invoicePaymentDao.remove(invoicePayment);
+			}
 		}
 	}
 }

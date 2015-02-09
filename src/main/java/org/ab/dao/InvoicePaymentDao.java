@@ -7,6 +7,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.ab.entity.Invoice;
+import org.ab.entity.InvoicePayment;
+import org.ab.entity.Payment;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +22,12 @@ public class InvoicePaymentDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findAll() {
-		return this.em.createQuery("from Invoice").getResultList();
+		return em.createQuery("from Invoice").getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findInvoices(final String userNumber, final LocalDate createDateFrom, final LocalDate createDateTo) {
-		final Query query = this.em.createQuery("from Invoice i where "
+		final Query query = em.createQuery("from Invoice i where "
 				+ "(:userNumber is null OR i.contract.subscriber.subscriberIdn = :userNumber) "
 				+ (createDateFrom == null ? "" : "AND i.createDate >= :dateFrom ")
 				+ (createDateTo == null ? "" : "AND i.createDate <= :dateTo ")
@@ -42,7 +44,7 @@ public class InvoicePaymentDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findUnpaidInvoices(final String subscriberId) {
-		return this.em.createQuery("FROM Invoice i "
+		return em.createQuery("FROM Invoice i "
 				+ "WHERE i.contract.subscriber.subscriberId = :subscriberId "
 				+ "AND i.paidAmount != i.grossAmount "
 				+ "ORDER BY i.settlementPeriodStart")
@@ -50,12 +52,18 @@ public class InvoicePaymentDao {
 				.getResultList();
 	}
 
-	public Invoice getInvoicePayment(final int invoiceId) {
-		return this.em.find(Invoice.class, invoiceId);
+	public InvoicePayment getByInvoiceAndPayment(final Invoice invoice, final Payment payment) {
+		return (InvoicePayment) em.createQuery("FROM InvoicePayment ip "
+				+ "WHERE ip.payment = :payment "
+				+ "AND ip.invoice = :invoice ")
+				.setParameter("payment", payment)
+				.setParameter("invoice", invoice)
+				.getSingleResult();
+
 	}
 
 	public long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
-		return (Long)this.em.createQuery("select count(*) "
+		return (Long)em.createQuery("select count(*) "
 				+ "from Invoice i where "
 				+ "i.settlementPeriodStart = :dateFrom "
 				+ "and i.settlementPeriodEnd = :dateTo ")
@@ -64,8 +72,16 @@ public class InvoicePaymentDao {
 				.getSingleResult();
 	}
 
+	public Invoice getInvoicePayment(final int invoiceId) {
+		return em.find(Invoice.class, invoiceId);
+	}
+
+	public void remove(final InvoicePayment invoicePayment) {
+		em.remove(invoicePayment);
+	}
+
 	public Integer save(final Invoice entity) {
-		this.em.persist(entity);
+		em.persist(entity);
 		return entity.getInvoiceId();
 	}
 }
