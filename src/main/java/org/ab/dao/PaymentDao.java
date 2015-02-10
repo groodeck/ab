@@ -26,8 +26,8 @@ public class PaymentDao {
 	@SuppressWarnings("unchecked")
 	public List<Payment> findPayments(final String userNumber, final LocalDate createDateFrom, final LocalDate createDateTo) {
 		final Query query = em.createQuery("SELECT DISTINCT OBJECT(p) FROM Payment p "
-				+ "JOIN p.invoices i "
-				+ "WHERE (:userNumber is null OR i.contract.subscriber.subscriberIdn = :userNumber) "
+				+ "JOIN p.invoicePayments ip "
+				+ "WHERE (:userNumber is null OR ip.invoice.contract.subscriber.subscriberIdn = :userNumber) "
 				+ (createDateFrom == null ? "" : "AND p.createDate >= :dateFrom ")
 				+ (createDateTo == null ? "" : "AND p.createDate <= :dateTo ")
 				+ "ORDER BY p.createDate ASC")

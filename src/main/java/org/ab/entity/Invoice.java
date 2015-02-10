@@ -71,9 +71,6 @@ public class Invoice {
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate paymentDate;
 
-	@Column(name="paidAmount")
-	private BigDecimal paidAmount;
-
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "invoice", cascade = CascadeType.ALL)
 	private InvoiceContent invoiceContent;
 
@@ -118,10 +115,6 @@ public class Invoice {
 
 	public BigDecimal getNetAmount() {
 		return netAmount;
-	}
-
-	public BigDecimal getPaidAmount() {
-		return paidAmount;
 	}
 
 	public LocalDate getPaymentDate() {
@@ -186,10 +179,6 @@ public class Invoice {
 
 	public void setNetAmount(final BigDecimal netAmount) {
 		this.netAmount = netAmount;
-	}
-
-	public void setPaidAmount(final BigDecimal paid) {
-		paidAmount = paid;
 	}
 
 	public void setPaymentDate(final LocalDate paymentDate) {

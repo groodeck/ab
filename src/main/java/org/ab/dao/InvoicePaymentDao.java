@@ -13,6 +13,8 @@ import org.joda.time.LocalDate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Iterables;
+
 @Repository
 @Transactional
 public class InvoicePaymentDao {
@@ -52,14 +54,15 @@ public class InvoicePaymentDao {
 				.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	public InvoicePayment getByInvoiceAndPayment(final Invoice invoice, final Payment payment) {
-		return (InvoicePayment) em.createQuery("FROM InvoicePayment ip "
-				+ "WHERE ip.payment = :payment "
-				+ "AND ip.invoice = :invoice ")
-				.setParameter("payment", payment)
-				.setParameter("invoice", invoice)
-				.getSingleResult();
-
+		final List resultList = em.createQuery("FROM InvoicePayment ip "
+				+ "WHERE ip.payment.paymentId = :paymentId "
+				+ "AND ip.invoice.invoiceId = :invoiceId ")
+				.setParameter("paymentId", payment.getPaymentId())
+				.setParameter("invoiceId", invoice.getInvoiceId())
+				.getResultList();
+		return  Iterables.getFirst(resultList, null);
 	}
 
 	public long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
@@ -80,8 +83,13 @@ public class InvoicePaymentDao {
 		em.remove(invoicePayment);
 	}
 
-	public Integer save(final Invoice entity) {
+	public Integer save(final InvoicePayment entity) {
 		em.persist(entity);
-		return entity.getInvoiceId();
+		return entity.getInvoicePaymentId();
+	}
+
+	public Integer update(final InvoicePayment entity) {
+		em.merge(entity);
+		return entity.getInvoicePaymentId();
 	}
 }

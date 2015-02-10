@@ -46,7 +46,6 @@ public class InvoiceConverter {
 			entity.setVatAmount(input.getVatAmount());
 			entity.setGrossAmount(input.getGrossAmount());
 			entity.setGrossAmountWords(input.getGrossAmountWords());
-			entity.setPaidAmount(input.getPaidAmount());
 			entity.setPaymentDate(input.getPaymentDate());
 			final InvoiceContent invoiceContent = new InvoiceContent();
 			invoiceContent.setInvoiceHtml(input.getHtmlContent());
@@ -92,7 +91,6 @@ public class InvoiceConverter {
 			.withNetAmount(input.getNetAmount())
 			.withVatAmount(input.getVatAmount())
 			.withGrossAmount(input.getGrossAmount())
-			.withPaidAmount(input.getPaidAmount())
 			.withPaymentDate(input.getPaymentDate())
 			.build();
 			return model;

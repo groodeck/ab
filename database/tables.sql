@@ -129,7 +129,6 @@ create table invoice(
  	grossAmount numeric(12,2),
  	grossAmountWords varchar(150),
  	paymentDate date,
- 	paidAmount numeric(12,2),
 );
 
 create table invoiceRecord(
@@ -156,8 +155,8 @@ create table Payment(
 );
 
 create table invoicePayment(
-	invoicePaymentId integer not null,
- 	invoiceId integer not null,
-	paymentId integer not null,
+	invoicePaymentId integer not null IDENTITY PRIMARY KEY,
+ 	invoiceId integer ,
+	paymentId integer ,
 	paymentAmount numeric(12,2) not null,
 );
