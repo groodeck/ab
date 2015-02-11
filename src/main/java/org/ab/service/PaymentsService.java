@@ -35,8 +35,9 @@ public class PaymentsService {
 	@Autowired
 	private InvoicePaymentDao invoicePaymentDao;
 
-	private void createInvoicePayment(final Invoice invoice, final Payment payment, final InvoicePaymentModel invoiceModel) {
+	private void createInvoicePayment(final Payment payment, final InvoicePaymentModel invoiceModel) {
 		if(invoiceModel.isShouldBePaid()){
+			final Invoice invoice = invoiceDao.getInvoice(Integer.parseInt(invoiceModel.getInvoiceId()));
 			final BigDecimal invoicePaymentAmount = Translator.toAmount(invoiceModel.getPaymentAmount());
 			final InvoicePayment invoicePayment = new InvoicePayment();
 			invoicePayment.setInvoice(invoice);
@@ -51,8 +52,14 @@ public class PaymentsService {
 		return paymentConverter.convertPaymentEntities(payments);
 	}
 
-	private InvoicePayment getInvoicePayment(final Payment payment, final Invoice invoice) {
-		return invoicePaymentDao.getByInvoiceAndPayment(invoice, payment);
+	private InvoicePayment getInvoicePayment(final InvoicePaymentModel invoiceModel) {
+		final String paymentId = invoiceModel.getPaymentId();
+		final String invoiceId = invoiceModel.getInvoiceId();
+		if(invoiceId != null && paymentId != null){
+			return invoicePaymentDao.getByInvoiceAndPayment(Integer.getInteger(invoiceId), Integer.getInteger(paymentId));
+		} else {
+			return null;
+		}
 	}
 
 	private Payment getOrCreatePayment(final String paymentId) {
@@ -77,16 +84,15 @@ public class PaymentsService {
 		final Payment payment = getOrCreatePayment(paymentModel.getPaymentId());
 		payment.setCreateDate(Translator.toLocalDate(paymentModel.getCreateDate()));
 		payment.setPaymentAmount(Translator.toAmount(paymentModel.getPaymentAmount()));
-		paymentDao.save(payment);
 		saveInvoicePayments(payment, paymentModel.getInvoices());
+		paymentDao.save(payment);
 	}
 
 	private void saveInvoicePayments(final Payment payment, final List<InvoicePaymentModel> invoicesModel) {
 		for(final InvoicePaymentModel invoiceModel : invoicesModel){
-			final Invoice invoice = invoiceDao.getInvoice(Integer.parseInt(invoiceModel.getInvoiceId()));
-			final InvoicePayment invoicePayment = getInvoicePayment(payment, invoice);
+			final InvoicePayment invoicePayment = getInvoicePayment(invoiceModel);
 			if(invoicePayment == null){
-				createInvoicePayment(invoice, payment, invoiceModel);
+				createInvoicePayment(payment, invoiceModel);
 			} else {
 				update(invoicePayment, invoiceModel);
 			}

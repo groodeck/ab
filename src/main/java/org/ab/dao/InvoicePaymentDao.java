@@ -8,7 +8,6 @@ import javax.persistence.Query;
 
 import org.ab.entity.Invoice;
 import org.ab.entity.InvoicePayment;
-import org.ab.entity.Payment;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,12 +54,12 @@ public class InvoicePaymentDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public InvoicePayment getByInvoiceAndPayment(final Invoice invoice, final Payment payment) {
-		final List resultList = em.createQuery("FROM InvoicePayment ip "
+	public InvoicePayment getByInvoiceAndPayment(final Integer invoiceId, final Integer paymentId) {
+		final List<InvoicePayment> resultList = em.createQuery("FROM InvoicePayment ip "
 				+ "WHERE ip.payment.paymentId = :paymentId "
 				+ "AND ip.invoice.invoiceId = :invoiceId ")
-				.setParameter("paymentId", payment.getPaymentId())
-				.setParameter("invoiceId", invoice.getInvoiceId())
+				.setParameter("paymentId", paymentId)
+				.setParameter("invoiceId", invoiceId)
 				.getResultList();
 		return  Iterables.getFirst(resultList, null);
 	}

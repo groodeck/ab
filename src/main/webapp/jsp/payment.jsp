@@ -103,6 +103,7 @@
 							<tr>	
 								<td><sf:checkbox path="invoices[${status.index}].shouldBePaid"/></td>
 								<td nowrap="nowrap">
+									<sf:hidden path="invoices[${status.index}].paymentId"/>
 									<sf:hidden path="invoices[${status.index}].invoiceId"/>
 									<sf:hidden path="invoices[${status.index}].invoiceNumber"/>
 									<sf:hidden path="invoices[${status.index}].settlementPeriod"/>

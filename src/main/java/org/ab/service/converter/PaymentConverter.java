@@ -42,6 +42,7 @@ public class PaymentConverter {
 			final InvoicePaymentModel model = new InvoicePaymentModel();
 			final Invoice invoice = input.getInvoice();
 			model.setInvoiceId(invoice.getInvoiceId().toString());
+			model.setPaymentId(input.getPayment().getPaymentId().toString());
 			model.setSettlementPeriod(String.format(
 					"%s - %s", invoice.getSettlementPeriodStart(), invoice.getSettlementPeriodEnd()));
 			model.setInvoiceNumber(invoice.getInvoiceNumber());
