@@ -55,8 +55,8 @@ public class PaymentsService {
 	private InvoicePayment getInvoicePayment(final InvoicePaymentModel invoiceModel) {
 		final String paymentId = invoiceModel.getPaymentId();
 		final String invoiceId = invoiceModel.getInvoiceId();
-		if(invoiceId != null && paymentId != null){
-			return invoicePaymentDao.getByInvoiceAndPayment(Integer.getInteger(invoiceId), Integer.getInteger(paymentId));
+		if(StringUtils.isNotBlank(invoiceId) && StringUtils.isNotBlank(paymentId)){
+			return invoicePaymentDao.getByInvoiceAndPayment(Integer.parseInt(invoiceId), Integer.parseInt(paymentId));
 		} else {
 			return null;
 		}
@@ -72,7 +72,15 @@ public class PaymentsService {
 
 	public PaymentModel getPayment(final int paymentId) {
 		final Payment payment = paymentDao.getPayment(paymentId);
-		return paymentConverter.convertPaymentEntity(payment);
+		final PaymentModel paymentModel;
+		if(payment == null){
+			paymentModel = null;
+		}else {
+			paymentModel = paymentConverter.convertPaymentEntity(payment);
+			final String subscriberId = payment.getSubscriberId().toString();
+			paymentModel.getInvoices().addAll(getUnpaidInvoices(subscriberId));
+		}
+		return paymentModel;
 	}
 
 	public List<InvoicePaymentModel> getUnpaidInvoices(final String subscriberId) {
@@ -80,12 +88,27 @@ public class PaymentsService {
 		return paymentConverter.convertInvoiceEntities(invoices);
 	}
 
+	private boolean isNotEmpty(final List<InvoicePaymentModel> invoicePayments) {
+		BigDecimal sum = BigDecimal.ZERO;
+		for(final InvoicePaymentModel invoicePayment : invoicePayments){
+			if(invoicePayment.isShouldBePaid()){
+				sum = sum.add(Translator.toAmount(invoicePayment.getPaymentAmount()));
+			}
+		}
+		return sum.compareTo(BigDecimal.ZERO) > 0;
+	}
+
 	public void save(final PaymentModel paymentModel, final String name) {
 		final Payment payment = getOrCreatePayment(paymentModel.getPaymentId());
+		payment.setSubscriberId(Integer.parseInt(paymentModel.getSubscriber().getSubscriberId()));
 		payment.setCreateDate(Translator.toLocalDate(paymentModel.getCreateDate()));
 		payment.setPaymentAmount(Translator.toAmount(paymentModel.getPaymentAmount()));
 		saveInvoicePayments(payment, paymentModel.getInvoices());
-		paymentDao.save(payment);
+		if(isNotEmpty(paymentModel.getInvoices())){
+			paymentDao.save(payment);
+		} else if(payment.getPaymentId() != null) {
+			paymentDao.remove(payment);
+		}
 	}
 
 	private void saveInvoicePayments(final Payment payment, final List<InvoicePaymentModel> invoicesModel) {

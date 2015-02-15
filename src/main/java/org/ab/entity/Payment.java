@@ -30,6 +30,9 @@ public class Payment {
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate createDate;
 
+	@Column(name = "subscriberId")
+	private Integer subscriberId;
+
 	@OneToMany(mappedBy="payment")
 	private List<InvoicePayment> invoicePayments;
 
@@ -49,6 +52,10 @@ public class Payment {
 		return paymentId;
 	}
 
+	public Integer getSubscriberId() {
+		return subscriberId;
+	}
+
 	public void setCreateDate(final LocalDate createDate) {
 		this.createDate = createDate;
 	}
@@ -63,6 +70,10 @@ public class Payment {
 
 	public void setPaymentId(final Integer paymentId) {
 		this.paymentId = paymentId;
+	}
+
+	public void setSubscriberId(final Integer subscriberId) {
+		this.subscriberId = subscriberId;
 	}
 
 }

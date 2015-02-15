@@ -150,6 +150,7 @@ create table invoiceContent(
 
 create table Payment(
  	paymentId integer not null IDENTITY PRIMARY KEY,
+ 	subscriberId integer not null,
  	createDate date,
 	paymentAmount numeric(12,2) not null,
 );

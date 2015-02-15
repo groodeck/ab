@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.ab.dao.ContractPackageDao;
+import org.ab.dao.SubscriberDao;
 import org.ab.dao.UserDao;
 import org.ab.entity.Invoice;
 import org.ab.entity.InvoicePayment;
@@ -12,12 +13,12 @@ import org.ab.entity.Subscriber;
 import org.ab.model.InvoicePaymentModel;
 import org.ab.model.PaymentModel;
 import org.ab.model.SubscriberModel;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 
 @Component
 public class PaymentConverter {
@@ -27,6 +28,9 @@ public class PaymentConverter {
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private SubscriberDao subscriberDao;
 
 	@Autowired
 	private DeviceConverter deviceConverter;
@@ -84,12 +88,11 @@ public class PaymentConverter {
 			model.setPaymentId(input.getPaymentId().toString());
 			model.setPaymentAmount(input.getPaymentAmount().toPlainString());
 			model.setCreateDate(input.getCreateDate().toString());
-			final Subscriber subscriber = Iterables.getFirst(input.getInvoicePayments(), null)
-					.getInvoice().getContract().getSubscriber();
+			final Subscriber subscriber = subscriberDao.getSubscriber(input.getSubscriberId());
 			final SubscriberModel subscriberModel = convertSubscriber(subscriber);
 			model.setSubscriber(subscriberModel);
 			final List<InvoicePaymentModel> invoicePayments =
-					FluentIterable.from(input.getInvoicePayments()).transform(toModelInvoicePayment).toList();
+					Lists.newArrayList(FluentIterable.from(input.getInvoicePayments()).transform(toModelInvoicePayment));
 			model.setInvoices(invoicePayments);
 			return model;
 		}

@@ -45,6 +45,10 @@ public class PaymentDao {
 		return em.find(Payment.class, paymentId);
 	}
 
+	public void remove(final Payment payment) {
+		em.remove(payment);
+	}
+
 	public Integer save(final Payment entity) {
 		em.persist(entity);
 		return entity.getPaymentId();

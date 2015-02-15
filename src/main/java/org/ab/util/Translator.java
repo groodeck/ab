@@ -144,7 +144,7 @@ public class Translator {
 	}
 
 	public static BigDecimal toDecimal(final String value, final int scale) {
-		BigDecimal decimal = new BigDecimal(0);
+		BigDecimal decimal = BigDecimal.ZERO;
 		if(StringUtils.isNotBlank(value)){
 			try {
 				decimal = new BigDecimal(commaNumber(value));
