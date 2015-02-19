@@ -1,37 +1,43 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
 <html>
 	<body>	
-		<table border='1' style='font-size: 10px;'>
-			<tr>
-				<td rowspan='3' colspan='3' width='250'>
-				
-				</td>
-				<td colspan='7' width='200'><h2>FAKTURA VAT</h2></td>
-				<td colspan='4' width='150'>${invoiceNumber}</td>
+		<table border='1' style='font-size: 12px; font-family: verdana;'>
+			<tr style='text-align:center; vertical-align: middle; font-size: 16px; font-weight: bold;'>
+				<td width='200' height='60'></td>
+				<td colspan='6' width='250'>FAKTURA VAT</td>
+				<td colspan='4' width='180'>${invoiceNumber}</td>
 			</tr>
 			<tr>
-				<td colspan='7'>Data wystawienia: ${createDate!}</td>
-				<td colspan='4'>ORYGINA£</td>
-			</tr>
-			<tr>
-				<td colspan='7'>Data sprzeda¿y: ${receiveDate!}</td>
-				<td colspan='4'/>
-			</tr>
-			
-			<tr>
-				<td colspan='3' align="center">pieczêæ sprzedawcy</td>
-				<td colspan='11'/>
-			</tr>
-			<tr>
-				<td colspan='5'>Sprzedawca</td>
-				<td colspan='9'>Nabywca</td>
-			</tr>
-			<tr>
-				<td colspan='5' rowspan='3'>
+				<td height='25'>Data sprzeda¿y: ${receiveDate!}</td>
+				<td colspan='6'></td>
+				<td colspan='4' rowspan='3'>
 					${seller.name!}<br/>
-					${seller.addressStreet!}<br/>
 					${seller.addressCity!}<br/>
-					${seller.regon!}
+					${seller.addressStreet!}<br/>
+				</td>
+			</tr>
+			<tr>
+				<td height='25'>Data wystawienia: ${createDate!}</td>
+				<td colspan='6'/>
+			</tr>
+			<tr>
+				<td height="25"/>
+				<td colspan='6'/>
+			</tr>
+			<tr>
+				<td colspan='11' height='60'> </td>
+			</tr>
+			<tr>
+				<td colspan='2' height='25'>Sprzedawca:</td>
+				<td colspan='2'>Nabywca:</td>
+				<td colspan='2'>Nr abonenta:</td>
+				<td colspan='5'>xxx</td>
+			</tr>
+			<tr>
+				<td colspan='2' rowspan='3'>
+					${seller.name!}<br/>
+					${seller.addressCity!}<br/>
+					${seller.addressStreet!}<br/>
 				</td>
 				<td colspan='9' rowspan='3'>
 					${buyer.name!}<br/>
@@ -41,68 +47,58 @@
 			</tr>
 			<tr/>
 			<tr/>
+			<tr style='vertical-align: bottom;'>
+				<td colspan='2' height='40'>NIP: ${seller.nip!}</td>
+				<td colspan='9'>NIP/PESEL: ${buyer.nip!}</td>
+			</tr>
+			<tr style='vertical-align: bottom;'>
+				<td colspan='2' height='100'>
+					Nr rachunku: ING Bank Œl¹ski<br/>
+					76 1050 1966 1000 0092 0446 25367
+				</td>
+				<td colspan='9'>
+					Sposób zap³aty:<br/>
+					Przelew 14 dni. Termin p³atnoœci: xxx
+				</td>
+			</tr>
 			<tr>
-				<td colspan='5'>NIP: ${seller.nip!}</td>
-				<td colspan='9'>NIP: ${buyer.nip!}</td>
+				<td colspan='11' height='25'/>
 			</tr>
 			
-			<tr>
-				<td colspan='5' height='30'>Nr rachunku:</td>
-				<td colspan='9'>Sposób zap³aty:</td>
-			</tr>
-			<tr>
-				<td colspan='14' height='5'/>
-			</tr>
-			
-			<tr>
-				<td rowspan='3'>Lp.</td>
-				<td rowspan='3'>Nazwa towaru lub us³ugi</td>
-				<td rowspan='3'>PKWiU</td>
-				<td rowspan='3'>J.m.</td>
-				<td rowspan='3'>Iloœæ</td>
-				<td rowspan='2' colspan='2' width='30px'>Cena jednostkowa bez podatku</td>
-				<td rowspan='2' colspan='2'>Wartoœæ netto</td>
-				<td colspan='3'>Podatek</td>
+			<tr align="center">
+				<td rowspan='2' height='25'>Nazwa us³ugi</td>
+				<td rowspan='2'>Iloœæ</td>
+				<td rowspan='2' colspan="2">Okres</td>
+				<td rowspan='2' colspan="2">Wartoœæ netto</td>
+				<td colspan='3'>VAT</td>
 				<td rowspan='2' colspan='2'>Wartoœæ brutto</td>
 			</tr>
 			<tr>
 				<td>%</td>
 				<td colspan='2'>kwota</td>
 			</tr>
-			<tr>
-				<td>z³</td>
-				<td>gr</td>
-				<td>z³</td>
-				<td>gr</td>
-				<td/>
-				<td>z³</td>
-				<td>gr</td>
-				<td>z³</td>
-				<td>gr</td>
-			</tr>
+			
 			<#list serviceRecords as serviceRecord>
-				<tr>
-					<td>${serviceRecord.lp}</td>
-					<td>${serviceRecord.serviceName}</td>
-					<td/>
-					<td/>
-					<td>${serviceRecord.quantity}</td>
-					<td colspan='2'>${serviceRecord.netAmount?string["0.00"]}</td>
-					<td colspan='2'/>
-					<td/>
-					<td colspan='2'>${serviceRecord.vatAmount?string["0.00"]}</td>
-					<td colspan='2'>${serviceRecord.grossAmount?string["0.00"]}</td>
-				</tr>
-			</#list>
 			<tr>
-				<td colspan='5'/>
+				<td height='25'>${serviceRecord.serviceName}</td>
+				<td>${serviceRecord.quantity}</td>
+				<td colspan="2">-xxx-</td>
+				<td colspan="2">${serviceRecord.netAmount?string["0.00"]}</td>
+				<td>xx</td>
+				<td colspan='2'>${serviceRecord.vatAmount?string["0.00"]}</td>
+				<td colspan='2'>${serviceRecord.grossAmount?string["0.00"]}</td>
+			</tr>
+			</#list>
+			
+			<tr>
+				<td colspan='2' height='25'/>
 				<td colspan='2'>RAZEM</td>
 				<td colspan='2'>${netAmount}</td>
 				<td>x</td>
 				<td colspan='2'>${vatAmount}</td>
 				<td colspan='2'>${grossAmount}</td>
 			</tr>
-			<tr>
+			<!-- <tr>
 				<td colspan='5'/>
 				<td colspan='2' rowspan='5'>W TYM</td>
 				<td colspan='2'/>
@@ -116,89 +112,47 @@
 				<td>23</td>
 				<td colspan='2'/>
 				<td colspan='2'/>
+			</tr> -->
+			<tr>
+				<td colspan='2' height='25'/>
+				<td colspan='9' rowspan="2">S³ownie: ${grossAmountWords}</td>
 			</tr>
 			<tr>
-				<td colspan='5'>S³ownie:</td>
-				<td colspan='2'/>
-				<td>8</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
+				<td colspan='2' height='25'/>
 			</tr>
 			<tr>
-				<td colspan='5' rowspan='2'>${grossAmountWords}</td>
-				<td colspan='2'/>
-				<td>5</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
-			</tr>
-			<tr>
-				<td colspan='2'/>
-				<td>0</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
+				<td colspan='11' height='25'/>
 			</tr>
 			
 			<tr>
-				<td colspan='14' height='5'/>
+				<td colspan='11' height='50'/>
 			</tr>
 			
-			<tr>
-				<td colspan='2' rowspan='2' height='40'>Razem do zap³aty:</td>
-				<td colspan='3' rowspan='2' height='40'>${grossAmount}</td>
+			<tr style='font-size: 14px; font-style: italic; font-weight: bold;'>
+				<td rowspan='2' height='50'>Razem do zap³aty:</td>
+				<td rowspan='2' height='50'>${grossAmount}</td>
 				<td colspan='9' rowspan='2'></td>
 			</tr>
 			<tr/>
 			
 			<tr>
-				<td colspan='14' height='5'/>
+				<td colspan='11' height='25'/>
 			</tr>
 			<tr>
-				<td colspan='14' rowspan='2' height='40' valign="top">Uwagi:</td>
+				<td colspan='11' height='25'/>
+			</tr>
+			<tr>
+				<td colspan='11' height='25'/>
+			</tr>
+			
+			<tr style='font-size: 14px; font-style: italic; font-weight: bold;'>
+				<td rowspan='2' height='50'>Saldo na dzieñ<br/>wystawienia faktury:</td>
+				<td rowspan='2' height='50'>123,00</td>
+				<td colspan='9' rowspan='2'></td>
 			</tr>
 			<tr/>
-			
 			<tr>
-				<td colspan='14' height='5'/>
-			</tr>
-			
-			<tr>
-				<td/>
-				<td colspan='2' rowspan='4' height='80' />
-				<td/>
-				<td/>
-				<td/>
-				<td colspan='7' rowspan='4' height='80' />
-				<td/>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-			</tr>
-			<tr>
-				<td/>
-				<td colspan='2' style="font-size: 10px">Podpis imienny osoby upowa¿nionej do odbioru faktur VAT</td>
-				<td/>
-				<td/>
-				<td/>
-				<td colspan='7' style="font-size: 10px">Podpis imienny osoby upowa¿nionej do wystawienia faktury VAT</td>
-				<td/>
+				<td colspan='11' height='25'>Je¿eli wartoœæ salda konta jest wy¿sza ni¿ kwota do zap³aty, pilnie skontaktuj siê z operatorem !</td>
 			</tr>
 			
 		</table>
