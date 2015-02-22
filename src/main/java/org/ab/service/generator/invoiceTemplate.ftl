@@ -1,17 +1,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
-<style>
-	tr.border_bottom td {
-	  border-bottom:1px solid;
-	}
-	
-	tr.bordered td {
-	  border-bottom:1px solid;
-	  border-left:1px solid;
-	}
-</style>
 <html>
+	<style>
+		tr.border_bottom td {
+		  border-bottom:1px solid;
+		}
+		
+		tr.bordered td {
+		  border-bottom:1px solid;
+		  border-left:1px solid;
+		}
+	</style>
 	<body>	
-		<table style='font-size: 11px; font-family: arial;'>
+		<table cellspacing='0' style='font-size: 11px; font-family: arial;'>
 			<tr style='text-align:center; vertical-align: middle; font-size: 15px; font-weight: bold;'>
 				<td width='230' height='60'></td>
 				<td colspan='6' width='200'>FAKTURA VAT</td>
@@ -83,7 +83,7 @@
 				<td colspan='3' width='90'>VAT</td>
 				<td rowspan='2' colspan='2' width='90'>Wartoœæ brutto</td>
 			</tr>
-			<tr style='text-align:center;'>
+			<tr class='bordered' style='text-align:center;'>
 				<td>%</td>
 				<td colspan='2'>kwota</td>
 			</tr>
@@ -100,7 +100,7 @@
 			</tr>
 			</#list>
 			
-			<tr>
+			<tr class='bordered'>
 				<td colspan='2' height='22'/>
 				<td colspan='2'>RAZEM</td>
 				<td colspan='2' style='text-align:right;'>${netAmount?string["0.00"]}</td>
