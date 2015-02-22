@@ -52,7 +52,7 @@ public class InvoiceFileGenerator {
 				@Override
 				public Font getFont(final String fontName, final String encoding, final boolean embedded,
 						final float size, final int style, final BaseColor color, final boolean cached) {
-					return super.getFont(BaseFont.TIMES_ROMAN, BaseFont.CP1257, embedded, size, style, color, cached);
+					return super.getFont(BaseFont.HELVETICA, BaseFont.CP1257, embedded, size, style, color, cached);
 				}
 			}
 			final XMLWorkerHelper worker = XMLWorkerHelper.getInstance();

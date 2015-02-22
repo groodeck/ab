@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 public class InvoiceModel {
 	public static class Builder {
 		private Integer invoiceId;
+		private String subscriberIdn;
 		private InvoiceParticipant seller;
 		private InvoiceParticipant buyer;
 		private String invoiceNumber;
@@ -28,7 +29,6 @@ public class InvoiceModel {
 		private LocalDate settlementPeriodStart;
 		private LocalDate settlementPeriodEnd;
 		private LocalDate paymentDate;
-		private BigDecimal paidAmount;
 		private String htmlContent;
 
 		public InvoiceModel build(){
@@ -85,11 +85,6 @@ public class InvoiceModel {
 			return this;
 		}
 
-		public Builder withPaidAmount(final BigDecimal paidAmount) {
-			this.paidAmount = paidAmount;
-			return this;
-		}
-
 		public Builder withPaymentDate(final LocalDate date) {
 			paymentDate = date;
 			return this;
@@ -125,12 +120,18 @@ public class InvoiceModel {
 			return this;
 		}
 
+		public Builder withSubscriberIdn(final String subscriberIdn) {
+			this.subscriberIdn = subscriberIdn;
+			return this;
+		}
+
 		public Builder withVatAmount(final BigDecimal vatAmount) {
 			this.vatAmount = vatAmount;
 			return this;
 		}
 	}
 	private Integer invoiceId;
+	private final String subscriberIdn;
 	private final InvoiceParticipant seller;
 	private final InvoiceParticipant buyer;
 	private final String invoiceNumber;
@@ -146,10 +147,10 @@ public class InvoiceModel {
 	private final LocalDate settlementPeriodStart;
 	private final LocalDate settlementPeriodEnd;
 	private final LocalDate paymentDate;
-	private final BigDecimal paidAmount;
 	private String htmlContent;
 
 	private InvoiceModel(final Builder builder){
+		subscriberIdn = builder.subscriberIdn;
 		seller = builder.seller;
 		buyer = builder.buyer;
 		invoiceNumber = builder.invoiceNumber;
@@ -167,7 +168,6 @@ public class InvoiceModel {
 		invoiceId = builder.invoiceId;
 		paymentDate = builder.paymentDate;
 		htmlContent = builder.htmlContent;
-		paidAmount = builder.paidAmount;
 	}
 
 	public InvoiceParticipant getBuyer() {
@@ -210,10 +210,6 @@ public class InvoiceModel {
 		return netAmount;
 	}
 
-	public BigDecimal getPaidAmount() {
-		return paidAmount;
-	}
-
 	public LocalDate getPaymentDate() {
 		return paymentDate;
 	}
@@ -236,6 +232,10 @@ public class InvoiceModel {
 
 	public LocalDate getSettlementPeriodStart() {
 		return settlementPeriodStart;
+	}
+
+	public String getSubscriberIdn() {
+		return subscriberIdn;
 	}
 
 	public BigDecimal getVatAmount() {

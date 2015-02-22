@@ -17,6 +17,7 @@ public class InvoiceContentGenerator {
 	public String generateHtml(final InvoiceModel invoice) {
 		final StringWriter out = new StringWriter();
 		final Configuration cfg = new Configuration();
+		cfg.setDateFormat("dd/MM/yyyy");
 		cfg.setObjectWrapper( new DefaultObjectWrapper());
 		try {
 			final Template temp = cfg.getTemplate( "src/main/java/org/ab/service/generator/invoiceTemplate.ftl" );

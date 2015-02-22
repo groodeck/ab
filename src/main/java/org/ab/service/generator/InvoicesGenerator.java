@@ -92,8 +92,7 @@ public class InvoicesGenerator {
 			.withCreateDate(currentDate)
 			.withReceiveDate(currentDate)
 			.withDateHeader(city + ", " + currentDate)
-			.withPaymentDate(currentDate.plusWeeks(2))
-			.withPaidAmount(BigDecimal.ZERO.setScale(2));
+			.withPaymentDate(currentDate.plusWeeks(2));
 			final ContractPackage contractPackage = contract.getContractPackage();
 			final List<Service> services = contractPackage.getServices();
 			generateServices(services, contract, invoiceBuilder);
