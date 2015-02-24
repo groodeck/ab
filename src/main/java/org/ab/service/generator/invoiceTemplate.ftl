@@ -1,15 +1,6 @@
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <html>
-	<style>
-		tr.border_bottom td {
-		  border-bottom:1px solid;
-		}
-		
-		tr.bordered td {
-		  border-bottom:1px solid;
-		  border-left:1px solid;
-		}
-	</style>
 	<body>	
 		<table cellspacing='0' style='font-size: 11px; font-family: arial;'>
 			<tr style='text-align:center; vertical-align: middle; font-size: 15px; font-weight: bold;'>
@@ -41,7 +32,7 @@
 				<td colspan='2' height='22'>Sprzedawca:</td>
 				<td colspan='2'>Nabywca:</td>
 				<td colspan='2' width='100'>Nr abonenta:</td>
-				<td colspan='5'>${subscriberIdn!}</td>
+				<td colspan='5'>${subscriberIdn!}</td> 	
 			</tr>
 			<tr>
 				<td colspan='2' rowspan='3'>
@@ -57,9 +48,13 @@
 			</tr>
 			<tr/>
 			<tr/>
-			<tr class='border_bottom' style='vertical-align: bottom;'>
-				<td colspan='2' height='40'>NIP: ${seller.nip!}</td>
-				<td colspan='9'>NIP/PESEL: ${buyer.nip!}</td>
+			<tr style='vertical-align: bottom;'>
+				<td colspan='2' height='40' style='border-bottom-width: 1px; border-bottom-style: solid;'>
+					NIP: ${seller.nip!}
+				</td>
+				<td colspan='9' style='border-bottom-width: 1px; border-bottom-style: solid;'>
+					NIP/PESEL: ${buyer.nip!}
+				</td>
 			</tr>
 			<tr style='vertical-align: bottom;'>
 				<td colspan='2' height='100'>
@@ -75,38 +70,78 @@
 				<td colspan='11' height='22'/>
 			</tr>
 			
-			<tr class="bordered" style='text-align:center;'>
-				<td rowspan='2' height='22'>Nazwa us³ugi</td>
-				<td rowspan='2' width='70'>Iloœæ</td>
-				<td rowspan='2' colspan="2">Okres</td>
-				<td rowspan='2' colspan="2">Wartoœæ netto</td>
-				<td colspan='3' width='90'>VAT</td>
-				<td rowspan='2' colspan='2' width='90'>Wartoœæ brutto</td>
+			<tr style='text-align:center;'>
+				<td rowspan='2' height='22' style='border: 1px solid;'>
+					Nazwa us³ugi
+				</td>
+				<td rowspan='2' width='70' style='border-top-width: 1px; border-top-style: solid; border-bottom-width: 1px; border-bottom-style: solid;'>
+					Iloœæ
+				</td>
+				<td rowspan='2' colspan="2" style='border: 1px solid;'>
+					Okres
+				</td>
+				<td rowspan='2' colspan="2" style='border-top-width: 1px; border-top-style: solid; border-bottom-width: 1px; border-bottom-style: solid;'>
+					Wartoœæ netto
+				</td>
+				<td colspan='3' width='90' style='border: 1px solid;'>
+					VAT
+				</td>
+				<td rowspan='2' colspan='2' width='90' style='border-top-width: 1px; border-top-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					Wartoœæ brutto
+				</td>
 			</tr>
-			<tr class='bordered' style='text-align:center;'>
-				<td>%</td>
-				<td colspan='2'>kwota</td>
+			<tr style='text-align:center;'>
+				<td style='border-bottom-width: 1px; border-bottom-style: solid; border-left-width: 1px; border-left-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					%
+				</td>
+				<td colspan='2' style='border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					kwota
+				</td>
 			</tr>
 			
 			<#list serviceRecords as serviceRecord>
-			<tr class="bordered">
-				<td height='22'>${serviceRecord.serviceName}</td>
-				<td>${serviceRecord.quantity}</td>
-				<td colspan="2" width='160'>${settlementPeriodStart!}-${settlementPeriodEnd!}</td>
-				<td colspan="2" style='text-align:right;'>${serviceRecord.netAmount?string["0.00"]}</td>
-				<td>${vatRate!}</td>
-				<td colspan='2' style='text-align:right;'>${serviceRecord.vatAmount?string["0.00"]}</td>
-				<td colspan='2' style='text-align:right;'>${serviceRecord.grossAmount?string["0.00"]}</td>
+			<tr>
+				<td height='22'  style='border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					${serviceRecord.serviceName}
+				</td>
+				<td style='border-bottom-width: 1px; border-bottom-style: solid;'>
+					${serviceRecord.quantity}
+				</td>
+				<td colspan="2" width='160' style='border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					${settlementPeriodStart!}-${settlementPeriodEnd!}
+				</td>
+				<td colspan="2" style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid;'>
+					${serviceRecord.netAmount?string["0.00"]}
+				</td>
+				<td style='border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					${vatRate!}
+				</td>
+				<td colspan='2' style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					${serviceRecord.vatAmount?string["0.00"]}
+				</td>
+				<td colspan='2' style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					${serviceRecord.grossAmount?string["0.00"]}
+				</td>
 			</tr>
 			</#list>
 			
-			<tr class='bordered'>
+			<tr>
 				<td colspan='2' height='22'/>
-				<td colspan='2'>RAZEM</td>
-				<td colspan='2' style='text-align:right;'>${netAmount?string["0.00"]}</td>
-				<td style='text-align:center;'>x</td>
-				<td colspan='2' style='text-align:right;'>${vatAmount?string["0.00"]}</td>
-				<td colspan='2' style='text-align:right;'>${grossAmount?string["0.00"]}</td>
+				<td colspan='2' style='border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					RAZEM
+				</td>
+				<td colspan='2' style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid;'>
+					${netAmount?string["0.00"]}
+				</td>
+				<td style='text-align:center; border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					x
+				</td>
+				<td colspan='2' style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					${vatAmount?string["0.00"]}
+				</td>
+				<td colspan='2' style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					${grossAmount?string["0.00"]}
+				</td>
 			</tr>
 			<!-- <tr>
 				<td colspan='5'/>
@@ -139,8 +174,12 @@
 			</tr>
 			
 			<tr style='font-size: 12px; font-style: italic; font-weight: bold;'>
-				<td rowspan='2' height='50'>Razem do zap³aty:</td>
-				<td rowspan='2' height='50'>${grossAmount?string["0.00"]}</td>
+				<td rowspan='2' height='50' style='border: 1px solid;'>
+					Razem do zap³aty:
+				</td>
+				<td rowspan='2' height='50' style='border-top-width: 1px; border-top-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					${grossAmount?string["0.00"]}
+				</td>
 				<td colspan='9' rowspan='2'></td>
 			</tr>
 			<tr/>
@@ -156,8 +195,12 @@
 			</tr>
 			
 			<tr style='font-size: 12px; font-style: italic; font-weight: bold;'>
-				<td rowspan='2' height='50'>Saldo na dzieñ<br/>wystawienia faktury:</td>
-				<td rowspan='2' height='50'>0,00</td>
+				<td rowspan='2' height='50' style='border: 1px solid;'>
+					Saldo na dzieñ<br/>wystawienia faktury:
+				</td>
+				<td rowspan='2' height='50' style='border-top-width: 1px; border-top-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					0,00
+				</td>
 				<td colspan='9' rowspan='2'></td>
 			</tr>
 			<tr/>

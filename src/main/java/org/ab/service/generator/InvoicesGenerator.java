@@ -65,7 +65,7 @@ public class InvoicesGenerator {
 	}
 
 	private String generateHtmlContent(final InvoiceModel invoice) {
-		return contentGenerator.generateHtml(invoice);
+		return this.contentGenerator.generateHtml(invoice);
 	}
 
 	String generateInvoiceNumber(final long invoiceCount, final LocalDate dateFrom) {
@@ -84,6 +84,7 @@ public class InvoicesGenerator {
 		for(final Contract contract : contracts){
 			final InvoiceModel.Builder invoiceBuilder = new InvoiceModel.Builder()
 			.withInvoiceNumber(generateInvoiceNumber(invoiceCount++, dateFrom))
+			.withSubscriberIdn(contract.getSubscriber().getSubscriberIdn())
 			.withContract(contract)
 			.withSettlementPeriodStart(dateFrom)
 			.withSettlementPeriodEnd(dateTo)
@@ -169,7 +170,7 @@ public class InvoicesGenerator {
 			return StringUtils.EMPTY;
 		} else {
 			final StringBuilder sb = new StringBuilder(address.getStreet());
-			sb.append(Joiner.on("/").skipNulls()
+			sb.append(" ").append(Joiner.on("/").skipNulls()
 					.join(address.getHouseNo(), address.getApartmentNo()));
 			return sb.toString();
 		}
@@ -205,13 +206,14 @@ public class InvoicesGenerator {
 	}
 
 	private long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
-		return invoiceDao.getInvoiceCount(dateFrom, dateTo);
+		return this.invoiceDao.getInvoiceCount(dateFrom, dateTo);
 	}
 
 	private InvoiceParticipant getSeller(final Contract contract, final Properties props) {
 		return new InvoiceParticipant.Builder()
 		.withName(props.getProperty("company.name"))
-		.withAddressCity(props.getProperty("company.addressCity"))
+		.withAddressCity(Joiner.on("/").skipNulls()
+				.join(props.getProperty("company.addressZipCode"), props.getProperty("company.addressCity")))
 		.withAddressStreet(props.getProperty("company.addressStreet"))
 		.withRegon(props.getProperty("company.regon"))
 		.withNip(props.getProperty("company.nip"))
