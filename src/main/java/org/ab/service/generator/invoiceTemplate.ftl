@@ -113,8 +113,8 @@
 				<td colspan="2" style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid;'>
 					${serviceRecord.netAmount?string["0.00"]}
 				</td>
-				<td style='border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
-					${vatRate!}
+				<td style='text-align:right; border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
+					${serviceRecord.vatRate!}
 				</td>
 				<td colspan='2' style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
 					${serviceRecord.vatAmount?string["0.00"]}

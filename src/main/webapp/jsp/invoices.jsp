@@ -98,6 +98,7 @@
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.settlementPeriodStart} - ${invoice.settlementPeriodEnd}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.createDate}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.grossAmount}"/></td>
+						<td><input type="button" value="Korekta" onClick="window.location.href = '/correction/new/${invoice.invoiceId}'"/></td>
 					</tr>
 				</c:forEach>
 			</table>

@@ -26,6 +26,11 @@ public class SelectValueService {
 	@Autowired
 	private DurationService durationService;
 
+	public Collection<?> getCorrectionDictionaries() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public Map<String, ?> getInvoicesDictionaries() {
 		final Map<String, Map> results = Maps.newHashMap();
 		results.put("months", Month.asValueMap());
