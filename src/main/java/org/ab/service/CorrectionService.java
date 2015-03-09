@@ -29,7 +29,7 @@ import org.springframework.util.CollectionUtils;
 
 @Component
 @Transactional
-public class InvoicesService {
+public class CorrectionService {
 
 	@Autowired
 	public ContractDao contractDao;
@@ -94,6 +94,11 @@ public class InvoicesService {
 			final Integer invoiceId = invoiceDao.save(entity);
 			invoice.setInvoiceId(invoiceId);
 		}
+	}
+
+	public InvoiceModel prepareCorrection(final int invoiceId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private void printFile(final String file){

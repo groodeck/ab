@@ -11,7 +11,7 @@ import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
 import org.ab.model.SubscriberModel;
 import org.ab.model.dictionary.SelectValueService;
-import org.ab.service.InvoicesService;
+import org.ab.service.CorrectionService;
 import org.assertj.core.util.Collections;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CorrectionController {
 
 	@Autowired
-	private InvoicesService invoicesService;
+	private CorrectionService correctionService;
 
 	@Autowired
 	private SelectValueService selectValuesService;
@@ -58,18 +58,18 @@ public class CorrectionController {
 	@RequestMapping("/new/{invoiceId}")
 	public String handleNewCorrection(@PathVariable final int invoiceId,
 			final Model model) {
-		final InvoiceModel correction = invoicesService.getInvoice(invoiceId);
+		final InvoiceModel correction = correctionService.prepareCorrection(invoiceId);
 
 		model.addAllAttributes(selectValuesService.getCorrectionDictionaries());
 		model.addAttribute("invoices", correction);
-		return "invoices";
+		return "correction";
 	}
 
 	@RequestMapping("/search")
 	public String handleSearchAction(final @RequestParam("searchDateFrom") String searchDateFrom,
 			final @RequestParam("searchDateTo") String searchDateTo, final Model model, final HttpServletRequest request) {
 		final String subscriberIdn = getSubscriberIdn(request.getSession());
-		final List<InvoiceModel> invoices = invoicesService.findInvoices(subscriberIdn, toLocalDate(searchDateFrom), toLocalDate(searchDateTo));
+		final List<InvoiceModel> invoices = correctionService.findInvoices(subscriberIdn, toLocalDate(searchDateFrom), toLocalDate(searchDateTo));
 		model.addAttribute("invoices", invoices);
 		handleInitEntry(model);
 		return "invoices";
