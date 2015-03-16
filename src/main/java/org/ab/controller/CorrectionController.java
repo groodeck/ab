@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.ab.model.CorrectionModel;
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
 import org.ab.model.SubscriberModel;
@@ -51,17 +52,17 @@ public class CorrectionController {
 	@RequestMapping
 	public String handleInitEntry(final Model model) {
 		model.addAttribute("generationParams", new InvoiceGenerationParams(LocalDate.now()));
-		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());
+		model.addAllAttributes(this.selectValuesService.getInvoicesDictionaries());
 		return "invoices";
 	}
 
 	@RequestMapping("/new/{invoiceId}")
 	public String handleNewCorrection(@PathVariable final int invoiceId,
 			final Model model) {
-		final InvoiceModel correction = correctionService.prepareCorrection(invoiceId);
+		final CorrectionModel correction = this.correctionService.prepareCorrection(invoiceId);
 
-		model.addAllAttributes(selectValuesService.getCorrectionDictionaries());
-		model.addAttribute("invoices", correction);
+		model.addAllAttributes(this.selectValuesService.getCorrectionDictionaries());
+		model.addAttribute("correction", correction);
 		return "correction";
 	}
 
@@ -69,7 +70,7 @@ public class CorrectionController {
 	public String handleSearchAction(final @RequestParam("searchDateFrom") String searchDateFrom,
 			final @RequestParam("searchDateTo") String searchDateTo, final Model model, final HttpServletRequest request) {
 		final String subscriberIdn = getSubscriberIdn(request.getSession());
-		final List<InvoiceModel> invoices = correctionService.findInvoices(subscriberIdn, toLocalDate(searchDateFrom), toLocalDate(searchDateTo));
+		final List<InvoiceModel> invoices = this.correctionService.findInvoices(subscriberIdn, toLocalDate(searchDateFrom), toLocalDate(searchDateTo));
 		model.addAttribute("invoices", invoices);
 		handleInitEntry(model);
 		return "invoices";

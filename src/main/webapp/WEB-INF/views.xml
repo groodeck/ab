@@ -27,6 +27,10 @@
 			<put-attribute name="content" value="/jsp/invoices.jsp"/>
 		</definition>
 		
+		<definition name="correction" extends="template">
+			<put-attribute name="content" value="/jsp/correction.jsp"/>
+		</definition>
+		
 		<definition name="payments" extends="template">
 			<put-attribute name="content" value="/jsp/payments.jsp"/>
 		</definition>

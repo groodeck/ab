@@ -89,7 +89,7 @@ public class InvoicesGenerator {
 			.withSettlementPeriodStart(dateFrom)
 			.withSettlementPeriodEnd(dateTo)
 			.withSeller(getSeller(contract, props))
-			.withBuyer(getBuyer(contract))
+			.withBuyer(getBuyer(contract.getSubscriber()))
 			.withCreateDate(currentDate)
 			.withReceiveDate(currentDate)
 			.withDateHeader(city + ", " + currentDate)
@@ -176,9 +176,8 @@ public class InvoicesGenerator {
 		}
 	}
 
-	private InvoiceParticipant getBuyer(final Contract contract) {
+	public InvoiceParticipant getBuyer(final Subscriber subscriber) {
 		final InvoiceParticipant.Builder builder = new InvoiceParticipant.Builder();
-		final Subscriber subscriber = contract.getSubscriber();
 		final Address address = determineInvoiceAddress(subscriber.getAddresses());
 		if(subscriber.getClientType() == ClientType.INDIVIDUAL){
 			builder.withName(Joiner.on(" ").join(subscriber.getName(), subscriber.getSurname()));

@@ -10,6 +10,7 @@ import org.ab.entity.Subscriber;
 import org.ab.model.InvoiceModel;
 import org.ab.service.generator.InvoiceParticipant;
 import org.ab.service.generator.InvoiceServiceRecord;
+import org.ab.service.generator.InvoicesGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,9 @@ public class InvoiceConverter {
 
 	@Autowired
 	private DeviceConverter deviceConverter;
+
+	@Autowired
+	private InvoicesGenerator ivoicesGenerator;
 
 	private final Function<InvoiceModel, org.ab.entity.Invoice> toEntityInvoice =
 			new Function<InvoiceModel, org.ab.entity.Invoice>(){
@@ -97,17 +101,19 @@ public class InvoiceConverter {
 		}
 
 		private InvoiceParticipant convertSubscriber(final Subscriber subscriber) {
-			return new InvoiceParticipant.Builder()
-			.withName(subscriber.getEffectiveName())
-			.build();
+			return InvoiceConverter.this.ivoicesGenerator.getBuyer(subscriber);
 		}
 	};
 
 	public org.ab.entity.Invoice convert(final InvoiceModel invoice) {
-		return toEntityInvoice.apply(invoice);
+		return this.toEntityInvoice.apply(invoice);
 	}
 
 	public List<InvoiceModel> convertEntities(final List<org.ab.entity.Invoice> invoices) {
-		return FluentIterable.from(invoices).transform(toModelInvoice).toList();
+		return FluentIterable.from(invoices).transform(this.toModelInvoice).toList();
+	}
+
+	public InvoiceModel convertEntity(final org.ab.entity.Invoice invoice) {
+		return this.toModelInvoice.apply(invoice);
 	}
 }

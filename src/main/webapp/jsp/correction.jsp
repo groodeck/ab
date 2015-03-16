@@ -40,7 +40,8 @@
    <h2>Korekta</h2>
    
    <div style="float:left; width: 100;">
-   <sf:form>
+   
+   <sf:form action="/correction/save" method="post" commandName="correction">
 		<table style="font-family:sans-serif;" >
 			<tr>
 				<td>Numer kortekty</td>
@@ -57,9 +58,9 @@
 			<tr>
 				<td>Sprzedający</td>
 				<td>
-					<sf:label path="${seller.name}" /><br/>
-					<sf:label path="${seller.addressStreet}" /><br/>
-					<sf:label path="${seller.addressCity}" />
+					<sf:input path="${seller.name}" /><br/>
+					<sf:input path="${seller.addressStreet}" /><br/>
+					<sf:input path="${seller.addressCity}" />
 				</td>
 			</tr>
 			<tr>
@@ -73,7 +74,7 @@
 			<tr>
 				<td>Data wystawienia korekty</td>
 				<td>
-					<custom:date name="createDate" value="${correction.createDate}" />
+					<custom:date name="createDate" identifier="createDate" value="${correction.createDate}" />
 				</td>
 			</tr>
 			<tr>

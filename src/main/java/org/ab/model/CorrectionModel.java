@@ -54,21 +54,22 @@ public class CorrectionModel {
 		}
 
 		public Builder fromInvoice(final InvoiceModel invoice) {
+			final LocalDate currentDate = LocalDate.now();
 			this.invoice = invoice;
-			contract = invoice.getContract();
-			buyer = invoice.getBuyer();
-			seller = invoice.getSeller();
-			subscriberIdn = invoice.getSubscriberIdn();
-			createDate = invoice.getCreateDate();
-			dateHeader = invoice.getDateHeader();
-			paymentDate = invoice.getPaymentDate();
-			receiveDate = invoice.getReceiveDate();
-			settlementPeriodStart = invoice.getSettlementPeriodStart();
-			settlementPeriodEnd = invoice.getSettlementPeriodEnd();
-			netAmount = invoice.getNetAmount();
-			vatAmount = invoice.getVatAmount();
-			grossAmount = invoice.getGrossAmount();
-			serviceRecords.addAll(createServiceRecords(invoice.getServiceRecords()));
+			this.contract = invoice.getContract();
+			this.buyer = invoice.getBuyer();
+			this.seller = invoice.getSeller();
+			this.subscriberIdn = invoice.getSubscriberIdn();
+			this.createDate = currentDate;
+			this.dateHeader = invoice.getDateHeader();
+			this.paymentDate = currentDate.plusWeeks(2);
+			this.receiveDate = invoice.getReceiveDate();
+			this.settlementPeriodStart = invoice.getSettlementPeriodStart();
+			this.settlementPeriodEnd = invoice.getSettlementPeriodEnd();
+			this.netAmount = invoice.getNetAmount();
+			this.vatAmount = invoice.getVatAmount();
+			this.grossAmount = invoice.getGrossAmount();
+			this.serviceRecords.addAll(createServiceRecords(invoice.getServiceRecords()));
 
 			return this;
 		}
@@ -114,7 +115,7 @@ public class CorrectionModel {
 		}
 
 		public Builder withHtmlContent(final String invoiceHtml) {
-			htmlContent = invoiceHtml;
+			this.htmlContent = invoiceHtml;
 			return this;
 		}
 
@@ -129,7 +130,7 @@ public class CorrectionModel {
 		}
 
 		public Builder withPaymentDate(final LocalDate date) {
-			paymentDate = date;
+			this.paymentDate = date;
 			return this;
 		}
 
@@ -144,7 +145,7 @@ public class CorrectionModel {
 		}
 
 		public Builder withServiceRecord(final CorrectionServiceRecord serviceRecord) {
-			serviceRecords.add(serviceRecord);
+			this.serviceRecords.add(serviceRecord);
 			return this;
 		}
 
@@ -154,12 +155,12 @@ public class CorrectionModel {
 		}
 
 		public Builder withSettlementPeriodEnd(final LocalDate date) {
-			settlementPeriodEnd = date;
+			this.settlementPeriodEnd = date;
 			return this;
 		}
 
 		public Builder withSettlementPeriodStart(final LocalDate date) {
-			settlementPeriodStart = date;
+			this.settlementPeriodStart = date;
 			return this;
 		}
 
@@ -195,101 +196,101 @@ public class CorrectionModel {
 	private String htmlContent;
 
 	private CorrectionModel(final Builder builder){
-		invoice = builder.invoice;
-		subscriberIdn = builder.subscriberIdn;
-		seller = builder.seller;
-		buyer = builder.buyer;
-		correctionNumber = builder.correctionNumber;
-		dateHeader = builder.dateHeader;
-		createDate = builder.createDate;
-		receiveDate = builder.receiveDate;
-		serviceRecords = builder.serviceRecords;
-		netAmount = builder.netAmount;
-		vatAmount = builder.vatAmount;
-		grossAmount = builder.grossAmount;
-		grossAmountWords = builder.grossAmountWords;
-		contract = builder.contract;
-		settlementPeriodStart = builder.settlementPeriodStart;
-		settlementPeriodEnd = builder.settlementPeriodEnd;
-		correctionId = builder.correctionId;
-		paymentDate = builder.paymentDate;
-		htmlContent = builder.htmlContent;
+		this.invoice = builder.invoice;
+		this.subscriberIdn = builder.subscriberIdn;
+		this.seller = builder.seller;
+		this.buyer = builder.buyer;
+		this.correctionNumber = builder.correctionNumber;
+		this.dateHeader = builder.dateHeader;
+		this.createDate = builder.createDate;
+		this.receiveDate = builder.receiveDate;
+		this.serviceRecords = builder.serviceRecords;
+		this.netAmount = builder.netAmount;
+		this.vatAmount = builder.vatAmount;
+		this.grossAmount = builder.grossAmount;
+		this.grossAmountWords = builder.grossAmountWords;
+		this.contract = builder.contract;
+		this.settlementPeriodStart = builder.settlementPeriodStart;
+		this.settlementPeriodEnd = builder.settlementPeriodEnd;
+		this.correctionId = builder.correctionId;
+		this.paymentDate = builder.paymentDate;
+		this.htmlContent = builder.htmlContent;
 	}
 
 	public InvoiceParticipant getBuyer() {
-		return buyer;
+		return this.buyer;
 	}
 
 	public Contract getContract() {
-		return contract;
+		return this.contract;
 	}
 
 	public LocalDate getCreateDate() {
-		return createDate;
+		return this.createDate;
 	}
 
 	public String getDateHeader() {
-		return dateHeader;
+		return this.dateHeader;
 	}
 
 	public BigDecimal getGrossAmount() {
-		return grossAmount;
+		return this.grossAmount;
 	}
 
 	public String getGrossAmountWords() {
-		return grossAmountWords;
+		return this.grossAmountWords;
 	}
 
 	public String getHtmlContent() {
-		return htmlContent;
+		return this.htmlContent;
 	}
 
 	public InvoiceModel getInvoice() {
-		return invoice;
+		return this.invoice;
 	}
 
 	public Integer getInvoiceId() {
-		return correctionId;
+		return this.correctionId;
 	}
 
 	public String getInvoiceNumber() {
-		return correctionNumber;
+		return this.correctionNumber;
 	}
 
 	public BigDecimal getNetAmount() {
-		return netAmount;
+		return this.netAmount;
 	}
 
 	public LocalDate getPaymentDate() {
-		return paymentDate;
+		return this.paymentDate;
 	}
 
 	public LocalDate getReceiveDate() {
-		return receiveDate;
+		return this.receiveDate;
 	}
 
 	public InvoiceParticipant getSeller() {
-		return seller;
+		return this.seller;
 	}
 
 	public List<CorrectionServiceRecord> getServiceRecords() {
-		return serviceRecords;
+		return this.serviceRecords;
 	}
 
 	public LocalDate getSettlementPeriodEnd() {
-		return settlementPeriodEnd;
+		return this.settlementPeriodEnd;
 	}
 
 	public LocalDate getSettlementPeriodStart() {
-		return settlementPeriodStart;
+		return this.settlementPeriodStart;
 	}
 
 	public String getSubscriberIdn() {
-		return subscriberIdn;
+		return this.subscriberIdn;
 	}
 
 	public BigDecimal getVatAmount() {
-		return vatAmount;
+		return this.vatAmount;
 	}
 
 	public void setHtmlContent(final String htmlContent) {
@@ -297,6 +298,6 @@ public class CorrectionModel {
 	}
 
 	public void setInvoiceId(final Integer invoiceId) {
-		correctionId = invoiceId;
+		this.correctionId = invoiceId;
 	}
 }

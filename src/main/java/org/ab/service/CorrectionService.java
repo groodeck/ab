@@ -16,6 +16,8 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import org.ab.dao.ContractDao;
 import org.ab.dao.InvoiceDao;
 import org.ab.entity.Contract;
+import org.ab.entity.Invoice;
+import org.ab.model.CorrectionModel;
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
 import org.ab.service.converter.InvoiceConverter;
@@ -47,19 +49,19 @@ public class CorrectionService {
 	private InvoiceFileGenerator invoiceFileGenerator;
 
 	public List<InvoiceModel> findInvoices(final String subscriberIdn, final LocalDate dateFrom, final LocalDate dateTo) {
-		final List<org.ab.entity.Invoice> invoices = invoiceDao.findInvoices(subscriberIdn, dateFrom, dateTo);
-		return invoiceConverter.convertEntities(invoices);
+		final List<org.ab.entity.Invoice> invoices = this.invoiceDao.findInvoices(subscriberIdn, dateFrom, dateTo);
+		return this.invoiceConverter.convertEntities(invoices);
 	}
 
 	@Transactional
 	public List<InvoiceModel> generateInvoices(final InvoiceGenerationParams generationParams) {
 		final LocalDate dateFrom = getFirstOfMonth(generationParams);
 		final LocalDate dateTo = getLastOfMonth(generationParams);
-		final List<Contract> contracts = contractDao.findContracts(dateFrom, dateTo);
-		final List<InvoiceModel> invoices = invoicesGenerator.generateInvoices(contracts, dateFrom, dateTo);
+		final List<Contract> contracts = this.contractDao.findContracts(dateFrom, dateTo);
+		final List<InvoiceModel> invoices = this.invoicesGenerator.generateInvoices(contracts, dateFrom, dateTo);
 		if(!CollectionUtils.isEmpty(invoices)){
 			persist(invoices);
-			final List<String> filesToPrint = invoiceFileGenerator.generatePdf(invoices);
+			final List<String> filesToPrint = this.invoiceFileGenerator.generatePdf(invoices);
 			// TODO:
 			//	1. uncomment in production
 			// 	2. print only invoices for specific subscriber - email not defined;
@@ -74,7 +76,7 @@ public class CorrectionService {
 	}
 
 	public String getInvoiceHtmlContent(final int invoiceId) {
-		final org.ab.entity.Invoice invoice = invoiceDao.getInvoice(invoiceId);
+		final org.ab.entity.Invoice invoice = this.invoiceDao.getInvoice(invoiceId);
 		return invoice.getInvoiceContent().getInvoiceHtml();
 	}
 
@@ -90,15 +92,18 @@ public class CorrectionService {
 
 	private void persist(final List<InvoiceModel> invoices) {
 		for(final InvoiceModel invoice : invoices){
-			final org.ab.entity.Invoice entity = invoiceConverter.convert(invoice);
-			final Integer invoiceId = invoiceDao.save(entity);
+			final org.ab.entity.Invoice entity = this.invoiceConverter.convert(invoice);
+			final Integer invoiceId = this.invoiceDao.save(entity);
 			invoice.setInvoiceId(invoiceId);
 		}
 	}
 
-	public InvoiceModel prepareCorrection(final int invoiceId) {
+	public CorrectionModel prepareCorrection(final int invoiceId) {
 		// TODO Auto-generated method stub
-		return null;
+		final Invoice invoice = this.invoiceDao.getInvoice(invoiceId);
+		final InvoiceModel invoiceModel = this.invoiceConverter.convertEntity(invoice);
+
+		return new CorrectionModel.Builder().fromInvoice(invoiceModel).build();
 	}
 
 	private void printFile(final String file){
