@@ -41,9 +41,9 @@
 					${seller.addressStreet!}<br/>
 				</td>
 				<td colspan='9' rowspan='3'>
-					${buyer.name!}<br/>
-					${buyer.addressStreet!}<br/>
-					${buyer.addressCity!}
+					${subscriber.name!}<br/>
+					${subscriber.addressStreet!}<br/>
+					${subscriber.addressCity!}
 				</td>
 			</tr>
 			<tr/>
@@ -53,7 +53,7 @@
 					NIP: ${seller.nip!}
 				</td>
 				<td colspan='9' style='border-bottom-width: 1px; border-bottom-style: solid;'>
-					NIP/PESEL: ${buyer.nip!}
+					NIP/PESEL: ${subscriber.nip!}
 				</td>
 			</tr>
 			<tr style='vertical-align: bottom;'>

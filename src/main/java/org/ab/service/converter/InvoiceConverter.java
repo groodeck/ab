@@ -11,6 +11,7 @@ import org.ab.model.InvoiceModel;
 import org.ab.service.generator.InvoiceParticipant;
 import org.ab.service.generator.InvoiceServiceRecord;
 import org.ab.service.generator.InvoicesGenerator;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -85,35 +86,61 @@ public class InvoiceConverter {
 		@Override
 		public InvoiceModel apply(final org.ab.entity.Invoice input) {
 			final InvoiceModel model = new InvoiceModel.Builder()
-			.withInvoiceId(input.getInvoiceId())
-			.withInvoiceNumber(input.getInvoiceNumber())
-			.withBuyer(convertSubscriber(input.getContract().getSubscriber()))
-			.withCreateDate(input.getCreateDate())
-			.withReceiveDate(input.getReceiveDate())
-			.withSettlementPeriodStart(input.getSettlementPeriodStart())
-			.withSettlementPeriodEnd(input.getSettlementPeriodEnd())
-			.withNetAmount(input.getNetAmount())
-			.withVatAmount(input.getVatAmount())
-			.withGrossAmount(input.getGrossAmount())
-			.withPaymentDate(input.getPaymentDate())
-			.build();
+				.withInvoiceId(input.getInvoiceId())
+				.withInvoiceNumber(input.getInvoiceNumber())
+				.withSubscriber(convertSubscriber(input.getContract().getSubscriber()))
+				.withSeller(getSeller())
+				.withCreateDate(input.getCreateDate())
+				.withReceiveDate(input.getReceiveDate())
+				.withSettlementPeriodStart(input.getSettlementPeriodStart())
+				.withSettlementPeriodEnd(input.getSettlementPeriodEnd())
+				.withNetAmount(input.getNetAmount())
+				.withVatAmount(input.getVatAmount())
+				.withGrossAmount(input.getGrossAmount())
+				.withPaymentDate(input.getPaymentDate())
+				.withServiceRecords(convertRecords(input.getInvoiceRecords()))
+				.build();
 			return model;
 		}
 
+		private List<InvoiceServiceRecord> convertRecords(
+				final List<InvoiceRecord> invoiceRecords) {
+			return Lists.newArrayList(FluentIterable.from(invoiceRecords).transform(
+					new Function<InvoiceRecord, InvoiceServiceRecord>(){
+
+						@Override
+						public InvoiceServiceRecord apply(final InvoiceRecord input) {
+							return new InvoiceServiceRecord.Builder()
+								.withServiceName(input.getServiceName())
+								.withQuantity(input.getQuantity())
+								.withNetPrice(input.getNetAmount())
+								.withNetAmount(input.getNetAmount())
+								.withVatRate(input.getVatRate())
+								.withVatAmount(input.getVatAmount())
+								.withGrossAmount(input.getGrossAmount())
+								.build();
+						}
+					}).toList());
+		}
+
+		private InvoiceParticipant getSeller() {
+			return ivoicesGenerator.getSeller();
+		}
+
 		private InvoiceParticipant convertSubscriber(final Subscriber subscriber) {
-			return InvoiceConverter.this.ivoicesGenerator.getBuyer(subscriber);
+			return ivoicesGenerator.getInvoiceParticipant(subscriber);
 		}
 	};
 
 	public org.ab.entity.Invoice convert(final InvoiceModel invoice) {
-		return this.toEntityInvoice.apply(invoice);
+		return toEntityInvoice.apply(invoice);
 	}
 
 	public List<InvoiceModel> convertEntities(final List<org.ab.entity.Invoice> invoices) {
-		return FluentIterable.from(invoices).transform(this.toModelInvoice).toList();
+		return FluentIterable.from(invoices).transform(toModelInvoice).toList();
 	}
 
 	public InvoiceModel convertEntity(final org.ab.entity.Invoice invoice) {
-		return this.toModelInvoice.apply(invoice);
+		return toModelInvoice.apply(invoice);
 	}
 }

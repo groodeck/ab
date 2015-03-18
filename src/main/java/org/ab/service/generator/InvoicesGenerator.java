@@ -88,8 +88,8 @@ public class InvoicesGenerator {
 			.withContract(contract)
 			.withSettlementPeriodStart(dateFrom)
 			.withSettlementPeriodEnd(dateTo)
-			.withSeller(getSeller(contract, props))
-			.withBuyer(getBuyer(contract.getSubscriber()))
+			.withSeller(getSeller(props))
+			.withSubscriber(getInvoiceParticipant(contract.getSubscriber()))
 			.withCreateDate(currentDate)
 			.withReceiveDate(currentDate)
 			.withDateHeader(city + ", " + currentDate)
@@ -176,7 +176,7 @@ public class InvoicesGenerator {
 		}
 	}
 
-	public InvoiceParticipant getBuyer(final Subscriber subscriber) {
+	public InvoiceParticipant getInvoiceParticipant(final Subscriber subscriber) {
 		final InvoiceParticipant.Builder builder = new InvoiceParticipant.Builder();
 		final Address address = determineInvoiceAddress(subscriber.getAddresses());
 		if(subscriber.getClientType() == ClientType.INDIVIDUAL){
@@ -208,7 +208,12 @@ public class InvoicesGenerator {
 		return this.invoiceDao.getInvoiceCount(dateFrom, dateTo);
 	}
 
-	private InvoiceParticipant getSeller(final Contract contract, final Properties props) {
+	public InvoiceParticipant getSeller() {
+		final Properties props = loadProperties("companyDetails.properties");
+		return getSeller(props);
+	}
+
+	public InvoiceParticipant getSeller(final Properties props) {
 		return new InvoiceParticipant.Builder()
 		.withName(props.getProperty("company.name"))
 		.withAddressCity(Joiner.on("/").skipNulls()

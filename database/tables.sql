@@ -116,7 +116,7 @@ create table service(
  	packageId integer,
 );
 
-create table invoice(
+create table Invoice(
 	invoiceId integer not null IDENTITY PRIMARY KEY,
 	contractId integer,
  	settlementPeriodStart date not null,
@@ -131,7 +131,7 @@ create table invoice(
  	paymentDate date,
 );
 
-create table invoiceRecord(
+create table InvoiceRecord(
 	invoiceRecordId integer not null IDENTITY PRIMARY KEY,
 	serviceName varchar(100) not null,
 	quantity integer,
@@ -143,7 +143,7 @@ create table invoiceRecord(
  	invoiceId integer,
 );
 
-create table invoiceContent(
+create table InvoiceContent(
  	invoiceId integer not null IDENTITY PRIMARY KEY,
 	invoiceHtml clob not null,
 );
@@ -155,9 +155,22 @@ create table Payment(
 	paymentAmount numeric(12,2) not null,
 );
 
-create table invoicePayment(
+create table InvoicePayment(
 	invoicePaymentId integer not null IDENTITY PRIMARY KEY,
  	invoiceId integer ,
 	paymentId integer ,
 	paymentAmount numeric(12,2) not null,
+);
+
+create table Correction(
+	correctionId integer not null IDENTITY PRIMARY KEY,
+	invoiceId integer,
+ 	correctionNumber varchar(30) not null,
+ 	createDate date,
+ 	receiveDate date,
+ 	netAmount numeric(12,2),
+ 	vatAmount numeric(12,2),
+ 	grossAmount numeric(12,2),
+ 	grossAmountWords varchar(150),
+ 	paymentDate date,
 );

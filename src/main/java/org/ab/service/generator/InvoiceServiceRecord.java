@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class InvoiceServiceRecord {
 	public static class Builder {
+		private Integer invoiceRecordId;
 		private Integer lp;
 		private String serviceName;
 		private Integer vatRate;
@@ -15,6 +16,11 @@ public class InvoiceServiceRecord {
 
 		public InvoiceServiceRecord build(){
 			return new InvoiceServiceRecord(this);
+		}
+
+		public Builder withInvoiceRecordId(final Integer invoiceRecordId) {
+			this.invoiceRecordId = invoiceRecordId;
+			return this;
 		}
 
 		public Builder withGrossAmount(final BigDecimal grossAmount) {
@@ -57,6 +63,8 @@ public class InvoiceServiceRecord {
 			return this;
 		}
 	}
+
+	private final Integer invoiceRecordId;
 	private final Integer lp;
 	private final String serviceName;
 	private final Integer vatRate;
@@ -67,6 +75,7 @@ public class InvoiceServiceRecord {
 
 	private final Integer quantity;
 	public InvoiceServiceRecord(final Builder builder) {
+		invoiceRecordId = builder.invoiceRecordId;
 		lp = builder.lp;
 		serviceName = builder.serviceName;
 		netPrice = builder.netPrice;
@@ -101,5 +110,8 @@ public class InvoiceServiceRecord {
 
 	public Integer getVatRate() {
 		return vatRate;
+	}
+	public Integer getInvoiceRecordId() {
+		return invoiceRecordId;
 	}
 }

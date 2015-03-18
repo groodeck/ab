@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 public class CorrectionServiceRecord {
 	public static class Builder {
+		private Integer correctionRecordId;
 		private InvoiceServiceRecord invoiceRecord;
-		private Integer lp;
 		private String serviceName;
 		private Integer vatRate;
 		private BigDecimal netPrice;
@@ -20,7 +20,6 @@ public class CorrectionServiceRecord {
 
 		public Builder fromInvoiceServiceRecord(final InvoiceServiceRecord invoiceRecord){
 			this.invoiceRecord = invoiceRecord;
-			lp = invoiceRecord.getLp();
 			serviceName = invoiceRecord.getServiceName();
 			vatRate = invoiceRecord.getVatRate();
 			quantity = invoiceRecord.getQuantity();
@@ -31,6 +30,11 @@ public class CorrectionServiceRecord {
 			return this;
 		}
 
+		public Builder withCorrectionRecordId(final Integer correctionRecordId) {
+			this.correctionRecordId = correctionRecordId;
+			return this;
+		}
+
 		public Builder withGrossAmount(final BigDecimal grossAmount) {
 			this.grossAmount = grossAmount;
 			return this;
@@ -38,11 +42,6 @@ public class CorrectionServiceRecord {
 
 		public Builder withInvoiceServiceRecord(final InvoiceServiceRecord invoiceRecord){
 			this.invoiceRecord = invoiceRecord;
-			return this;
-		}
-
-		public Builder withLp(final Integer lp) {
-			this.lp = lp;
 			return this;
 		}
 
@@ -77,18 +76,18 @@ public class CorrectionServiceRecord {
 		}
 	}
 
-	private final InvoiceServiceRecord invoiceRecord;
-	private final Integer lp;
-	private final String serviceName;
-	private final Integer vatRate;
-	private final BigDecimal netAmount;
-	private final BigDecimal netPrice;
-	private final BigDecimal vatAmount;
-	private final BigDecimal grossAmount;
+	private Integer correctionRecordId;
+	private InvoiceServiceRecord invoiceRecord;
+	private String serviceName;
+	private Integer vatRate;
+	private BigDecimal netAmount;
+	private BigDecimal netPrice;
+	private BigDecimal vatAmount;
+	private BigDecimal grossAmount;
+	private Integer quantity;
 
-	private final Integer quantity;
 	public CorrectionServiceRecord(final Builder builder) {
-		lp = builder.lp;
+		correctionRecordId = builder.correctionRecordId;
 		serviceName = builder.serviceName;
 		netPrice = builder.netPrice;
 		vatRate = builder.vatRate;
@@ -103,9 +102,6 @@ public class CorrectionServiceRecord {
 	}
 	public InvoiceServiceRecord getInvoiceRecord() {
 		return invoiceRecord;
-	}
-	public Integer getLp() {
-		return lp;
 	}
 	public BigDecimal getNetAmount() {
 		return netAmount;
@@ -126,5 +122,35 @@ public class CorrectionServiceRecord {
 	}
 	public Integer getVatRate() {
 		return vatRate;
+	}
+	public Integer getCorrectionRecordId() {
+		return correctionRecordId;
+	}
+	public void setCorrectionRecordId(final Integer correctionRecordId) {
+		this.correctionRecordId = correctionRecordId;
+	}
+	public void setInvoiceRecord(final InvoiceServiceRecord invoiceRecord) {
+		this.invoiceRecord = invoiceRecord;
+	}
+	public void setServiceName(final String serviceName) {
+		this.serviceName = serviceName;
+	}
+	public void setVatRate(final Integer vatRate) {
+		this.vatRate = vatRate;
+	}
+	public void setNetAmount(final BigDecimal netAmount) {
+		this.netAmount = netAmount;
+	}
+	public void setNetPrice(final BigDecimal netPrice) {
+		this.netPrice = netPrice;
+	}
+	public void setVatAmount(final BigDecimal vatAmount) {
+		this.vatAmount = vatAmount;
+	}
+	public void setGrossAmount(final BigDecimal grossAmount) {
+		this.grossAmount = grossAmount;
+	}
+	public void setQuantity(final Integer quantity) {
+		this.quantity = quantity;
 	}
 }

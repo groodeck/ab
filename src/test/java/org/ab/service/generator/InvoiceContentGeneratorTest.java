@@ -32,7 +32,7 @@ public class InvoiceContentGeneratorTest {
 			.withGrossAmount(new BigDecimal(122))
 			.withGrossAmountWords("sto dwadziescia dwa z³ote 00/100")
 			.withSeller(createDefaultSeller())
-			.withBuyer(createDefaultBuyer())
+			.withSubscriber(createDefaultSubscriber())
 			.build();
 
 		// when
@@ -42,7 +42,7 @@ public class InvoiceContentGeneratorTest {
 		System.out.println(html);
 	}
 
-	private InvoiceParticipant createDefaultBuyer() {
+	private InvoiceParticipant createDefaultSubscriber() {
 		return new InvoiceParticipant.Builder()
 			.withName("Jan Kowalski")
 			.withAddressStreet("Akacjowa 15/8")

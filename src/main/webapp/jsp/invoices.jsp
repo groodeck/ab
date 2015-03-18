@@ -94,7 +94,7 @@
 					<tr>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${status.index + 1}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.invoiceNumber}"/></td>
-						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.buyer.name}"/></td>
+						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.subscriber.name}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.settlementPeriodStart} - ${invoice.settlementPeriodEnd}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.createDate}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.grossAmount}"/></td>

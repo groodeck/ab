@@ -42,17 +42,17 @@ public class InvoicesController {
 	@RequestMapping
 	public String handleInitEntry(final Model model) {
 		model.addAttribute("generationParams", new InvoiceGenerationParams(LocalDate.now()));
-		model.addAllAttributes(this.selectValuesService.getInvoicesDictionaries());
+		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());
 		return "invoices";
 	}
 
 	@RequestMapping("/generate")
 	public String handleInvoicesGeneration(final @ModelAttribute("generationParams") InvoiceGenerationParams generationParams,
 			final Model model) {
-		final List<InvoiceModel> invoices = this.invoicesService.generateInvoices(generationParams);
+		final List<InvoiceModel> invoices = invoicesService.generateInvoices(generationParams);
 		model.addAttribute("uiMessage", getGenerationResultsMessage(invoices));
 
-		model.addAllAttributes(this.selectValuesService.getInvoicesDictionaries());
+		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());
 		model.addAttribute("invoices", invoices);
 		return "invoices";
 	}
@@ -61,7 +61,7 @@ public class InvoicesController {
 	public String handleSearchAction(final @RequestParam("searchDateFrom") String searchDateFrom,
 			final @RequestParam("searchDateTo") String searchDateTo, final Model model, final HttpServletRequest request) {
 		final String subscriberIdn = getSubscriberIdn(request.getSession());
-		final List<InvoiceModel> invoices = this.invoicesService.findInvoices(subscriberIdn, toLocalDate(searchDateFrom), toLocalDate(searchDateTo));
+		final List<InvoiceModel> invoices = invoicesService.findInvoices(subscriberIdn, toLocalDate(searchDateFrom), toLocalDate(searchDateTo));
 		model.addAttribute("invoices", invoices);
 		handleInitEntry(model);
 		return "invoices";

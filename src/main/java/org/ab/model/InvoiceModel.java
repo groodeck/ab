@@ -15,7 +15,7 @@ public class InvoiceModel {
 		private Integer invoiceId;
 		private String subscriberIdn;
 		private InvoiceParticipant seller;
-		private InvoiceParticipant buyer;
+		private InvoiceParticipant subscriber;
 		private String invoiceNumber;
 		private String dateHeader;
 		private LocalDate createDate;
@@ -35,8 +35,8 @@ public class InvoiceModel {
 			return new InvoiceModel(this);
 		}
 
-		public Builder withBuyer(final InvoiceParticipant buyer) {
-			this.buyer = buyer;
+		public Builder withSubscriber(final InvoiceParticipant subscriber) {
+			this.subscriber = subscriber;
 			return this;
 		}
 
@@ -133,7 +133,7 @@ public class InvoiceModel {
 	private Integer invoiceId;
 	private final String subscriberIdn;
 	private final InvoiceParticipant seller;
-	private final InvoiceParticipant buyer;
+	private final InvoiceParticipant subscriber;
 	private final String invoiceNumber;
 	private final String dateHeader;
 	private final LocalDate createDate;
@@ -152,7 +152,7 @@ public class InvoiceModel {
 	private InvoiceModel(final Builder builder){
 		subscriberIdn = builder.subscriberIdn;
 		seller = builder.seller;
-		buyer = builder.buyer;
+		subscriber = builder.subscriber;
 		invoiceNumber = builder.invoiceNumber;
 		dateHeader = builder.dateHeader;
 		createDate = builder.createDate;
@@ -170,8 +170,8 @@ public class InvoiceModel {
 		htmlContent = builder.htmlContent;
 	}
 
-	public InvoiceParticipant getBuyer() {
-		return buyer;
+	public InvoiceParticipant getSubscriber() {
+		return subscriber;
 	}
 
 	public Contract getContract() {
