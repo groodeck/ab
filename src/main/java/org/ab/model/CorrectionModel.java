@@ -137,7 +137,7 @@ public class CorrectionModel {
 	private String dateHeader;
 	private LocalDate createDate;
 	private LocalDate receiveDate;
-	private List<CorrectionServiceRecord> serviceRecords;
+	private List<CorrectionServiceRecord> serviceRecords = Lists.newArrayList();
 	private BigDecimal netAmount;
 	private BigDecimal vatAmount;
 	private BigDecimal grossAmount;
@@ -145,10 +145,10 @@ public class CorrectionModel {
 	private LocalDate paymentDate;
 	private String htmlContent;
 
-	private CorrectionModel(){
+	public CorrectionModel(){
 	}
 
-	private CorrectionModel(final Builder builder){
+	public CorrectionModel(final Builder builder){
 		invoice = builder.invoice;
 		correctionNumber = builder.correctionNumber;
 		dateHeader = builder.dateHeader;
@@ -168,48 +168,16 @@ public class CorrectionModel {
 		return correctionId;
 	}
 
-	public void setCorrectionId(final Integer correctionId) {
-		this.correctionId = correctionId;
-	}
-
-	public String getHtmlContent() {
-		return htmlContent;
-	}
-
-	public void setHtmlContent(final String htmlContent) {
-		this.htmlContent = htmlContent;
-	}
-
-	public InvoiceModel getInvoice() {
-		return invoice;
-	}
-
 	public String getCorrectionNumber() {
 		return correctionNumber;
-	}
-
-	public String getDateHeader() {
-		return dateHeader;
 	}
 
 	public LocalDate getCreateDate() {
 		return createDate;
 	}
 
-	public LocalDate getReceiveDate() {
-		return receiveDate;
-	}
-
-	public List<CorrectionServiceRecord> getServiceRecords() {
-		return serviceRecords;
-	}
-
-	public BigDecimal getNetAmount() {
-		return netAmount;
-	}
-
-	public BigDecimal getVatAmount() {
-		return vatAmount;
+	public String getDateHeader() {
+		return dateHeader;
 	}
 
 	public BigDecimal getGrossAmount() {
@@ -220,40 +188,48 @@ public class CorrectionModel {
 		return grossAmountWords;
 	}
 
+	public String getHtmlContent() {
+		return htmlContent;
+	}
+
+	public InvoiceModel getInvoice() {
+		return invoice;
+	}
+
+	public BigDecimal getNetAmount() {
+		return netAmount;
+	}
+
 	public LocalDate getPaymentDate() {
 		return paymentDate;
 	}
 
-	public void setInvoice(final InvoiceModel invoice) {
-		this.invoice = invoice;
+	public LocalDate getReceiveDate() {
+		return receiveDate;
+	}
+
+	public List<CorrectionServiceRecord> getServiceRecords() {
+		return serviceRecords;
+	}
+
+	public BigDecimal getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setCorrectionId(final Integer correctionId) {
+		this.correctionId = correctionId;
 	}
 
 	public void setCorrectionNumber(final String correctionNumber) {
 		this.correctionNumber = correctionNumber;
 	}
 
-	public void setDateHeader(final String dateHeader) {
-		this.dateHeader = dateHeader;
-	}
-
 	public void setCreateDate(final LocalDate createDate) {
 		this.createDate = createDate;
 	}
 
-	public void setReceiveDate(final LocalDate receiveDate) {
-		this.receiveDate = receiveDate;
-	}
-
-	public void setServiceRecords(final List<CorrectionServiceRecord> serviceRecords) {
-		this.serviceRecords = serviceRecords;
-	}
-
-	public void setNetAmount(final BigDecimal netAmount) {
-		this.netAmount = netAmount;
-	}
-
-	public void setVatAmount(final BigDecimal vatAmount) {
-		this.vatAmount = vatAmount;
+	public void setDateHeader(final String dateHeader) {
+		this.dateHeader = dateHeader;
 	}
 
 	public void setGrossAmount(final BigDecimal grossAmount) {
@@ -264,8 +240,32 @@ public class CorrectionModel {
 		this.grossAmountWords = grossAmountWords;
 	}
 
+	public void setHtmlContent(final String htmlContent) {
+		this.htmlContent = htmlContent;
+	}
+
+	public void setInvoice(final InvoiceModel invoice) {
+		this.invoice = invoice;
+	}
+
+	public void setNetAmount(final BigDecimal netAmount) {
+		this.netAmount = netAmount;
+	}
+
 	public void setPaymentDate(final LocalDate paymentDate) {
 		this.paymentDate = paymentDate;
+	}
+
+	public void setReceiveDate(final LocalDate receiveDate) {
+		this.receiveDate = receiveDate;
+	}
+
+	public void setServiceRecords(final List<CorrectionServiceRecord> serviceRecords) {
+		this.serviceRecords = serviceRecords;
+	}
+
+	public void setVatAmount(final BigDecimal vatAmount) {
+		this.vatAmount = vatAmount;
 	}
 
 }
