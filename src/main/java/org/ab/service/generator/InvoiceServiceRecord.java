@@ -18,13 +18,13 @@ public class InvoiceServiceRecord {
 			return new InvoiceServiceRecord(this);
 		}
 
-		public Builder withInvoiceRecordId(final Integer invoiceRecordId) {
-			this.invoiceRecordId = invoiceRecordId;
+		public Builder withGrossAmount(final BigDecimal grossAmount) {
+			this.grossAmount = grossAmount;
 			return this;
 		}
 
-		public Builder withGrossAmount(final BigDecimal grossAmount) {
-			this.grossAmount = grossAmount;
+		public Builder withInvoiceRecordId(final Integer invoiceRecordId) {
+			this.invoiceRecordId = invoiceRecordId;
 			return this;
 		}
 
@@ -64,16 +64,19 @@ public class InvoiceServiceRecord {
 		}
 	}
 
-	private final Integer invoiceRecordId;
-	private final Integer lp;
-	private final String serviceName;
-	private final Integer vatRate;
-	private final BigDecimal netAmount;
-	private final BigDecimal netPrice;
-	private final BigDecimal vatAmount;
-	private final BigDecimal grossAmount;
+	private Integer invoiceRecordId;
+	private Integer lp;
+	private String serviceName;
+	private Integer vatRate;
+	private BigDecimal netAmount;
+	private BigDecimal netPrice;
+	private BigDecimal vatAmount;
+	private BigDecimal grossAmount;
+	private Integer quantity;
 
-	private final Integer quantity;
+	public InvoiceServiceRecord(){
+	}
+
 	public InvoiceServiceRecord(final Builder builder) {
 		invoiceRecordId = builder.invoiceRecordId;
 		lp = builder.lp;
@@ -88,6 +91,9 @@ public class InvoiceServiceRecord {
 	public BigDecimal getGrossAmount() {
 		return grossAmount;
 	}
+	public Integer getInvoiceRecordId() {
+		return invoiceRecordId;
+	}
 	public Integer getLp() {
 		return lp;
 	}
@@ -100,6 +106,7 @@ public class InvoiceServiceRecord {
 	public Integer getQuantity() {
 		return quantity;
 	}
+
 	public String getServiceName() {
 		return serviceName;
 	}
@@ -107,11 +114,43 @@ public class InvoiceServiceRecord {
 	public BigDecimal getVatAmount() {
 		return vatAmount;
 	}
-
 	public Integer getVatRate() {
 		return vatRate;
 	}
-	public Integer getInvoiceRecordId() {
-		return invoiceRecordId;
+
+	public void setGrossAmount(final BigDecimal grossAmount) {
+		this.grossAmount = grossAmount;
+	}
+
+	public void setInvoiceRecordId(final Integer invoiceRecordId) {
+		this.invoiceRecordId = invoiceRecordId;
+	}
+
+	public void setLp(final Integer lp) {
+		this.lp = lp;
+	}
+
+	public void setNetAmount(final BigDecimal netAmount) {
+		this.netAmount = netAmount;
+	}
+
+	public void setNetPrice(final BigDecimal netPrice) {
+		this.netPrice = netPrice;
+	}
+
+	public void setQuantity(final Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public void setServiceName(final String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	public void setVatAmount(final BigDecimal vatAmount) {
+		this.vatAmount = vatAmount;
+	}
+
+	public void setVatRate(final Integer vatRate) {
+		this.vatRate = vatRate;
 	}
 }

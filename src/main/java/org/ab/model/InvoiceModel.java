@@ -35,11 +35,6 @@ public class InvoiceModel {
 			return new InvoiceModel(this);
 		}
 
-		public Builder withSubscriber(final InvoiceParticipant subscriber) {
-			this.subscriber = subscriber;
-			return this;
-		}
-
 		public Builder withContract(final Contract contract) {
 			this.contract = contract;
 			return this;
@@ -120,6 +115,11 @@ public class InvoiceModel {
 			return this;
 		}
 
+		public Builder withSubscriber(final InvoiceParticipant subscriber) {
+			this.subscriber = subscriber;
+			return this;
+		}
+
 		public Builder withSubscriberIdn(final String subscriberIdn) {
 			this.subscriberIdn = subscriberIdn;
 			return this;
@@ -130,24 +130,28 @@ public class InvoiceModel {
 			return this;
 		}
 	}
+
 	private Integer invoiceId;
-	private final String subscriberIdn;
-	private final InvoiceParticipant seller;
-	private final InvoiceParticipant subscriber;
-	private final String invoiceNumber;
-	private final String dateHeader;
-	private final LocalDate createDate;
-	private final LocalDate receiveDate;
-	private final List<InvoiceServiceRecord> serviceRecords;
-	private final BigDecimal netAmount;
-	private final BigDecimal vatAmount;
-	private final BigDecimal grossAmount;
-	private final String grossAmountWords;
-	private final Contract contract;
-	private final LocalDate settlementPeriodStart;
-	private final LocalDate settlementPeriodEnd;
-	private final LocalDate paymentDate;
+	private String subscriberIdn;
+	private InvoiceParticipant seller;
+	private InvoiceParticipant subscriber;
+	private String invoiceNumber;
+	private String dateHeader;
+	private LocalDate createDate;
+	private LocalDate receiveDate;
+	private List<InvoiceServiceRecord> serviceRecords;
+	private BigDecimal netAmount;
+	private BigDecimal vatAmount;
+	private BigDecimal grossAmount;
+	private String grossAmountWords;
+	private Contract contract;
+	private LocalDate settlementPeriodStart;
+	private LocalDate settlementPeriodEnd;
+	private LocalDate paymentDate;
 	private String htmlContent;
+
+	public InvoiceModel(){
+	}
 
 	private InvoiceModel(final Builder builder){
 		subscriberIdn = builder.subscriberIdn;
@@ -168,10 +172,6 @@ public class InvoiceModel {
 		invoiceId = builder.invoiceId;
 		paymentDate = builder.paymentDate;
 		htmlContent = builder.htmlContent;
-	}
-
-	public InvoiceParticipant getSubscriber() {
-		return subscriber;
 	}
 
 	public Contract getContract() {
@@ -234,6 +234,10 @@ public class InvoiceModel {
 		return settlementPeriodStart;
 	}
 
+	public InvoiceParticipant getSubscriber() {
+		return subscriber;
+	}
+
 	public String getSubscriberIdn() {
 		return subscriberIdn;
 	}
@@ -242,11 +246,75 @@ public class InvoiceModel {
 		return vatAmount;
 	}
 
+	public void setContract(final Contract contract) {
+		this.contract = contract;
+	}
+
+	public void setCreateDate(final LocalDate createDate) {
+		this.createDate = createDate;
+	}
+
+	public void setDateHeader(final String dateHeader) {
+		this.dateHeader = dateHeader;
+	}
+
+	public void setGrossAmount(final BigDecimal grossAmount) {
+		this.grossAmount = grossAmount;
+	}
+
+	public void setGrossAmountWords(final String grossAmountWords) {
+		this.grossAmountWords = grossAmountWords;
+	}
+
 	public void setHtmlContent(final String htmlContent) {
 		this.htmlContent = htmlContent;
 	}
 
 	public void setInvoiceId(final Integer invoiceId) {
 		this.invoiceId = invoiceId;
+	}
+
+	public void setInvoiceNumber(final String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
+	}
+
+	public void setNetAmount(final BigDecimal netAmount) {
+		this.netAmount = netAmount;
+	}
+
+	public void setPaymentDate(final LocalDate paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+
+	public void setReceiveDate(final LocalDate receiveDate) {
+		this.receiveDate = receiveDate;
+	}
+
+	public void setSeller(final InvoiceParticipant seller) {
+		this.seller = seller;
+	}
+
+	public void setServiceRecords(final List<InvoiceServiceRecord> serviceRecords) {
+		this.serviceRecords = serviceRecords;
+	}
+
+	public void setSettlementPeriodEnd(final LocalDate settlementPeriodEnd) {
+		this.settlementPeriodEnd = settlementPeriodEnd;
+	}
+
+	public void setSettlementPeriodStart(final LocalDate settlementPeriodStart) {
+		this.settlementPeriodStart = settlementPeriodStart;
+	}
+
+	public void setSubscriber(final InvoiceParticipant subscriber) {
+		this.subscriber = subscriber;
+	}
+
+	public void setSubscriberIdn(final String subscriberIdn) {
+		this.subscriberIdn = subscriberIdn;
+	}
+
+	public void setVatAmount(final BigDecimal vatAmount) {
+		this.vatAmount = vatAmount;
 	}
 }

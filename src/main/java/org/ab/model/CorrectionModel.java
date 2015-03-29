@@ -24,6 +24,9 @@ public class CorrectionModel {
 		private BigDecimal netAmount;
 		private BigDecimal vatAmount;
 		private BigDecimal grossAmount;
+		private BigDecimal netAmountDiff;
+		private BigDecimal vatAmountDiff;
+		private BigDecimal grossAmountDiff;
 		private String grossAmountWords;
 		private LocalDate paymentDate;
 		private String htmlContent;
@@ -85,6 +88,11 @@ public class CorrectionModel {
 			return this;
 		}
 
+		public Builder withGrossAmountDiff(final BigDecimal grossAmountDiff){
+			this.grossAmountDiff = grossAmountDiff;
+			return this;
+		}
+
 		public Builder withGrossAmountWords(final String grossAmountWords) {
 			this.grossAmountWords = grossAmountWords;
 			return this;
@@ -102,6 +110,11 @@ public class CorrectionModel {
 
 		public Builder withNetAmount(final BigDecimal netAmount) {
 			this.netAmount = netAmount;
+			return this;
+		}
+
+		public Builder withNetAmountDiff(final BigDecimal netAmountDiff){
+			this.netAmountDiff = netAmountDiff;
 			return this;
 		}
 
@@ -129,6 +142,11 @@ public class CorrectionModel {
 			this.vatAmount = vatAmount;
 			return this;
 		}
+
+		public Builder withVatAmountDiff(final BigDecimal vatAmountDiff){
+			this.vatAmountDiff = vatAmountDiff;
+			return this;
+		}
 	}
 
 	private InvoiceModel invoice;
@@ -137,18 +155,21 @@ public class CorrectionModel {
 	private String dateHeader;
 	private LocalDate createDate;
 	private LocalDate receiveDate;
-	private List<CorrectionServiceRecord> serviceRecords;
+	private List<CorrectionServiceRecord> serviceRecords = Lists.newArrayList();
 	private BigDecimal netAmount;
 	private BigDecimal vatAmount;
 	private BigDecimal grossAmount;
+	private BigDecimal netAmountDiff;
+	private BigDecimal vatAmountDiff;
+	private BigDecimal grossAmountDiff;
 	private String grossAmountWords;
 	private LocalDate paymentDate;
 	private String htmlContent;
 
-	private CorrectionModel(){
+	public CorrectionModel(){
 	}
 
-	private CorrectionModel(final Builder builder){
+	public CorrectionModel(final Builder builder){
 		invoice = builder.invoice;
 		correctionNumber = builder.correctionNumber;
 		dateHeader = builder.dateHeader;
@@ -158,6 +179,9 @@ public class CorrectionModel {
 		netAmount = builder.netAmount;
 		vatAmount = builder.vatAmount;
 		grossAmount = builder.grossAmount;
+		netAmountDiff = builder.netAmountDiff;
+		vatAmountDiff = builder.vatAmountDiff;
+		grossAmountDiff = builder.grossAmountDiff;
 		grossAmountWords = builder.grossAmountWords;
 		correctionId = builder.correctionId;
 		paymentDate = builder.paymentDate;
@@ -168,32 +192,48 @@ public class CorrectionModel {
 		return correctionId;
 	}
 
-	public void setCorrectionId(final Integer correctionId) {
-		this.correctionId = correctionId;
-	}
-
-	public String getHtmlContent() {
-		return htmlContent;
-	}
-
-	public void setHtmlContent(final String htmlContent) {
-		this.htmlContent = htmlContent;
-	}
-
-	public InvoiceModel getInvoice() {
-		return invoice;
-	}
-
 	public String getCorrectionNumber() {
 		return correctionNumber;
+	}
+
+	public LocalDate getCreateDate() {
+		return createDate;
 	}
 
 	public String getDateHeader() {
 		return dateHeader;
 	}
 
-	public LocalDate getCreateDate() {
-		return createDate;
+	public BigDecimal getGrossAmount() {
+		return grossAmount;
+	}
+
+	public BigDecimal getGrossAmountDiff() {
+		return grossAmountDiff;
+	}
+
+	public String getGrossAmountWords() {
+		return grossAmountWords;
+	}
+
+	public String getHtmlContent() {
+		return htmlContent;
+	}
+
+	public InvoiceModel getInvoice() {
+		return invoice;
+	}
+
+	public BigDecimal getNetAmount() {
+		return netAmount;
+	}
+
+	public BigDecimal getNetAmountDiff() {
+		return netAmountDiff;
+	}
+
+	public LocalDate getPaymentDate() {
+		return paymentDate;
 	}
 
 	public LocalDate getReceiveDate() {
@@ -204,40 +244,60 @@ public class CorrectionModel {
 		return serviceRecords;
 	}
 
-	public BigDecimal getNetAmount() {
-		return netAmount;
-	}
-
 	public BigDecimal getVatAmount() {
 		return vatAmount;
 	}
 
-	public BigDecimal getGrossAmount() {
-		return grossAmount;
+	public BigDecimal getVatAmountDiff() {
+		return vatAmountDiff;
 	}
 
-	public String getGrossAmountWords() {
-		return grossAmountWords;
-	}
-
-	public LocalDate getPaymentDate() {
-		return paymentDate;
-	}
-
-	public void setInvoice(final InvoiceModel invoice) {
-		this.invoice = invoice;
+	public void setCorrectionId(final Integer correctionId) {
+		this.correctionId = correctionId;
 	}
 
 	public void setCorrectionNumber(final String correctionNumber) {
 		this.correctionNumber = correctionNumber;
 	}
 
+	public void setCreateDate(final LocalDate createDate) {
+		this.createDate = createDate;
+	}
+
 	public void setDateHeader(final String dateHeader) {
 		this.dateHeader = dateHeader;
 	}
 
-	public void setCreateDate(final LocalDate createDate) {
-		this.createDate = createDate;
+	public void setGrossAmount(final BigDecimal grossAmount) {
+		this.grossAmount = grossAmount;
+	}
+
+	public void setGrossAmountDiff(final BigDecimal grossAmountDiff) {
+		this.grossAmountDiff = grossAmountDiff;
+	}
+
+	public void setGrossAmountWords(final String grossAmountWords) {
+		this.grossAmountWords = grossAmountWords;
+	}
+
+	public void setHtmlContent(final String htmlContent) {
+		this.htmlContent = htmlContent;
+	}
+
+	public void setInvoice(final InvoiceModel invoice) {
+		this.invoice = invoice;
+	}
+
+	public void setNetAmount(final BigDecimal netAmount) {
+		this.netAmount = netAmount;
+	}
+
+	public void setNetAmountDiff(final BigDecimal netAmountDiff) {
+		this.netAmountDiff = netAmountDiff;
+	}
+
+	public void setPaymentDate(final LocalDate paymentDate) {
+		this.paymentDate = paymentDate;
 	}
 
 	public void setReceiveDate(final LocalDate receiveDate) {
@@ -248,24 +308,12 @@ public class CorrectionModel {
 		this.serviceRecords = serviceRecords;
 	}
 
-	public void setNetAmount(final BigDecimal netAmount) {
-		this.netAmount = netAmount;
-	}
-
 	public void setVatAmount(final BigDecimal vatAmount) {
 		this.vatAmount = vatAmount;
 	}
 
-	public void setGrossAmount(final BigDecimal grossAmount) {
-		this.grossAmount = grossAmount;
-	}
-
-	public void setGrossAmountWords(final String grossAmountWords) {
-		this.grossAmountWords = grossAmountWords;
-	}
-
-	public void setPaymentDate(final LocalDate paymentDate) {
-		this.paymentDate = paymentDate;
+	public void setVatAmountDiff(final BigDecimal vatAmountDiff) {
+		this.vatAmountDiff = vatAmountDiff;
 	}
 
 }

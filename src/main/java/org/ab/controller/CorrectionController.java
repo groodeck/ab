@@ -19,6 +19,20 @@ public class CorrectionController {
 	@Autowired
 	private SelectValueService selectValuesService;
 
+	@RequestMapping("/addRow")
+	public String handleAddRowAction(final CorrectionModel correction, final Model model) {
+		//correction.getServiceRecords().add(new CorrectionServiceRecord.Builder().build());
+		model.addAttribute("correction", correction);
+		return "correction";
+	}
+
+	@RequestMapping("/delRow/{rowNumber}")
+	public String handleDelRowAction(@PathVariable final int rowNumber, final CorrectionModel correction, final Model model) {
+		//correction.getServiceRecords().remove(rowNumber);
+		model.addAttribute("correction", correction);
+		return "correction";
+	}
+
 	@RequestMapping("/new/{invoiceId}")
 	public String handleNewCorrection(@PathVariable final int invoiceId, final Model model) {
 		final CorrectionModel correction = correctionService.prepareCorrection(invoiceId);
