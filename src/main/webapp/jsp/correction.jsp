@@ -81,7 +81,6 @@
 		<button> - </button>
 		<br/>
 		
-		
 			<table border="1" cellpadding="2">
 				<tr>
 					<td>Nazwa usługi</td>

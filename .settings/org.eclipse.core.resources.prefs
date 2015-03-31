@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//src/main/java/org/ab/controller/AsyncController.java=UTF-8
+encoding//src/main/java/org/ab/service/CorrectionService.java=UTF-8
+encoding//src/main/java/org/ab/service/InvoicesService.java=UTF-8
+encoding//src/main/java/org/ab/service/PaymentsService.java=UTF-8
+encoding//src/main/java/org/ab/service/generator/InvoiceFileGenerator.java=UTF-8
+encoding//src/main/java/org/ab/service/generator/invoiceTemplate.ftl=Cp1250
