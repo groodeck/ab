@@ -85,21 +85,23 @@ public class InvoiceConverter {
 
 		@Override
 		public InvoiceModel apply(final org.ab.entity.Invoice input) {
+			final Subscriber subscriber = input.getContract().getSubscriber();
 			final InvoiceModel model = new InvoiceModel.Builder()
-				.withInvoiceId(input.getInvoiceId())
-				.withInvoiceNumber(input.getInvoiceNumber())
-				.withSubscriber(convertSubscriber(input.getContract().getSubscriber()))
-				.withSeller(getSeller())
-				.withCreateDate(input.getCreateDate())
-				.withReceiveDate(input.getReceiveDate())
-				.withSettlementPeriodStart(input.getSettlementPeriodStart())
-				.withSettlementPeriodEnd(input.getSettlementPeriodEnd())
-				.withNetAmount(input.getNetAmount())
-				.withVatAmount(input.getVatAmount())
-				.withGrossAmount(input.getGrossAmount())
-				.withPaymentDate(input.getPaymentDate())
-				.withServiceRecords(convertRecords(input.getInvoiceRecords()))
-				.build();
+			.withInvoiceId(input.getInvoiceId())
+			.withInvoiceNumber(input.getInvoiceNumber())
+			.withSubscriber(convertSubscriber(subscriber))
+			.withSubscriberIdn(subscriber.getSubscriberIdn())
+			.withSeller(getSeller())
+			.withCreateDate(input.getCreateDate())
+			.withReceiveDate(input.getReceiveDate())
+			.withSettlementPeriodStart(input.getSettlementPeriodStart())
+			.withSettlementPeriodEnd(input.getSettlementPeriodEnd())
+			.withNetAmount(input.getNetAmount())
+			.withVatAmount(input.getVatAmount())
+			.withGrossAmount(input.getGrossAmount())
+			.withPaymentDate(input.getPaymentDate())
+			.withServiceRecords(convertRecords(input.getInvoiceRecords()))
+			.build();
 			return model;
 		}
 
@@ -111,24 +113,24 @@ public class InvoiceConverter {
 						@Override
 						public InvoiceServiceRecord apply(final InvoiceRecord input) {
 							return new InvoiceServiceRecord.Builder()
-								.withServiceName(input.getServiceName())
-								.withQuantity(input.getQuantity())
-								.withNetPrice(input.getNetAmount())
-								.withNetAmount(input.getNetAmount())
-								.withVatRate(input.getVatRate())
-								.withVatAmount(input.getVatAmount())
-								.withGrossAmount(input.getGrossAmount())
-								.build();
+							.withServiceName(input.getServiceName())
+							.withQuantity(input.getQuantity())
+							.withNetPrice(input.getNetAmount())
+							.withNetAmount(input.getNetAmount())
+							.withVatRate(input.getVatRate())
+							.withVatAmount(input.getVatAmount())
+							.withGrossAmount(input.getGrossAmount())
+							.build();
 						}
 					}).toList());
 		}
 
-		private InvoiceParticipant getSeller() {
-			return ivoicesGenerator.getSeller();
-		}
-
 		private InvoiceParticipant convertSubscriber(final Subscriber subscriber) {
 			return ivoicesGenerator.getInvoiceParticipant(subscriber);
+		}
+
+		private InvoiceParticipant getSeller() {
+			return ivoicesGenerator.getSeller();
 		}
 	};
 

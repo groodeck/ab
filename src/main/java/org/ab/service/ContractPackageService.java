@@ -6,7 +6,9 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.ab.dao.ContractPackageDao;
+import org.ab.dao.ServiceDao;
 import org.ab.entity.ContractPackage;
+import org.ab.entity.Service;
 import org.ab.model.dictionary.ClientType;
 import org.ab.model.js.PackageDetails;
 import org.ab.service.converter.ContractPackageConverter;
@@ -23,6 +25,9 @@ public class ContractPackageService {
 
 	@Autowired
 	private ContractPackageDao contractPackageDao;
+
+	@Autowired
+	private ServiceDao serviceDao;
 
 	@Transactional
 	public List<org.ab.model.ContractPackage> getAllPackages() {
@@ -68,6 +73,15 @@ public class ContractPackageService {
 		for(final ContractPackage contractPackage : packages){
 			results.put(contractPackage.getPackageId().toString(),
 					contractPackage.getPackageName());
+		}
+		return results;
+	}
+
+	public Map<String, String> getPackageServicesDictionary(final String subscriberIdn){
+		final List<Service> services = serviceDao.findAllForSubscriber(subscriberIdn);
+		final Map<String, String> results = Maps.newHashMap();
+		for(final Service service : services){
+			results.put(service.getServiceId().toString(), service.getServiceName());
 		}
 		return results;
 	}

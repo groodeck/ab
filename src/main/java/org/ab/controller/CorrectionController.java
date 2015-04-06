@@ -3,6 +3,7 @@ package org.ab.controller;
 import org.ab.model.CorrectionModel;
 import org.ab.model.dictionary.SelectValueService;
 import org.ab.service.CorrectionService;
+import org.ab.service.generator.CorrectionServiceRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,14 +22,18 @@ public class CorrectionController {
 
 	@RequestMapping("/addRow")
 	public String handleAddRowAction(final CorrectionModel correction, final Model model) {
-		//correction.getServiceRecords().add(new CorrectionServiceRecord.Builder().build());
+		correction.getServiceRecords().add(new CorrectionServiceRecord.Builder().build());
+		model.addAllAttributes(selectValuesService.getCorrectionDictionaries(
+				correction.getInvoice().getSubscriberIdn()));
 		model.addAttribute("correction", correction);
 		return "correction";
 	}
 
 	@RequestMapping("/delRow/{rowNumber}")
 	public String handleDelRowAction(@PathVariable final int rowNumber, final CorrectionModel correction, final Model model) {
-		//correction.getServiceRecords().remove(rowNumber);
+		correction.getServiceRecords().remove(rowNumber);
+		model.addAllAttributes(selectValuesService.getCorrectionDictionaries(
+				correction.getInvoice().getSubscriberIdn()));
 		model.addAttribute("correction", correction);
 		return "correction";
 	}
@@ -36,15 +41,16 @@ public class CorrectionController {
 	@RequestMapping("/new/{invoiceId}")
 	public String handleNewCorrection(@PathVariable final int invoiceId, final Model model) {
 		final CorrectionModel correction = correctionService.prepareCorrection(invoiceId);
-
-		model.addAllAttributes(selectValuesService.getCorrectionDictionaries());
-
+		model.addAllAttributes(selectValuesService.getCorrectionDictionaries(
+				correction.getInvoice().getSubscriberIdn()));
 		model.addAttribute("correction", correction);
 		return "correction";
 	}
 
 	@RequestMapping("/save")
 	public String handleSaveAction(final CorrectionModel correction, final Model model) {
+		model.addAllAttributes(selectValuesService.getCorrectionDictionaries(
+				correction.getInvoice().getSubscriberIdn()));
 		model.addAttribute("correction", correction);
 		return "correction";
 	}

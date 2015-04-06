@@ -26,10 +26,11 @@ public class SelectValueService {
 	@Autowired
 	private DurationService durationService;
 
-	public Map<String, ?> getCorrectionDictionaries() {
+	public Map<String, ?> getCorrectionDictionaries(final String subscriberIdn) {
 		final Map<String, Map> results = Maps.newHashMap();
 		results.put("months", Month.asValueMap());
 		results.put("years", getYearValueMap());
+		results.put("services", packageService.getPackageServicesDictionary(subscriberIdn));
 		return results;
 	}
 
@@ -56,9 +57,9 @@ public class SelectValueService {
 		final Map<String, Map<String, String>> results = Maps.newHashMap();
 		results.put("clientTypes", ClientType.asValueMap());
 		results.put("contractStatuses", ContractStatus.asValueMap());
-		results.put("cities", this.cityService.getCityDictionary());
-		results.put("packages", this.packageService.getPackageDictionary());
-		results.put("contractDurations", this.durationService.getDurationDictionary());
+		results.put("cities", cityService.getCityDictionary());
+		results.put("packages", packageService.getPackageDictionary());
+		results.put("contractDurations", durationService.getDurationDictionary());
 		results.put("deviceTypes", DeviceType.asValueMap());
 		return results;
 	}
