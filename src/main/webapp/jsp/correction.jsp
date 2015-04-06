@@ -27,33 +27,33 @@
 	 			var correctionNetPrice = $(("#correctionService_" + rowNumber + "_netPrice")).val();
 	 			var netAmount = 0;
 	 			if(correctionQuantity && correctionNetPrice){
-	 				netAmount = correctionQuantity * correctionNetPrice;
+	 				netAmount = (correctionQuantity * correctionNetPrice).toFixed(2);
 	 				$(("#correctionService_" + rowNumber + "_netAmount")).val(netAmount);
 	 				
 	 				var invoiceNetPrice = $(("#invoiceService_" + rowNumber + "_netPrice")).val();
-	 				var netPriceDiff = correctionNetPrice - invoiceNetPrice;
+	 				var netPriceDiff = (correctionNetPrice - invoiceNetPrice).toFixed(2);
 	 				$(("#correctionService_" + rowNumber + "_netPriceDiff")).val(netPriceDiff);
 	 				
 	 				var invoiceNetAmount = $(("#invoiceService_" + rowNumber + "_netAmount")).val();
-	 				var netAmountDiff = netAmount - invoiceNetAmount;
+	 				var netAmountDiff = (netAmount - invoiceNetAmount).toFixed(2);
 	 				$(("#correctionService_" + rowNumber + "_netAmountDiff")).val(netAmountDiff);
 	 			}
 	 			var correctionVatRate = $(("#correctionService_" + rowNumber + "_vatRate")).val();
 	 			if(correctionVatRate){
 	 				$(("#correctionService_" + rowNumber + "_vatRateDiff")).val(correctionVatRate);
 
-	 				var vatAmount = (correctionVatRate/100) * netAmount;
+	 				var vatAmount = ((correctionVatRate/100) * netAmount).toFixed(2);
 	 				$(("#correctionService_" + rowNumber + "_vatAmount")).val(vatAmount);
 
 	 				var invoiceVatAmount = $(("#invoiceService_" + rowNumber + "_vatAmount")).val();
-	 				var vatAmountDiff = vatAmount - invoiceVatAmount;
+	 				var vatAmountDiff = (vatAmount - invoiceVatAmount).toFixed(2);
 	 				$(("#correctionService_" + rowNumber + "_vatAmountDiff")).val(vatAmountDiff);
 	 				
-	 				var grossAmount = vatAmount + netAmount;
+	 				var grossAmount = (new Number(vatAmount) + new Number(netAmount)).toFixed(2);
 	 				$(("#correctionService_" + rowNumber + "_grossAmount")).val(grossAmount);
 	 				
 	 				var invoiceGrossAmount = $(("#invoiceService_" + rowNumber + "_grossAmount")).val();
-	 				var grossAmountDiff = grossAmount - invoiceGrossAmount;
+	 				var grossAmountDiff = (grossAmount - invoiceGrossAmount).toFixed(2);
 	 				$(("#correctionService_" + rowNumber + "_grossAmountDiff")).val(grossAmountDiff);
 	 			}
 	 			calculateSumAmounts();
@@ -68,17 +68,17 @@
 		 			var netAmount = $(("#correctionService_" + i + "_netAmount")).val();
 		 			var vatAmount = $(("#correctionService_" + i + "_vatAmount")).val();
 		 			var grossAmount = $(("#correctionService_" + i + "_grossAmount")).val();
-		 			sumNetAmount = new Number(sumNetAmount) + new Number(netAmount);
-		 			sumVatAmount = new Number(sumVatAmount) + new Number(vatAmount);
-		 			sumGrossAmount = new Number(sumGrossAmount) + new Number(grossAmount);
+		 			sumNetAmount = (new Number(sumNetAmount) + new Number(netAmount)).toFixed(2);
+		 			sumVatAmount = (new Number(sumVatAmount) + new Number(vatAmount)).toFixed(2);
+		 			sumGrossAmount = (new Number(sumGrossAmount) + new Number(grossAmount)).toFixed(2);
 	 			}
 	 			var invoiceNetAmount = $("#invoiceNetAmount").val();
 	 			var invoiceVatAmount = $("#invoiceVatAmount").val();
 	 			var invoiceGrossAmount = $("#invoiceGrossAmount").val();
 	 			
-	 			var netAmountDiff = new Number(sumNetAmount) - new Number(invoiceNetAmount);
-	 			var vatAmountDiff = new Number(sumVatAmount) - new Number(invoiceVatAmount);
-	 			var grossAmountDiff = new Number(sumGrossAmount) - new Number(invoiceGrossAmount);
+	 			var netAmountDiff = (new Number(sumNetAmount) - new Number(invoiceNetAmount)).toFixed(2);
+	 			var vatAmountDiff = (new Number(sumVatAmount) - new Number(invoiceVatAmount)).toFixed(2);
+	 			var grossAmountDiff = (new Number(sumGrossAmount) - new Number(invoiceGrossAmount)).toFixed(2);
 	 			
 	 			$("#netAmount").val(sumNetAmount);
 	 			$("#vatAmount").val(sumVatAmount);
