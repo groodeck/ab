@@ -2,6 +2,7 @@ package org.ab.service;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.print.Doc;
@@ -22,6 +23,7 @@ import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
 import org.ab.service.converter.InvoiceConverter;
 import org.ab.service.generator.CorrectionNumberGenerator;
+import org.ab.service.generator.CorrectionServiceRecord;
 import org.ab.service.generator.InvoiceFileGenerator;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,33 @@ public class CorrectionService {
 
 	@Autowired
 	private InvoiceFileGenerator invoiceFileGenerator;
+
+	public void calculateCorrectionSum(final CorrectionModel correction) {
+		BigDecimal correctionNetAmount = BigDecimal.ZERO;
+		BigDecimal correctionVatAmount = BigDecimal.ZERO;
+		BigDecimal correctionGrossAmount = BigDecimal.ZERO;
+		for(final CorrectionServiceRecord serviceRec : correction.getServiceRecords()){
+			if(serviceRec.getNetAmount() != null){
+				correctionNetAmount = correctionNetAmount.add(serviceRec.getNetAmount());
+			}
+			if(serviceRec.getVatAmount() != null){
+				correctionVatAmount = correctionVatAmount.add(serviceRec.getVatAmount());
+			}
+			if(serviceRec.getGrossAmount() != null){
+				correctionGrossAmount = correctionGrossAmount.add(serviceRec.getGrossAmount());
+			}
+		}
+		final InvoiceModel invoice = correction.getInvoice();
+		final BigDecimal netAmountDiff = correctionNetAmount.subtract(invoice.getNetAmount());
+		final BigDecimal vatAmountDiff = correctionVatAmount.subtract(invoice.getVatAmount());
+		final BigDecimal grossAmountDiff = correctionGrossAmount.subtract(invoice.getGrossAmount());
+		correction.setNetAmount(correctionNetAmount);
+		correction.setVatAmount(correctionVatAmount);
+		correction.setGrossAmount(correctionGrossAmount);
+		correction.setNetAmountDiff(netAmountDiff);
+		correction.setVatAmountDiff(vatAmountDiff);
+		correction.setGrossAmountDiff(grossAmountDiff);
+	}
 
 	public List<InvoiceModel> findInvoices(final String subscriberIdn, final LocalDate dateFrom, final LocalDate dateTo) {
 		final List<org.ab.entity.Invoice> invoices = invoiceDao.findInvoices(subscriberIdn, dateFrom, dateTo);
@@ -88,9 +117,9 @@ public class CorrectionService {
 		final String correctionNumber = numberGenerator.generate(invoiceModel);
 
 		return new CorrectionModel.Builder()
-			.fromInvoice(invoiceModel)
-			.withCorrectionNumber(correctionNumber)
-			.build();
+		.fromInvoice(invoiceModel)
+		.withCorrectionNumber(correctionNumber)
+		.build();
 	}
 
 	private void printFile(final String file){

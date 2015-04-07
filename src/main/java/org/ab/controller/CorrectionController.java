@@ -32,9 +32,7 @@ public class CorrectionController {
 	@RequestMapping("/delRow/{rowNumber}")
 	public String handleDelRowAction(@PathVariable final int rowNumber, final CorrectionModel correction, final Model model) {
 		correction.getServiceRecords().remove(rowNumber);
-
-		//TODO: przeliczanie sum przy usuwaniu wiersza, odswiezanie ceny przy zmianie us³ugi
-
+		correctionService.calculateCorrectionSum(correction);
 		model.addAllAttributes(selectValuesService.getCorrectionDictionaries(
 				correction.getInvoice().getSubscriberIdn()));
 		model.addAttribute("correction", correction);

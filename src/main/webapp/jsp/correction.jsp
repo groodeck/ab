@@ -89,6 +89,14 @@
 	 			$("#grossAmountDiff").val(grossAmountDiff);
 	 		}
 	 		
+	 		changeService = function(rowNum, serviceId){
+				$.getJSON( "/async/getService/" + serviceId, function(packages) {
+
+					//TODO:  odswiezanie ceny przy zmianie usługi - async
+					// RECALCULATE
+				});
+	 		}
+	 		
 	 	</script>
  	]]>
  </jsp:text>
@@ -210,7 +218,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td rowspan="2"><sf:select path="serviceRecords[${status.index}].serviceId" items="${services}"/></td>
+						<td rowspan="2"><sf:select path="serviceRecords[${status.index}].serviceId" items="${services}" onchange="changeService(${status.index}, this.value)"/></td>
 						<td>Po korekcie</td>
 						<td><sf:input id="correctionService_${status.index}_quantity" path="serviceRecords[${status.index}].quantity" onchange="calculateRow(${status.index})" /></td>
 						<td><sf:input id="correctionService_${status.index}_netPrice" path="serviceRecords[${status.index}].netPrice" onchange="calculateRow(${status.index})" /></td>
