@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import org.ab.model.js.PackageDetails;
+import org.ab.model.js.ServiceDetails;
 import org.ab.service.ContractPackageService;
 import org.ab.service.InvoicesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,13 @@ public class AsyncController {
 	@ResponseBody
 	public String getPackageDetails(@PathVariable final int id) {
 		final PackageDetails packageDetails = packageService.getPackage(String.valueOf(id));
+		return packageDetails.serialize();
+	}
+
+	@RequestMapping(value="/getServiceDetails/{id}", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String getServiceDetails(@PathVariable final int id) {
+		final ServiceDetails packageDetails =packageService.getService(String.valueOf(id));
 		return packageDetails.serialize();
 	}
 }

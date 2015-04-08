@@ -6,7 +6,6 @@ public class CorrectionServiceRecord {
 	public static class Builder {
 		private Integer correctionRecordId;
 		private InvoiceServiceRecord invoiceRecord;
-		private String serviceId;
 		private String serviceName;
 		private Integer vatRate;
 		private BigDecimal netPrice;
@@ -86,11 +85,6 @@ public class CorrectionServiceRecord {
 			return this;
 		}
 
-		public Builder withServiceId(final String serviceId) {
-			this.serviceId = serviceId;
-			return this;
-		}
-
 		public Builder withServiceName(final String serviceName) {
 			this.serviceName = serviceName;
 			return this;
@@ -114,7 +108,6 @@ public class CorrectionServiceRecord {
 
 	private Integer correctionRecordId;
 	private InvoiceServiceRecord invoiceRecord;
-	private String serviceId;
 	private String serviceName;
 	private Integer vatRate;
 	private BigDecimal netAmount;
@@ -133,7 +126,6 @@ public class CorrectionServiceRecord {
 
 	public CorrectionServiceRecord(final Builder builder) {
 		correctionRecordId = builder.correctionRecordId;
-		serviceId = builder.serviceId;
 		serviceName = builder.serviceName;
 		netPrice = builder.netPrice;
 		netPriceDiff = builder.netPriceDiff;
@@ -181,9 +173,6 @@ public class CorrectionServiceRecord {
 	public Integer getQuantityDiff() {
 		return quantityDiff;
 	}
-	public String getServiceId() {
-		return serviceId;
-	}
 	public String getServiceName() {
 		return serviceName;
 	}
@@ -227,10 +216,6 @@ public class CorrectionServiceRecord {
 
 	public void setQuantityDiff(final Integer quantityDiff) {
 		this.quantityDiff = quantityDiff;
-	}
-
-	public void setServiceId(final String serviceId) {
-		this.serviceId = serviceId;
 	}
 
 	public void setServiceName(final String serviceName) {

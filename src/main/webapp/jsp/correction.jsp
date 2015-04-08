@@ -90,11 +90,12 @@
 	 		}
 	 		
 	 		changeService = function(rowNum, serviceId){
-				$.getJSON( "/async/getService/" + serviceId, function(packages) {
-
-					//TODO:  odswiezanie ceny przy zmianie usługi - async
-					// RECALCULATE
-				});
+				//$.getJSON( "/async/getServiceDetails/" + serviceId, function(service) {
+				//	var netPriceCtrl = $(("#correctionService_" + rowNum + "_netPrice"));
+				//	var vatRateCtrl = $(("#correctionService_" + rowNum + "_vatRate"));
+				//	netPriceCtrl.val(service.netPrice);
+				//	vatRateCtrl.val(service.vatRate);
+				//});
 	 		}
 	 		
 	 	</script>
@@ -218,7 +219,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td rowspan="2"><sf:select path="serviceRecords[${status.index}].serviceId" items="${services}" onchange="changeService(${status.index}, this.value)"/></td>
+						<td rowspan="2"><sf:input path="serviceRecords[${status.index}].serviceName" onchange="changeService(${status.index}, this.value)"/></td>
 						<td>Po korekcie</td>
 						<td><sf:input id="correctionService_${status.index}_quantity" path="serviceRecords[${status.index}].quantity" onchange="calculateRow(${status.index})" /></td>
 						<td><sf:input id="correctionService_${status.index}_netPrice" path="serviceRecords[${status.index}].netPrice" onchange="calculateRow(${status.index})" /></td>
@@ -286,6 +287,12 @@
 					</td>
 				</tr>
 			</table>
+		
+		<br/>
+		<div>
+			<button class="deleteButton" value="/correction/delRow/${status.index}" onClick="document.pressed=this.value" style="width: 35px;">-</button>
+			<button value="/correction/save" onClick="document.pressed=this.value" >Zapisz</button>
+		</div>
 		
 		</sf:form>
 	

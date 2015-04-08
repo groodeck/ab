@@ -12,11 +12,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="InvoiceRecord")
-public class InvoiceRecord {
+@Table(name="CorrectionRecord")
+public class CorrectionRecord {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="correctionRecordId")
+	private Integer correctionRecordId;
+
 	@Column(name="invoiceRecordId")
 	private Integer invoiceRecordId;
 
@@ -42,15 +45,19 @@ public class InvoiceRecord {
 	private BigDecimal grossAmount;
 
 	@ManyToOne
-	@JoinColumn(name="invoiceId", insertable=false, updatable=false, nullable=false)
-	private Invoice invoice;
+	@JoinColumn(name="correctionId", insertable=false, updatable=false, nullable=false)
+	private Correction correction;
+
+	public Correction getCorrection() {
+		return correction;
+	}
+
+	public Integer getCorrectionRecordId() {
+		return correctionRecordId;
+	}
 
 	public BigDecimal getGrossAmount() {
 		return grossAmount;
-	}
-
-	public Invoice getInvoice() {
-		return invoice;
 	}
 
 	public Integer getInvoiceRecordId() {
@@ -81,12 +88,16 @@ public class InvoiceRecord {
 		return vatRate;
 	}
 
-	public void setGrossAmount(final BigDecimal grossAmount) {
-		this.grossAmount = grossAmount;
+	public void setCorrection(final Correction correction) {
+		this.correction = correction;
 	}
 
-	public void setInvoice(final Invoice invoice) {
-		this.invoice = invoice;
+	public void setCorrectionRecordId(final Integer correctionRecordId) {
+		this.correctionRecordId = correctionRecordId;
+	}
+
+	public void setGrossAmount(final BigDecimal grossAmount) {
+		this.grossAmount = grossAmount;
 	}
 
 	public void setInvoiceRecordId(final Integer invoiceRecordId) {

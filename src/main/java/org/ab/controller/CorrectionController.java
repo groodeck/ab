@@ -50,6 +50,7 @@ public class CorrectionController {
 
 	@RequestMapping("/save")
 	public String handleSaveAction(final CorrectionModel correction, final Model model) {
+		correctionService.save(correction);
 		model.addAllAttributes(selectValuesService.getCorrectionDictionaries(
 				correction.getInvoice().getSubscriberIdn()));
 		model.addAttribute("correction", correction);

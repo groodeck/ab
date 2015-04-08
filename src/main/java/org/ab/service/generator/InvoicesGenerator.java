@@ -65,7 +65,7 @@ public class InvoicesGenerator {
 	}
 
 	private String generateHtmlContent(final InvoiceModel invoice) {
-		return this.contentGenerator.generateHtml(invoice);
+		return contentGenerator.generateHtml(invoice);
 	}
 
 	String generateInvoiceNumber(final long invoiceCount, final LocalDate dateFrom) {
@@ -176,6 +176,22 @@ public class InvoicesGenerator {
 		}
 	}
 
+	private InvoiceServiceRecord getInstallationFeeRecord(final Contract contract, final int serviceNumber) {
+		final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
+		.withLp(serviceNumber)
+		.withServiceName("Op³ata instalacyjna")
+		.withQuantity(ONE)
+		.withVatRate(contract.getInstallationFeeVatRate().getRate())
+		.withNetAmount(contract.getInstallationFeeNet())
+		.withVatAmount(contract.getInstallationFeeVat())
+		.withGrossAmount(contract.getInstallationFeeGross());
+		return serviceBuilder.build();
+	}
+
+	private long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
+		return invoiceDao.getInvoiceCount(dateFrom, dateTo);
+	}
+
 	public InvoiceParticipant getInvoiceParticipant(final Subscriber subscriber) {
 		final InvoiceParticipant.Builder builder = new InvoiceParticipant.Builder();
 		final Address address = determineInvoiceAddress(subscriber.getAddresses());
@@ -192,22 +208,6 @@ public class InvoicesGenerator {
 		return builder.build();
 	}
 
-	private InvoiceServiceRecord getInstallationFeeRecord(final Contract contract, final int serviceNumber) {
-		final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
-		.withLp(serviceNumber)
-		.withServiceName("Op³ata instalacyjna")
-		.withQuantity(ONE)
-		.withVatRate(contract.getInstallationFeeVatRate().getRate())
-		.withNetAmount(contract.getInstallationFeeNet())
-		.withVatAmount(contract.getInstallationFeeVat())
-		.withGrossAmount(contract.getInstallationFeeGross());
-		return serviceBuilder.build();
-	}
-
-	private long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
-		return this.invoiceDao.getInvoiceCount(dateFrom, dateTo);
-	}
-
 	public InvoiceParticipant getSeller() {
 		final Properties props = loadProperties("companyDetails.properties");
 		return getSeller(props);
@@ -218,11 +218,11 @@ public class InvoicesGenerator {
 		.withName(props.getProperty("company.name"))
 		.withAddressCity(Joiner.on("/").skipNulls()
 				.join(props.getProperty("company.addressZipCode"), props.getProperty("company.addressCity")))
-		.withAddressStreet(props.getProperty("company.addressStreet"))
-		.withRegon(props.getProperty("company.regon"))
-		.withNip(props.getProperty("company.nip"))
-		.withPhone(props.getProperty("company.phone"))
-		.build();
+				.withAddressStreet(props.getProperty("company.addressStreet"))
+				.withRegon(props.getProperty("company.regon"))
+				.withNip(props.getProperty("company.nip"))
+				.withPhone(props.getProperty("company.phone"))
+				.build();
 	}
 
 	private Properties loadProperties(final String fileName) {

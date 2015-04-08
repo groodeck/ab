@@ -110,10 +110,10 @@ public class InvoiceServiceRecord {
 	public String getServiceName() {
 		return serviceName;
 	}
-
 	public BigDecimal getVatAmount() {
 		return vatAmount;
 	}
+
 	public Integer getVatRate() {
 		return vatRate;
 	}

@@ -11,6 +11,7 @@ import org.ab.entity.ContractPackage;
 import org.ab.entity.Service;
 import org.ab.model.dictionary.ClientType;
 import org.ab.model.js.PackageDetails;
+import org.ab.model.js.ServiceDetails;
 import org.ab.service.converter.ContractPackageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -84,6 +85,12 @@ public class ContractPackageService {
 			results.put(service.getServiceId().toString(), service.getServiceName());
 		}
 		return results;
+	}
+
+	public ServiceDetails getService(final String id) {
+		final Service service = serviceDao.getById(id);
+		return new ServiceDetails(id, service.getServiceName(),
+				service.getSubscriptionNet().toPlainString(), service.getVatRate().toString());
 	}
 
 	public void save(final org.ab.model.ContractPackage contractPackage, final String name) {

@@ -55,7 +55,11 @@ public class CorrectionDao {
 	}
 
 	public Integer save(final Correction entity) {
-		em.persist(entity);
+		if(entity.getCorrectionId() == null){
+			em.persist(entity);
+		} else {
+			em.merge(entity);
+		}
 		return entity.getCorrectionId();
 	}
 }

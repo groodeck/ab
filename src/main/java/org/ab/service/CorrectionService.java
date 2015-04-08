@@ -17,10 +17,12 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import org.ab.dao.ContractDao;
 import org.ab.dao.CorrectionDao;
 import org.ab.dao.InvoiceDao;
+import org.ab.entity.Correction;
 import org.ab.entity.Invoice;
 import org.ab.model.CorrectionModel;
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
+import org.ab.service.converter.CorrectionConverter;
 import org.ab.service.converter.InvoiceConverter;
 import org.ab.service.generator.CorrectionNumberGenerator;
 import org.ab.service.generator.CorrectionServiceRecord;
@@ -39,6 +41,9 @@ public class CorrectionService {
 
 	@Autowired
 	private InvoiceConverter invoiceConverter;
+
+	@Autowired
+	private CorrectionConverter correctionConverter;
 
 	@Autowired
 	private InvoiceDao invoiceDao;
@@ -140,6 +145,11 @@ public class CorrectionService {
 		for(final String file : filesToPrint){
 			printFile(file);
 		}
+	}
+
+	public void save(final CorrectionModel correction) {
+		final Correction entity = correctionConverter.convert(correction);
+		correctionDao.save(entity);
 	}
 
 }
