@@ -113,6 +113,7 @@ public class InvoiceConverter {
 						@Override
 						public InvoiceServiceRecord apply(final InvoiceRecord input) {
 							return new InvoiceServiceRecord.Builder()
+							.withInvoiceRecordId(input.getInvoiceRecordId())
 							.withServiceName(input.getServiceName())
 							.withQuantity(input.getQuantity())
 							.withNetPrice(input.getNetAmount())

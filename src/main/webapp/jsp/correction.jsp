@@ -290,7 +290,6 @@
 		
 		<br/>
 		<div>
-			<button class="deleteButton" value="/correction/delRow/${status.index}" onClick="document.pressed=this.value" style="width: 35px;">-</button>
 			<button value="/correction/save" onClick="document.pressed=this.value" >Zapisz</button>
 		</div>
 		

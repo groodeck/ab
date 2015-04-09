@@ -3,10 +3,8 @@ package org.ab.service.converter;
 import java.util.List;
 
 import org.ab.dao.ContractPackageDao;
-import org.ab.dao.InvoiceDao;
 import org.ab.dao.UserDao;
 import org.ab.entity.CorrectionRecord;
-import org.ab.entity.Invoice;
 import org.ab.entity.InvoiceRecord;
 import org.ab.entity.Subscriber;
 import org.ab.model.CorrectionModel;
@@ -32,9 +30,6 @@ public class CorrectionConverter {
 	private UserDao userDao;
 
 	@Autowired
-	private InvoiceDao invoiceDao;
-
-	@Autowired
 	private DeviceConverter deviceConverter;
 
 	@Autowired
@@ -45,17 +40,19 @@ public class CorrectionConverter {
 
 		@Override
 		public org.ab.entity.Correction apply(final CorrectionModel input) {
-			final Invoice invoice = invoiceDao.getInvoice(input.getInvoice().getInvoiceId());
 			final org.ab.entity.Correction entity = new org.ab.entity.Correction();
 			entity.setCorrectionId(input.getCorrectionId());
-			entity.setInvoice(invoice);
+			entity.setInvoiceId(input.getInvoice().getInvoiceId());
 			entity.setCorrectionNumber(input.getCorrectionNumber());
 			entity.setCreateDate(input.getCreateDate());
 			entity.setReceiveDate(input.getReceiveDate());
 			entity.setCorrectionRecords(convertRecords(input.getServiceRecords()));
 			entity.setNetAmount(input.getNetAmount());
+			entity.setNetAmountDiff(input.getNetAmountDiff());
 			entity.setVatAmount(input.getVatAmount());
+			entity.setVatAmountDiff(input.getVatAmountDiff());
 			entity.setGrossAmount(input.getGrossAmount());
+			entity.setGrossAmountDiff(input.getGrossAmountDiff());
 			entity.setGrossAmountWords(input.getGrossAmountWords());
 			entity.setPaymentDate(input.getPaymentDate());
 			//			final InvoiceContent invoiceContent = new InvoiceContent();
@@ -72,15 +69,22 @@ public class CorrectionConverter {
 
 						@Override
 						public CorrectionRecord apply(final CorrectionServiceRecord input) {
-							final CorrectionRecord record = new CorrectionRecord();
-							record.setServiceName(input.getServiceName());
-							record.setQuantity(input.getQuantity());
-							record.setNetPrice(input.getNetAmount());
-							record.setNetAmount(input.getNetAmount());
-							record.setVatRate(input.getVatRate());
-							record.setVatAmount(input.getVatAmount());
-							record.setGrossAmount(input.getGrossAmount());
-							return record;
+							final CorrectionRecord entity = new CorrectionRecord();
+							entity.setCorrectionRecordId(input.getCorrectionRecordId());
+							entity.setInvoiceRecordId(input.getInvoiceRecord().getInvoiceRecordId());
+							entity.setServiceName(input.getServiceName());
+							entity.setQuantity(input.getQuantity());
+							entity.setQuantityDiff(input.getQuantityDiff());
+							entity.setNetPrice(input.getNetPrice());
+							entity.setNetPriceDiff(input.getNetPriceDiff());
+							entity.setNetAmount(input.getNetAmount());
+							entity.setNetAmountDiff(input.getNetAmountDiff());
+							entity.setVatRate(input.getVatRate());
+							entity.setVatAmount(input.getVatAmount());
+							entity.setVatAmountDiff(input.getVatAmountDiff());
+							entity.setGrossAmount(input.getGrossAmount());
+							entity.setGrossAmountDiff(input.getGrossAmountDiff());
+							return entity;
 						}
 					}).toList();
 		}

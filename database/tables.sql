@@ -171,6 +171,27 @@ create table Correction(
  	netAmount numeric(12,2),
  	vatAmount numeric(12,2),
  	grossAmount numeric(12,2),
+ 	netAmountDiff numeric(12,2),
+ 	vatAmountDiff numeric(12,2),
+ 	grossAmountDiff numeric(12,2),
  	grossAmountWords varchar(150),
  	paymentDate date,
+);
+
+create table CorrectionRecord(
+	correctionRecordId integer not null IDENTITY PRIMARY KEY,
+	invoiceRecordId integer,
+	serviceName varchar(100) not null,
+	quantity integer,
+	quantityDiff integer,
+ 	netPrice numeric(12,2),
+ 	netPriceDiff numeric(12,2),
+ 	netAmount numeric(12,2),
+ 	netAmountDiff numeric(12,2),
+ 	vatRate integer,
+ 	vatAmount numeric(12,2),
+ 	vatAmountDiff numeric(12,2),
+ 	grossAmount numeric(12,2),
+ 	grossAmountDiff numeric(12,2),
+ 	correctionId integer,
 );
