@@ -87,6 +87,18 @@
 	 			$("#netAmountDiff").val(netAmountDiff);
 	 			$("#vatAmountDiff").val(vatAmountDiff);
 	 			$("#grossAmountDiff").val(grossAmountDiff);
+	 			
+	 			updateAmountWords(grossAmountDiff);
+				
+	 		}
+	 		
+	 		updateAmountWords = function(grossAmountDiff){
+	 			var amountWordsRequest = $.ajax({
+				   	url: "/async/getAmountWords/" + grossAmountDiff
+				});
+				amountWordsRequest.done(function(valueWords)	{
+	 				$("#grossAmountDiffWords").val(valueWords);
+				});
 	 		}
 	 		
 	 		changeService = function(rowNum, serviceId){
@@ -109,6 +121,8 @@
    <h2>Korekta</h2>
    
    <sf:form method="post" modelAttribute="correction" name="correctionForm" onsubmit="return OnSubmitForm();">
+		
+		<sf:hidden path="invoice.invoiceId" />
 		
 		<table style="font-family:sans-serif;" cellspacing="5px" >
 			<tr>
@@ -289,7 +303,23 @@
 			</table>
 		
 		<br/>
-		<div>
+		<table style="font-family:sans-serif;" cellspacing="5px" >
+			<tr>
+				<th align="right"><label>Do zapłaty:</label></th>
+				<td>
+					<sf:input path="grossAmount" />
+				</td>
+			</tr>
+			<tr>
+				<th align="right"><label>Słownie:</label></th>
+				<td>
+					<sf:input id="grossAmountDiffWords" path="grossAmountDiffWords" />
+				</td>
+			</tr>
+		</table>
+		<br/>
+		
+		<div align="right">
 			<button value="/correction/save" onClick="document.pressed=this.value" >Zapisz</button>
 		</div>
 		

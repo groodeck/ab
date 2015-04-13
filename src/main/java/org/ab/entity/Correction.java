@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -25,8 +26,9 @@ public class Correction {
 	@Column(name="correctionId")
 	private Integer correctionId;
 
-	@Column(name="invoiceId")
-	private Integer invoiceId;
+	@ManyToOne
+	@JoinColumn(name="invoiceId")
+	private Invoice invoice;
 
 	@Column(name="correctionNumber")
 	private String correctionNumber;
@@ -102,10 +104,6 @@ public class Correction {
 		return grossAmountWords;
 	}
 
-	public Integer getInvoiceId() {
-		return invoiceId;
-	}
-
 	public BigDecimal getNetAmount() {
 		return netAmount;
 	}
@@ -158,10 +156,6 @@ public class Correction {
 		this.grossAmountWords = grossAmountWords;
 	}
 
-	public void setInvoiceId(final Integer invoiceId) {
-		this.invoiceId = invoiceId;
-	}
-
 	public void setNetAmount(final BigDecimal netAmount) {
 		this.netAmount = netAmount;
 	}
@@ -184,6 +178,14 @@ public class Correction {
 
 	public void setVatAmountDiff(final BigDecimal vatAmountDiff) {
 		this.vatAmountDiff = vatAmountDiff;
+	}
+
+	public Invoice getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(final Invoice invoice) {
+		this.invoice = invoice;
 	}
 
 }

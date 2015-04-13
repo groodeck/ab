@@ -3,8 +3,10 @@ package org.ab.service.converter;
 import java.util.List;
 
 import org.ab.dao.ContractPackageDao;
+import org.ab.dao.InvoiceDao;
 import org.ab.dao.UserDao;
 import org.ab.entity.CorrectionRecord;
+import org.ab.entity.Invoice;
 import org.ab.entity.InvoiceRecord;
 import org.ab.entity.Subscriber;
 import org.ab.model.CorrectionModel;
@@ -30,6 +32,9 @@ public class CorrectionConverter {
 	private UserDao userDao;
 
 	@Autowired
+	private InvoiceDao invoiceDao;
+
+	@Autowired
 	private DeviceConverter deviceConverter;
 
 	@Autowired
@@ -40,9 +45,10 @@ public class CorrectionConverter {
 
 		@Override
 		public org.ab.entity.Correction apply(final CorrectionModel input) {
+			final Invoice invoice = invoiceDao.getInvoice(input.getInvoice().getInvoiceId());
 			final org.ab.entity.Correction entity = new org.ab.entity.Correction();
 			entity.setCorrectionId(input.getCorrectionId());
-			entity.setInvoiceId(input.getInvoice().getInvoiceId());
+			entity.setInvoice(invoice);
 			entity.setCorrectionNumber(input.getCorrectionNumber());
 			entity.setCreateDate(input.getCreateDate());
 			entity.setReceiveDate(input.getReceiveDate());
@@ -53,7 +59,7 @@ public class CorrectionConverter {
 			entity.setVatAmountDiff(input.getVatAmountDiff());
 			entity.setGrossAmount(input.getGrossAmount());
 			entity.setGrossAmountDiff(input.getGrossAmountDiff());
-			entity.setGrossAmountWords(input.getGrossAmountWords());
+			entity.setGrossAmountWords(input.getGrossAmountDiffWords());
 			entity.setPaymentDate(input.getPaymentDate());
 			//			final InvoiceContent invoiceContent = new InvoiceContent();
 			//			invoiceContent.setInvoiceHtml(input.getHtmlContent());

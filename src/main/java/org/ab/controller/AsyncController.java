@@ -9,6 +9,7 @@ import org.ab.model.js.PackageDetails;
 import org.ab.model.js.ServiceDetails;
 import org.ab.service.ContractPackageService;
 import org.ab.service.InvoicesService;
+import org.ab.util.DecimalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,5 +60,11 @@ public class AsyncController {
 	public String getServiceDetails(@PathVariable final int id) {
 		final ServiceDetails packageDetails =packageService.getService(String.valueOf(id));
 		return packageDetails.serialize();
+	}
+
+	@RequestMapping(value="/getAmountWords/{amount}",  produces = "text/html; charset=utf-8")
+	@ResponseBody
+	public String getAmountWords(@PathVariable final String amount) {
+		return DecimalWriter.getDecimalSpoken(amount);
 	}
 }

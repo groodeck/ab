@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.ab.service.generator.CorrectionServiceRecord;
 import org.ab.service.generator.InvoiceServiceRecord;
+import org.ab.util.DecimalWriter;
 import org.joda.time.LocalDate;
 
 import com.google.common.base.Function;
@@ -27,7 +28,7 @@ public class CorrectionModel {
 		private BigDecimal netAmountDiff;
 		private BigDecimal vatAmountDiff;
 		private BigDecimal grossAmountDiff;
-		private String grossAmountWords;
+		private String grossAmountDiffWords;
 		private LocalDate paymentDate;
 		private String htmlContent;
 
@@ -58,6 +59,10 @@ public class CorrectionModel {
 			netAmount = invoice.getNetAmount();
 			vatAmount = invoice.getVatAmount();
 			grossAmount = invoice.getGrossAmount();
+			netAmountDiff = BigDecimal.ZERO.setScale(2);
+			vatAmountDiff = BigDecimal.ZERO.setScale(2);
+			grossAmountDiff = BigDecimal.ZERO.setScale(2);
+			grossAmountDiffWords = DecimalWriter.getDecimalSpoken(grossAmountDiff.toPlainString());
 			serviceRecords.addAll(createServiceRecords(invoice.getServiceRecords()));
 
 			return this;
@@ -93,8 +98,8 @@ public class CorrectionModel {
 			return this;
 		}
 
-		public Builder withGrossAmountWords(final String grossAmountWords) {
-			this.grossAmountWords = grossAmountWords;
+		public Builder withGrossAmountDiffWords(final String grossAmountDiffWords) {
+			this.grossAmountDiffWords = grossAmountDiffWords;
 			return this;
 		}
 
@@ -162,7 +167,7 @@ public class CorrectionModel {
 	private BigDecimal netAmountDiff;
 	private BigDecimal vatAmountDiff;
 	private BigDecimal grossAmountDiff;
-	private String grossAmountWords;
+	private String grossAmountDiffWords;
 	private LocalDate paymentDate;
 	private String htmlContent;
 
@@ -182,7 +187,7 @@ public class CorrectionModel {
 		netAmountDiff = builder.netAmountDiff;
 		vatAmountDiff = builder.vatAmountDiff;
 		grossAmountDiff = builder.grossAmountDiff;
-		grossAmountWords = builder.grossAmountWords;
+		grossAmountDiffWords = builder.grossAmountDiffWords;
 		correctionId = builder.correctionId;
 		paymentDate = builder.paymentDate;
 		htmlContent = builder.htmlContent;
@@ -212,8 +217,8 @@ public class CorrectionModel {
 		return grossAmountDiff;
 	}
 
-	public String getGrossAmountWords() {
-		return grossAmountWords;
+	public String getGrossAmountDiffWords() {
+		return grossAmountDiffWords;
 	}
 
 	public String getHtmlContent() {
@@ -276,8 +281,8 @@ public class CorrectionModel {
 		this.grossAmountDiff = grossAmountDiff;
 	}
 
-	public void setGrossAmountWords(final String grossAmountWords) {
-		this.grossAmountWords = grossAmountWords;
+	public void setGrossAmountDiffWords(final String grossAmountDiffWords) {
+		this.grossAmountDiffWords = grossAmountDiffWords;
 	}
 
 	public void setHtmlContent(final String htmlContent) {

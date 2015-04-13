@@ -28,10 +28,15 @@ public class CorrectionServiceRecord {
 			serviceName = invoiceRecord.getServiceName();
 			vatRate = invoiceRecord.getVatRate();
 			quantity = invoiceRecord.getQuantity();
+			quantityDiff = 0;
 			netPrice = invoiceRecord.getNetPrice();
+			netPriceDiff = BigDecimal.ZERO.setScale(2);
 			netAmount = invoiceRecord.getNetAmount();
+			netAmountDiff = BigDecimal.ZERO.setScale(2);
 			vatAmount = invoiceRecord.getVatAmount();
+			vatAmountDiff = BigDecimal.ZERO.setScale(2);
 			grossAmount = invoiceRecord.getGrossAmount();
+			grossAmountDiff = BigDecimal.ZERO.setScale(2);
 			return this;
 		}
 
