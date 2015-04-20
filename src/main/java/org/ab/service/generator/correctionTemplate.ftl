@@ -11,7 +11,7 @@
 			<tr>
 				<td height='22'></td>
                 <td colspan='6' width='200'></td>
-				<td colspan='4' width='220' style='text-align:left;'>Do faktury:<br>${invoice.invoiceNumber}</td>
+				<td colspan='4' width='220' style='text-align:left;'>Do faktury:<br/>${invoice.invoiceNumber}</td>
 			</tr>
 			<tr>
 				<td height='22'>Data sprzeda¿y: ${receiveDate!}</td>
@@ -36,7 +36,7 @@
 			<tr>
 				<td colspan='2' height='22'>Sprzedawca:</td>
 				<td colspan='2'>Nabywca:</td>
-				<td colspan='2' width='120'>Nr abonenta:</td>
+				<td colspan='2' width='80'>Nr abonenta:</td>
 				<td colspan='5'>${invoice.subscriberIdn!}</td> 	
 			</tr>
 			<tr>
@@ -79,7 +79,7 @@
 				<td rowspan='2' height='22' style='border: 1px solid;'>
 					Nazwa us³ugi
 				</td>
-				<td rowspan='2' style='border-top-width: 1px; border-top-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;' />
+				<td rowspan='2' width='60' style='border-top-width: 1px; border-top-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;' />
 				<td rowspan='2' width='70' style='border-top-width: 1px; border-top-style: solid; border-bottom-width: 1px; border-bottom-style: solid;'>
 					Iloœæ
 				</td>
@@ -186,7 +186,7 @@
 			</#list>
 			
 			<tr>
-				<td colspan='3' height='22'/>
+				<td colspan='3' height='25'/>
 				<td  style='border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
 					RAZEM PRZED KOREKT¥
 				</td>

@@ -18,12 +18,13 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 public class FileGenerator {
 
+	public static final String DOWNLOAD_DIR = "src/main/webapp/resources/download/";
+
 	String generateSingleDocument(final String documentNumber, final String documentContent) {
 		try {
 			final Document document = new Document();
 			final String fileName = documentNumber.replace("/", "_");
-			final String outputFilePath =
-					String.format("src/main/webapp/resources/download/%s.pdf", fileName);
+			final String outputFilePath = String.format(DOWNLOAD_DIR + "%s.pdf", fileName);
 			final PdfWriter writer = PdfWriter.getInstance(document,
 					new FileOutputStream(outputFilePath));
 

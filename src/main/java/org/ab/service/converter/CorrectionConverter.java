@@ -133,9 +133,11 @@ public class CorrectionConverter {
 			entity.setGrossAmountWords(input.getGrossAmountDiffWords());
 			entity.setPaymentDate(input.getPaymentDate());
 			final CorrectionContent correctionContent = new CorrectionContent();
-			correctionContent.setCorrectionHtml(contentGenerator.generateHtml(input));
+			final String htmlContent = contentGenerator.generateHtml(input);
+			correctionContent.setCorrectionHtml(htmlContent);
 			entity.setCorrectionContent(correctionContent);
 			correctionContent.setCorrection(entity);
+			input.setHtmlContent(htmlContent);
 			return entity;
 		}
 

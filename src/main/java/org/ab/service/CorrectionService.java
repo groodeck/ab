@@ -169,4 +169,9 @@ public class CorrectionService {
 		//printToPrinter(filesToPrint);
 	}
 
+	public String getCorrectionFile(final int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

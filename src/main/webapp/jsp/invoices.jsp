@@ -111,8 +111,9 @@
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.grossAmount}"/></td>
 						<td>
 							<c:if test="${!invoice.corrected}">
-								<input type="button" value="Korekta" onClick="window.location.href = '/correction/new/${invoice.invoiceId}'"/>
+								<input type="button" value="Korekta" onClick="window.location.href = '/correction/new/${invoice.invoiceId}'"/> <br/>
 							</c:if>
+							<input type="button" value="Pobierz" onClick="window.location.href = '/async/getInvoiceFile/${invoice.invoiceId}'"/>
 						</td>
 					</tr>
 					<c:set var="correction" value="${corrections[invoice.invoiceId]}" />
@@ -124,7 +125,9 @@
 							<td onclick="displayCorrection(${correction.correctionId})" />
 							<td onclick="displayCorrection(${correction.correctionId})"><c:out value="${correction.createDate}"/></td>
 							<td onclick="displayCorrection(${correction.correctionId})"><c:out value="${correction.grossAmountDiff}"/></td>
-							<td />
+							<td>
+								<input type="button" value="Pobierz" onClick="window.location.href = '/async/getCorrectionFile/${correction.correctionId}'"/>
+							</td>
 						</tr>
 					</c:if>
 				</c:forEach>

@@ -1,9 +1,12 @@
 package org.ab.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.ab.model.js.PackageDetails;
 import org.ab.model.js.ServiceDetails;
@@ -11,6 +14,7 @@ import org.ab.service.ContractPackageService;
 import org.ab.service.CorrectionService;
 import org.ab.service.InvoicesService;
 import org.ab.util.DecimalWriter;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +36,39 @@ public class AsyncController {
 
 	@Autowired
 	private CorrectionService correctionService;
+
+
+	@RequestMapping(value="/getInvoiceFile/{id}",  produces = "application/pdf; charset=utf-8")
+	@ResponseBody
+	public void getInvoiceFile(@PathVariable final int id, final HttpServletResponse response) {
+		final String filePath = invoiceService.getInvoiceFile(id);
+		response.setContentType("application/octet-stream");
+		//TODO: get filename from Service layer
+		response.setHeader("Content-Disposition", "filename=\"KOR_000001_02_2015.pdf\"");
+		final File file = new File(filePath);
+		try {
+			FileUtils.copyFile(file, response.getOutputStream());
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping(value="/getCorrectionFile/{id}",  produces = "text/html; charset=utf-8")
+	@ResponseBody
+	public void getCorrectionFile(@PathVariable final int id, final HttpServletResponse response) {
+		final String filePath = correctionService.getCorrectionFile(id);
+		response.setContentType("application/octet-stream");
+		//TODO: get filename from Service layer
+		response.setHeader("Content-Disposition", "filename=\"KOR_000001_02_2015.pdf\"");
+		final File file = new File(filePath);
+		try {
+			FileUtils.copyFile(file, response.getOutputStream());
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@RequestMapping(value="/getAmountWords",  produces = "text/html; charset=utf-8")
 	@ResponseBody

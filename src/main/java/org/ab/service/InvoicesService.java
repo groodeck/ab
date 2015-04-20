@@ -1,5 +1,7 @@
 package org.ab.service;
 
+import static org.ab.service.generator.FileGenerator.DOWNLOAD_DIR;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -114,6 +116,14 @@ public class InvoicesService {
 		for(final String file : filesToPrint){
 			printFile(file);
 		}
+	}
+
+	public String getInvoiceFile(final int id) {
+		// TODO Auto-generated method stub
+		final String fileName = "KOR_000001_02_2015.pdf";
+		final String workingDir = System.getProperty("user.dir");
+		final String filePath = workingDir + DOWNLOAD_DIR + fileName;
+		return filePath;
 	}
 
 }
