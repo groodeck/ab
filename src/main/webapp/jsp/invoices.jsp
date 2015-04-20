@@ -29,6 +29,16 @@
 				});
 	 		}
 	 		
+	 		displayCorrection = function(correctionId){
+	 			var subscribeRequest = $.ajax({
+	 				//contentType: "application/x-www-form-urlencoded; charset=utf-8",
+				   	url: "/async/getCorrectionContent/" + correctionId
+				});
+				subscribeRequest.done(function(correctionContent)	{
+	 				$("#invoiceContentDiv").html(correctionContent);
+				});
+	 		}
+	 		
 	 	</script>
  	]]>
  </jsp:text>
@@ -89,6 +99,7 @@
 					<td>Okres rozliczeniowy</td>
 					<td>Data utworzenia</td>
 					<td>Wartość faktury</td>
+					<td />
 				</tr>
 				<c:forEach var="invoice" items="${invoices}" varStatus="status" >
 					<tr>
@@ -98,8 +109,24 @@
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.settlementPeriodStart} - ${invoice.settlementPeriodEnd}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.createDate}"/></td>
 						<td onclick="displayInvoice(${invoice.invoiceId})"><c:out value="${invoice.grossAmount}"/></td>
-						<td><input type="button" value="Korekta" onClick="window.location.href = '/correction/new/${invoice.invoiceId}'"/></td>
+						<td>
+							<c:if test="${!invoice.corrected}">
+								<input type="button" value="Korekta" onClick="window.location.href = '/correction/new/${invoice.invoiceId}'"/>
+							</c:if>
+						</td>
 					</tr>
+					<c:set var="correction" value="${corrections[invoice.invoiceId]}" />
+					<c:if test="${correction != null}">
+						<tr>
+							<td />
+							<td onclick="displayCorrection(${correction.correctionId})"><c:out value="${correction.correctionNumber}"/></td>
+							<td onclick="displayCorrection(${correction.correctionId})" />
+							<td onclick="displayCorrection(${correction.correctionId})" />
+							<td onclick="displayCorrection(${correction.correctionId})"><c:out value="${correction.createDate}"/></td>
+							<td onclick="displayCorrection(${correction.correctionId})"><c:out value="${correction.grossAmountDiff}"/></td>
+							<td />
+						</tr>
+					</c:if>
 				</c:forEach>
 			</table>
 		</c:if>

@@ -12,7 +12,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
-public class CorrectionModel {
+public class CorrectionModel implements PrintableContent {
 
 	public static class Builder {
 		private InvoiceModel invoice;

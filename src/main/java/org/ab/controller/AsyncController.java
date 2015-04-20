@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.ab.model.js.PackageDetails;
 import org.ab.model.js.ServiceDetails;
 import org.ab.service.ContractPackageService;
+import org.ab.service.CorrectionService;
 import org.ab.service.InvoicesService;
 import org.ab.util.DecimalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,27 @@ public class AsyncController {
 	@Autowired
 	private InvoicesService invoiceService;
 
+	@Autowired
+	private CorrectionService correctionService;
+
+	@RequestMapping(value="/getAmountWords",  produces = "text/html; charset=utf-8")
+	@ResponseBody
+	public String getAmountWords(final HttpServletRequest request) {
+		final String value = request.getParameter("value");
+		return DecimalWriter.getDecimalSpoken(value);
+	}
+
 	@RequestMapping(value="/getPackages/{clientType}", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String getContractPackages(@PathVariable final String clientType) {
 		final Map<String, String> packages = packageService.getPackageDictionary(clientType);
 		return new JSONSerializer().serialize(packages);
+	}
+
+	@RequestMapping(value="/getCorrectionContent/{id}",  produces = "text/html; charset=utf-8")
+	@ResponseBody
+	public String getCorrectionContent(@PathVariable final int id) {
+		return correctionService.getCorrectionHtmlContent(id);
 	}
 
 	@RequestMapping(value="/clearSubscriberContext",  produces = "text/html; charset=utf-8")
@@ -60,11 +77,5 @@ public class AsyncController {
 	public String getServiceDetails(@PathVariable final int id) {
 		final ServiceDetails packageDetails =packageService.getService(String.valueOf(id));
 		return packageDetails.serialize();
-	}
-
-	@RequestMapping(value="/getAmountWords/{amount}",  produces = "text/html; charset=utf-8")
-	@ResponseBody
-	public String getAmountWords(@PathVariable final String amount) {
-		return DecimalWriter.getDecimalSpoken(amount);
 	}
 }

@@ -24,13 +24,18 @@ import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
 import org.ab.service.converter.CorrectionConverter;
 import org.ab.service.converter.InvoiceConverter;
+import org.ab.service.generator.CorrectionFileGenerator;
 import org.ab.service.generator.CorrectionNumberGenerator;
 import org.ab.service.generator.CorrectionServiceRecord;
-import org.ab.service.generator.InvoiceFileGenerator;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 @Component
 @Transactional
@@ -55,7 +60,7 @@ public class CorrectionService {
 	private CorrectionNumberGenerator numberGenerator;
 
 	@Autowired
-	private InvoiceFileGenerator invoiceFileGenerator;
+	private CorrectionFileGenerator correctionFileGenerator;
 
 	public void calculateCorrectionSum(final CorrectionModel correction) {
 		BigDecimal correctionNetAmount = BigDecimal.ZERO;
@@ -84,18 +89,25 @@ public class CorrectionService {
 		correction.setGrossAmountDiff(grossAmountDiff);
 	}
 
-	public List<InvoiceModel> findInvoices(final String subscriberIdn, final LocalDate dateFrom, final LocalDate dateTo) {
-		final List<org.ab.entity.Invoice> invoices = invoiceDao.findInvoices(subscriberIdn, dateFrom, dateTo);
-		return invoiceConverter.convertEntities(invoices);
+	public List<CorrectionModel> findCorrections(final List<InvoiceModel> invoices) {
+		final ImmutableMap<Integer, InvoiceModel> invoiceMap = Maps.uniqueIndex(invoices,
+				new Function<InvoiceModel, Integer>(){
+			@Override
+			public Integer apply(final InvoiceModel entry) {
+				return entry.getInvoiceId();
+			}
+		});
+		final List<org.ab.entity.Correction> corrections = correctionDao.findCorrections(invoiceMap.keySet());
+		return correctionConverter.convertEntities(corrections, invoiceMap);
+	}
+
+	public String getCorrectionHtmlContent(final int correctionId) {
+		final org.ab.entity.Correction correction = correctionDao.getCorrection(correctionId);
+		return correction.getCorrectionContent().getCorrectionHtml();
 	}
 
 	private LocalDate getFirstOfMonth(final InvoiceGenerationParams generationParams) {
 		return getLocalDate(generationParams).dayOfMonth().withMinimumValue();
-	}
-
-	public String getInvoiceHtmlContent(final int invoiceId) {
-		final org.ab.entity.Invoice invoice = invoiceDao.getInvoice(invoiceId);
-		return invoice.getInvoiceContent().getInvoiceHtml();
 	}
 
 	private LocalDate getLastOfMonth(final InvoiceGenerationParams generationParams) {
@@ -150,6 +162,11 @@ public class CorrectionService {
 	public void save(final CorrectionModel correction) {
 		final Correction entity = correctionConverter.convert(correction);
 		correctionDao.save(entity);
+		final Optional<String> fileToPrint = correctionFileGenerator.generatePdf(correction);
+		// TODO:
+		//	1. uncomment in production
+		// 	2. print only invoices for specific subscriber - email not defined;
+		//printToPrinter(filesToPrint);
 	}
 
 }

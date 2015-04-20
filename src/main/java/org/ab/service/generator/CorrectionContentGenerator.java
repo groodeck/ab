@@ -3,9 +3,9 @@ package org.ab.service.generator;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InvoiceContentGenerator extends ContentGenerator {
+public class CorrectionContentGenerator extends ContentGenerator {
 	@Override
 	protected String getTemplateName() {
-		return "invoiceTemplate.ftl";
+		return "correctionTemplate.ftl";
 	}
 }

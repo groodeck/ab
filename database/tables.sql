@@ -1,4 +1,4 @@
-\-- nie testowane
+-- nie testowane
 create table Users(
 	userId integer(10) not null,
 	username varchar(45) not null,
@@ -194,4 +194,9 @@ create table CorrectionRecord(
  	grossAmount numeric(12,2),
  	grossAmountDiff numeric(12,2),
  	correctionId integer,
+);
+
+create table CorrectionContent(
+ 	correctionId integer not null IDENTITY PRIMARY KEY,
+	correctionHtml clob not null,
 );

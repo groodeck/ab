@@ -5,15 +5,15 @@ import java.util.List;
 import org.ab.dao.ContractPackageDao;
 import org.ab.dao.InvoiceDao;
 import org.ab.dao.UserDao;
+import org.ab.entity.CorrectionContent;
 import org.ab.entity.CorrectionRecord;
 import org.ab.entity.Invoice;
-import org.ab.entity.InvoiceRecord;
 import org.ab.entity.Subscriber;
 import org.ab.model.CorrectionModel;
 import org.ab.model.InvoiceModel;
+import org.ab.service.generator.CorrectionContentGenerator;
 import org.ab.service.generator.CorrectionServiceRecord;
 import org.ab.service.generator.InvoiceParticipant;
-import org.ab.service.generator.InvoiceServiceRecord;
 import org.ab.service.generator.InvoicesGenerator;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,77 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableMap;
 
 @Component
 public class CorrectionConverter {
+
+	private final class ToModelCorrectionFunction implements Function<org.ab.entity.Correction, CorrectionModel>{
+
+		private final ImmutableMap<Integer, InvoiceModel> invoiceMap;
+		private final boolean convertRecords;
+
+		public ToModelCorrectionFunction(final ImmutableMap<Integer, InvoiceModel> invoiceMap, final boolean convertRecords) {
+			this.invoiceMap = invoiceMap;
+			this.convertRecords = convertRecords;
+		}
+
+		@Override
+		public CorrectionModel apply(final org.ab.entity.Correction input) {
+			final InvoiceModel invoiceModel = invoiceMap.get(input.getInvoice().getInvoiceId());
+			invoiceModel.setCorrected(true);
+			final CorrectionModel.Builder builder = new CorrectionModel.Builder()
+			.withInvoice(invoiceModel)
+			.withCorrectionId(input.getCorrectionId())
+			.withCorrectionNumber(input.getCorrectionNumber())
+			.withCreateDate(input.getCreateDate())
+			.withReceiveDate(input.getReceiveDate())
+			.withPaymentDate(input.getPaymentDate())
+			.withNetAmount(input.getNetAmount())
+			.withVatAmount(input.getVatAmount())
+			.withGrossAmount(input.getGrossAmount())
+			.withNetAmountDiff(input.getNetAmountDiff())
+			.withVatAmountDiff(input.getVatAmountDiff())
+			.withGrossAmountDiff(input.getGrossAmountDiff())
+			.withGrossAmountDiffWords(input.getGrossAmountWords());
+			if(convertRecords){
+				builder.withServiceRecords(convertRecords(input.getCorrectionRecords()));
+			}
+			return builder.build();
+		}
+
+		private List<CorrectionServiceRecord> convertRecords(
+				final List<CorrectionRecord> invoiceRecords) {
+			return Lists.newArrayList(FluentIterable.from(invoiceRecords).transform(
+					new Function<CorrectionRecord, CorrectionServiceRecord>(){
+
+						@Override
+						public CorrectionServiceRecord apply(final CorrectionRecord input) {
+							return new CorrectionServiceRecord.Builder()
+							.withServiceName(input.getServiceName())
+							.withQuantity(input.getQuantity())
+							.withNetPrice(input.getNetAmount())
+							.withNetAmount(input.getNetAmount())
+							.withVatRate(input.getVatRate())
+							.withVatAmount(input.getVatAmount())
+							.withGrossAmount(input.getGrossAmount())
+							.withNetPriceDiff(input.getNetPriceDiff())
+							.withNetAmountDiff(input.getNetAmountDiff())
+							.withVatAmountDiff(input.getVatAmountDiff())
+							.withGrossAmountDiff(input.getGrossAmountDiff())
+							.build();
+						}
+					}).toList());
+		}
+
+		private InvoiceParticipant convertSubscriber(final Subscriber subscriber) {
+			return ivoicesGenerator.getInvoiceParticipant(subscriber);
+		}
+
+		private InvoiceParticipant getSeller() {
+			return ivoicesGenerator.getSeller();
+		}
+	}
 
 	@Autowired
 	private ContractPackageDao packageDao;
@@ -39,6 +107,9 @@ public class CorrectionConverter {
 
 	@Autowired
 	private InvoicesGenerator ivoicesGenerator;
+
+	@Autowired
+	private CorrectionContentGenerator contentGenerator;
 
 	private final Function<CorrectionModel, org.ab.entity.Correction> toEntityCorrection =
 			new Function<CorrectionModel, org.ab.entity.Correction>(){
@@ -61,10 +132,10 @@ public class CorrectionConverter {
 			entity.setGrossAmountDiff(input.getGrossAmountDiff());
 			entity.setGrossAmountWords(input.getGrossAmountDiffWords());
 			entity.setPaymentDate(input.getPaymentDate());
-			//			final InvoiceContent invoiceContent = new InvoiceContent();
-			//			invoiceContent.setInvoiceHtml(input.getHtmlContent());
-			//			entity.setInvoiceContent(invoiceContent);
-			//			invoiceContent.setInvoice(entity);
+			final CorrectionContent correctionContent = new CorrectionContent();
+			correctionContent.setCorrectionHtml(contentGenerator.generateHtml(input));
+			entity.setCorrectionContent(correctionContent);
+			correctionContent.setCorrection(entity);
 			return entity;
 		}
 
@@ -96,69 +167,17 @@ public class CorrectionConverter {
 		}
 	};
 
-	private final Function<org.ab.entity.Invoice, InvoiceModel> toModelInvoice =
-			new Function<org.ab.entity.Invoice, InvoiceModel>(){
-
-		@Override
-		public InvoiceModel apply(final org.ab.entity.Invoice input) {
-			final Subscriber subscriber = input.getContract().getSubscriber();
-			final InvoiceModel model = new InvoiceModel.Builder()
-			.withInvoiceId(input.getInvoiceId())
-			.withInvoiceNumber(input.getInvoiceNumber())
-			.withSubscriber(convertSubscriber(subscriber))
-			.withSubscriberIdn(subscriber.getSubscriberIdn())
-			.withSeller(getSeller())
-			.withCreateDate(input.getCreateDate())
-			.withReceiveDate(input.getReceiveDate())
-			.withSettlementPeriodStart(input.getSettlementPeriodStart())
-			.withSettlementPeriodEnd(input.getSettlementPeriodEnd())
-			.withNetAmount(input.getNetAmount())
-			.withVatAmount(input.getVatAmount())
-			.withGrossAmount(input.getGrossAmount())
-			.withPaymentDate(input.getPaymentDate())
-			.withServiceRecords(convertRecords(input.getInvoiceRecords()))
-			.build();
-			return model;
-		}
-
-		private List<InvoiceServiceRecord> convertRecords(
-				final List<InvoiceRecord> invoiceRecords) {
-			return Lists.newArrayList(FluentIterable.from(invoiceRecords).transform(
-					new Function<InvoiceRecord, InvoiceServiceRecord>(){
-
-						@Override
-						public InvoiceServiceRecord apply(final InvoiceRecord input) {
-							return new InvoiceServiceRecord.Builder()
-							.withServiceName(input.getServiceName())
-							.withQuantity(input.getQuantity())
-							.withNetPrice(input.getNetAmount())
-							.withNetAmount(input.getNetAmount())
-							.withVatRate(input.getVatRate())
-							.withVatAmount(input.getVatAmount())
-							.withGrossAmount(input.getGrossAmount())
-							.build();
-						}
-					}).toList());
-		}
-
-		private InvoiceParticipant convertSubscriber(final Subscriber subscriber) {
-			return ivoicesGenerator.getInvoiceParticipant(subscriber);
-		}
-
-		private InvoiceParticipant getSeller() {
-			return ivoicesGenerator.getSeller();
-		}
-	};
-
 	public org.ab.entity.Correction convert(final CorrectionModel invoice) {
 		return toEntityCorrection.apply(invoice);
 	}
 
-	public List<InvoiceModel> convertEntities(final List<org.ab.entity.Invoice> invoices) {
-		return FluentIterable.from(invoices).transform(toModelInvoice).toList();
+	public List<CorrectionModel> convertEntities(final List<org.ab.entity.Correction> corrections,
+			final ImmutableMap<Integer,InvoiceModel> invoiceMap) {
+		final ToModelCorrectionFunction toModelCorrection = new ToModelCorrectionFunction(invoiceMap, false);
+		return FluentIterable.from(corrections).transform(toModelCorrection).toList();
 	}
 
-	public InvoiceModel convertEntity(final org.ab.entity.Invoice invoice) {
-		return toModelInvoice.apply(invoice);
-	}
+	//	public CorrectionModel convertEntity(final org.ab.entity.Correction invoice) {
+	//		return toModelCorrection.apply(invoice);
+	//	}
 }

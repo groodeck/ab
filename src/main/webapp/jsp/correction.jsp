@@ -87,6 +87,7 @@
 	 			$("#netAmountDiff").val(netAmountDiff);
 	 			$("#vatAmountDiff").val(vatAmountDiff);
 	 			$("#grossAmountDiff").val(grossAmountDiff);
+	 			$("#paymentAmount").val(grossAmountDiff);
 	 			
 	 			updateAmountWords(grossAmountDiff);
 				
@@ -94,7 +95,7 @@
 	 		
 	 		updateAmountWords = function(grossAmountDiff){
 	 			var amountWordsRequest = $.ajax({
-				   	url: "/async/getAmountWords/" + grossAmountDiff
+				   	url: "/async/getAmountWords?value=" + grossAmountDiff
 				});
 				amountWordsRequest.done(function(valueWords)	{
 	 				$("#grossAmountDiffWords").val(valueWords);
@@ -123,6 +124,13 @@
    <sf:form method="post" modelAttribute="correction" name="correctionForm" onsubmit="return OnSubmitForm();">
 		
 		<sf:hidden path="invoice.invoiceId" />
+		
+		<sf:hidden path="invoice.seller.name" />
+		<sf:hidden path="invoice.seller.addressStreet" />
+		<sf:hidden path="invoice.seller.addressCity" />
+		<sf:hidden path="invoice.seller.nip" />
+		<sf:hidden path="invoice.seller.regon" />
+		<sf:hidden path="invoice.seller.phone" />
 		
 		<table style="font-family:sans-serif;" cellspacing="5px" >
 			<tr>
@@ -307,7 +315,7 @@
 			<tr>
 				<th align="right"><label>Do zapłaty:</label></th>
 				<td>
-					<sf:input path="grossAmount" />
+					<sf:input id="paymentAmount" path="grossAmount" />
 				</td>
 			</tr>
 			<tr>

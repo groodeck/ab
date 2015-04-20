@@ -11,6 +11,8 @@ import org.joda.time.LocalDate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.ImmutableSet;
+
 @Repository
 @Transactional
 public class CorrectionDao {
@@ -24,19 +26,11 @@ public class CorrectionDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Correction> findCorrections(final String userNumber, final LocalDate createDateFrom, final LocalDate createDateTo) {
+	public List<Correction> findCorrections(final ImmutableSet<Integer> invoiceIds) {
 		final Query query = em.createQuery("from Correction c where "
-				+ "(:userNumber is null OR c.invoice.contract.subscriber.subscriberIdn = :userNumber) "
-				+ (createDateFrom == null ? "" : "AND c.createDate >= :dateFrom ")
-				+ (createDateTo == null ? "" : "AND c.createDate <= :dateTo ")
+				+ "c.invoice.invoiceId IN (:invoiceIds) "
 				+ "ORDER BY c.invoice.contract.subscriber.subscriberId, c.invoice.settlementPeriodStart ASC")
-				.setParameter("userNumber", userNumber);
-		if(createDateFrom != null){
-			query.setParameter("dateFrom", createDateFrom);
-		}
-		if(createDateTo != null){
-			query.setParameter("dateTo", createDateTo);
-		}
+				.setParameter("invoiceIds", invoiceIds);
 		return query.getResultList();
 	}
 

@@ -10,7 +10,7 @@ import org.joda.time.LocalDate;
 
 import com.google.common.collect.Lists;
 
-public class InvoiceModel {
+public class InvoiceModel implements PrintableContent{
 	public static class Builder {
 		private Integer invoiceId;
 		private String subscriberIdn;
@@ -149,6 +149,7 @@ public class InvoiceModel {
 	private LocalDate settlementPeriodEnd;
 	private LocalDate paymentDate;
 	private String htmlContent;
+	private boolean corrected;
 
 	public InvoiceModel(){
 	}
@@ -246,8 +247,16 @@ public class InvoiceModel {
 		return vatAmount;
 	}
 
+	public boolean isCorrected() {
+		return corrected;
+	}
+
 	public void setContract(final Contract contract) {
 		this.contract = contract;
+	}
+
+	public void setCorrected(final boolean corrected) {
+		this.corrected = corrected;
 	}
 
 	public void setCreateDate(final LocalDate createDate) {

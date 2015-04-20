@@ -6,12 +6,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -70,11 +72,15 @@ public class Correction {
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate paymentDate;
 
-	//	@OneToOne(fetch = FetchType.LAZY, mappedBy = "invoice", cascade = CascadeType.ALL)
-	//	private InvoiceContent invoiceContent;
-	//
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "correction", cascade = CascadeType.ALL)
+	private CorrectionContent correctionContent;
+
 	//	@OneToMany(mappedBy="invoice")
 	//	private List<InvoicePayment> invoicePayments;
+
+	public CorrectionContent getCorrectionContent() {
+		return correctionContent;
+	}
 
 	public Integer getCorrectionId() {
 		return correctionId;
@@ -104,6 +110,10 @@ public class Correction {
 		return grossAmountWords;
 	}
 
+	public Invoice getInvoice() {
+		return invoice;
+	}
+
 	public BigDecimal getNetAmount() {
 		return netAmount;
 	}
@@ -126,6 +136,10 @@ public class Correction {
 
 	public BigDecimal getVatAmountDiff() {
 		return vatAmountDiff;
+	}
+
+	public void setCorrectionContent(final CorrectionContent correctionContent) {
+		this.correctionContent = correctionContent;
 	}
 
 	public void setCorrectionId(final Integer correctionId) {
@@ -156,6 +170,10 @@ public class Correction {
 		this.grossAmountWords = grossAmountWords;
 	}
 
+	public void setInvoice(final Invoice invoice) {
+		this.invoice = invoice;
+	}
+
 	public void setNetAmount(final BigDecimal netAmount) {
 		this.netAmount = netAmount;
 	}
@@ -178,14 +196,6 @@ public class Correction {
 
 	public void setVatAmountDiff(final BigDecimal vatAmountDiff) {
 		this.vatAmountDiff = vatAmountDiff;
-	}
-
-	public Invoice getInvoice() {
-		return invoice;
-	}
-
-	public void setInvoice(final Invoice invoice) {
-		this.invoice = invoice;
 	}
 
 }

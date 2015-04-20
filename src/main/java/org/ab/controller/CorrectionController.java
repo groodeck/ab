@@ -1,9 +1,11 @@
 package org.ab.controller;
 
 import org.ab.model.CorrectionModel;
+import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.dictionary.SelectValueService;
 import org.ab.service.CorrectionService;
 import org.ab.service.generator.CorrectionServiceRecord;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,10 +53,10 @@ public class CorrectionController {
 	@RequestMapping("/save")
 	public String handleSaveAction(final CorrectionModel correction, final Model model) {
 		correctionService.save(correction);
-		model.addAllAttributes(selectValuesService.getCorrectionDictionaries(
-				correction.getInvoice().getSubscriberIdn()));
-		model.addAttribute("correction", correction);
-		return "correction";
+		model.addAttribute("uiMessage", "Zapisano korektê");
+		model.addAttribute("generationParams", new InvoiceGenerationParams(LocalDate.now()));
+		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());
+		return "invoices";
 	}
 
 }

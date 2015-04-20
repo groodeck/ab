@@ -1,7 +1,6 @@
 package org.ab.service.generator;
 
 import org.ab.model.InvoiceModel;
-import org.ab.service.generator.InvoiceFileGenerator;
 import org.junit.Test;
 
 public class InvoiceFileGeneratorTest {
@@ -11,9 +10,10 @@ public class InvoiceFileGeneratorTest {
 	@Test
 	public void shouldPrintPdf(){
 		// given
+		final InvoiceModel invoice = new InvoiceModel.Builder().build();
 
 		// when
-		service.generateSingleInvoice(new InvoiceModel.Builder().build());
+		service.generateSingleDocument(invoice.getInvoiceNumber(), invoice.getHtmlContent());
 
 		// then
 	}
