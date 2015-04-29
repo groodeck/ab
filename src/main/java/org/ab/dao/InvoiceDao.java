@@ -57,14 +57,15 @@ public class InvoiceDao {
 		return em.find(Invoice.class, invoiceId);
 	}
 
-	public long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
-		return (Long)em.createQuery("select count(*) "
+	@SuppressWarnings("unchecked")
+	public List<String> getInvoiceNumbers(final LocalDate dateFrom, final LocalDate dateTo) {
+		return em.createQuery("select i.invoiceNumber "
 				+ "from Invoice i where "
-				+ "i.settlementPeriodStart = :dateFrom "
-				+ "and i.settlementPeriodEnd = :dateTo ")
+				+ "i.createDate >= :dateFrom "
+				+ "and i.createDate <= :dateTo ")
 				.setParameter("dateFrom", dateFrom)
 				.setParameter("dateTo", dateTo)
-				.getSingleResult();
+				.getResultList();
 	}
 
 	public Integer save(final Invoice entity) {

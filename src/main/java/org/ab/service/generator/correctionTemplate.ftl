@@ -106,30 +106,59 @@
 			</tr>
 			
 			<#list serviceRecords as serviceRecord>
+			
 			<tr>
 				<td height='22'  style='border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
-					${serviceRecord.invoiceRecord.serviceName}
+					<#if serviceRecord.invoiceRecord.quantity??>
+						${serviceRecord.invoiceRecord.serviceName!}
+					<#else>
+						-
+					</#if>
 				</td>
 				<td style='border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
 					Przed korekt¹
 				</td>
 				<td style='border-bottom-width: 1px; border-bottom-style: solid;'>
-					${serviceRecord.invoiceRecord.quantity}
+					<#if serviceRecord.invoiceRecord.quantity??>
+						${serviceRecord.invoiceRecord.quantity}
+					<#else>
+						-
+					</#if>
 				</td>
 				<td width='160' style='border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
-					${invoice.settlementPeriodStart!}-${invoice.settlementPeriodEnd!}
+					<#if serviceRecord.invoiceRecord.quantity??>
+						${invoice.settlementPeriodStart}-${invoice.settlementPeriodEnd}
+					<#else>
+						-
+					</#if>
 				</td>
 				<td colspan="2" style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid;'>
-					${serviceRecord.invoiceRecord.netAmount?string["0.00"]}
+					<#if serviceRecord.invoiceRecord.netAmount??>
+						${serviceRecord.invoiceRecord.netAmount?string["0.00"]}
+					<#else>
+						-
+					</#if>
 				</td>
 				<td style='text-align:right; border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
-					${serviceRecord.invoiceRecord.vatRate!}
+					<#if serviceRecord.invoiceRecord.vatRate??>
+						${serviceRecord.invoiceRecord.vatRate}
+					<#else>
+						-
+					</#if>
 				</td>
 				<td colspan='2' style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
-					${serviceRecord.invoiceRecord.vatAmount?string["0.00"]}
+					<#if serviceRecord.invoiceRecord.vatAmount??>
+						${serviceRecord.invoiceRecord.vatAmount?string["0.00"]}
+					<#else>
+						-
+					</#if>
 				</td>
 				<td colspan='2' style='text-align:right; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
-					${serviceRecord.invoiceRecord.grossAmount?string["0.00"]}
+					<#if serviceRecord.invoiceRecord.grossAmount??>
+						${serviceRecord.invoiceRecord.grossAmount?string["0.00"]}
+					<#else>
+						-
+					</#if>
 				</td>
 			</tr>
 			
@@ -165,7 +194,7 @@
 					Korekta
 				</td>
 				<td style='border-bottom-width: 1px; border-bottom-style: solid;'>
-					${serviceRecord.quantityDiff}
+					${serviceRecord.quantityDiff!}
 				</td>
 				<td style='border-left-width: 1px; border-left-style: solid; border-bottom-width: 1px; border-bottom-style: solid; border-right-width: 1px; border-right-style: solid;'>
 				
@@ -242,24 +271,9 @@
 				</td>
 			</tr>
 			
-			<!-- <tr>
-				<td colspan='5'/>
-				<td colspan='2' rowspan='5'>W TYM</td>
-				<td colspan='2'/>
-				<td>zw</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
-			</tr>
 			<tr>
-				<td colspan='5'/>
-				<td colspan='2'/>
-				<td>23</td>
-				<td colspan='2'/>
-				<td colspan='2'/>
-			</tr> -->
-			<tr>
-				<td colspan='2' height='22'/>
-				<td colspan='9' rowspan="2">S³ownie: ${grossAmountDiffWords}</td>
+				<td colspan='3' height='22'/>
+				<td colspan='8' rowspan="2">S³ownie: ${grossAmountDiffWords}</td>
 			</tr>
 			<tr>
 				<td colspan='2' height='22'/>

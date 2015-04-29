@@ -19,8 +19,11 @@
 	 		
 	 		calculateRow = function(rowNumber){
 	 			var invoiceQuantity = $(("#invoiceService_" + rowNumber + "_quantity")).val();
+	 			if(invoiceQuantity == null){
+	 				invoiceQuantity = 0;
+	 			}
 	 			var correctionQuantity = $(("#correctionService_" + rowNumber + "_quantity")).val();
-	 			if(invoiceQuantity && correctionQuantity){
+	 			if(correctionQuantity){
 	 				var quantityDiff = correctionQuantity - invoiceQuantity;
 	 				$(("#correctionService_" + rowNumber + "_quantityDiff")).val(quantityDiff);
 	 			}
@@ -219,45 +222,45 @@
 						</td>
 						<td>Przed korektą</td>
 						<td>
-							<sf:input id="invoiceService_${status.index}_quantity" path="serviceRecords[${status.index}].invoiceRecord.quantity" readonly="true"/>
+							<sf:input id="invoiceService_${status.index}_quantity" path="serviceRecords[${status.index}].invoiceRecord.quantity" readonly="true" cssStyle="width: 50px;"/>
 						</td>
 						<td>
-							<sf:input id="invoiceService_${status.index}_netPrice" path="serviceRecords[${status.index}].invoiceRecord.netPrice" readonly="true"/>
+							<sf:input id="invoiceService_${status.index}_netPrice" path="serviceRecords[${status.index}].invoiceRecord.netPrice" readonly="true" cssStyle="width: 100px;"/>
 						</td>
 						<td>
-							<sf:input id="invoiceService_${status.index}_netAmount" path="serviceRecords[${status.index}].invoiceRecord.netAmount" readonly="true"/>
+							<sf:input id="invoiceService_${status.index}_netAmount" path="serviceRecords[${status.index}].invoiceRecord.netAmount" readonly="true" cssStyle="width: 100px;"/>
 						</td>
 						<td>
-							<sf:input id="invoiceService_${status.index}_vatRate" path="serviceRecords[${status.index}].invoiceRecord.vatRate" readonly="true" />
+							<sf:input id="invoiceService_${status.index}_vatRate" path="serviceRecords[${status.index}].invoiceRecord.vatRate" readonly="true" cssStyle="width: 100px;" />
 						</td>
 						<td>
-							<sf:input id="invoiceService_${status.index}_vatAmount" path="serviceRecords[${status.index}].invoiceRecord.vatAmount" readonly="true"/>
+							<sf:input id="invoiceService_${status.index}_vatAmount" path="serviceRecords[${status.index}].invoiceRecord.vatAmount" readonly="true" cssStyle="width: 100px;"/>
 						</td>
 						<td>
-							<sf:input id="invoiceService_${status.index}_grossAmount" path="serviceRecords[${status.index}].invoiceRecord.grossAmount" readonly="true"/>
+							<sf:input id="invoiceService_${status.index}_grossAmount" path="serviceRecords[${status.index}].invoiceRecord.grossAmount" readonly="true" cssStyle="width: 110px;"/>
 						</td>
 						<td rowspan="2">
 							<button class="deleteButton" value="/correction/delRow/${status.index}" onClick="document.pressed=this.value" style="width: 35px;">-</button>
 						</td>
 					</tr>
 					<tr>
-						<td rowspan="2"><sf:input path="serviceRecords[${status.index}].serviceName" onchange="changeService(${status.index}, this.value)"/></td>
+						<td rowspan="2"><sf:input path="serviceRecords[${status.index}].serviceName" onchange="changeService(${status.index}, this.value)" cssStyle="width: 250px;"/></td>
 						<td>Po korekcie</td>
-						<td><sf:input id="correctionService_${status.index}_quantity" path="serviceRecords[${status.index}].quantity" onchange="calculateRow(${status.index})" /></td>
-						<td><sf:input id="correctionService_${status.index}_netPrice" path="serviceRecords[${status.index}].netPrice" onchange="calculateRow(${status.index})" /></td>
-						<td><sf:input id="correctionService_${status.index}_netAmount" path="serviceRecords[${status.index}].netAmount" readonly="true"/></td>
-						<td><sf:input id="correctionService_${status.index}_vatRate" path="serviceRecords[${status.index}].vatRate" onchange="calculateRow(${status.index})" /></td>
-						<td><sf:input id="correctionService_${status.index}_vatAmount" path="serviceRecords[${status.index}].vatAmount" readonly="true"/></td>
-						<td><sf:input id="correctionService_${status.index}_grossAmount" path="serviceRecords[${status.index}].grossAmount" readonly="true"/></td>
+						<td><sf:input id="correctionService_${status.index}_quantity" path="serviceRecords[${status.index}].quantity" onchange="calculateRow(${status.index})" cssStyle="width: 50px;"/></td>
+						<td><sf:input id="correctionService_${status.index}_netPrice" path="serviceRecords[${status.index}].netPrice" onchange="calculateRow(${status.index})" cssStyle="width: 100px;"/></td>
+						<td><sf:input id="correctionService_${status.index}_netAmount" path="serviceRecords[${status.index}].netAmount" readonly="true" cssStyle="width: 100px;"/></td>
+						<td><sf:input id="correctionService_${status.index}_vatRate" path="serviceRecords[${status.index}].vatRate" onchange="calculateRow(${status.index})" cssStyle="width: 100px;"/></td>
+						<td><sf:input id="correctionService_${status.index}_vatAmount" path="serviceRecords[${status.index}].vatAmount" readonly="true" cssStyle="width: 100px;"/></td>
+						<td><sf:input id="correctionService_${status.index}_grossAmount" path="serviceRecords[${status.index}].grossAmount" readonly="true" cssStyle="width: 110px;"/></td>
 					</tr>
 					<tr>
 						<td>Korekta</td>
-						<td><sf:input id="correctionService_${status.index}_quantityDiff" path="serviceRecords[${status.index}].quantityDiff" readonly="true"/></td>
-						<td><sf:input id="correctionService_${status.index}_netPriceDiff" path="serviceRecords[${status.index}].netPriceDiff" readonly="true"/></td>
-						<td><sf:input id="correctionService_${status.index}_netAmountDiff" path="serviceRecords[${status.index}].netAmountDiff" readonly="true"/></td>
-						<td><sf:input id="correctionService_${status.index}_vatRateDiff" path="serviceRecords[${status.index}].vatRate" readonly="true"/></td>
-						<td><sf:input id="correctionService_${status.index}_vatAmountDiff" path="serviceRecords[${status.index}].vatAmountDiff" readonly="true"/></td>
-						<td><sf:input id="correctionService_${status.index}_grossAmountDiff" path="serviceRecords[${status.index}].grossAmountDiff" readonly="true"/></td>
+						<td><sf:input id="correctionService_${status.index}_quantityDiff" path="serviceRecords[${status.index}].quantityDiff" readonly="true" cssStyle="width: 50px;"/></td>
+						<td><sf:input id="correctionService_${status.index}_netPriceDiff" path="serviceRecords[${status.index}].netPriceDiff" readonly="true" cssStyle="width: 100px;"/></td>
+						<td><sf:input id="correctionService_${status.index}_netAmountDiff" path="serviceRecords[${status.index}].netAmountDiff" readonly="true" cssStyle="width: 100px;"/></td>
+						<td><sf:input id="correctionService_${status.index}_vatRateDiff" path="serviceRecords[${status.index}].vatRate" readonly="true" cssStyle="width: 100px;"/></td>
+						<td><sf:input id="correctionService_${status.index}_vatAmountDiff" path="serviceRecords[${status.index}].vatAmountDiff" readonly="true" cssStyle="width: 100px;"/></td>
+						<td><sf:input id="correctionService_${status.index}_grossAmountDiff" path="serviceRecords[${status.index}].grossAmountDiff" readonly="true" cssStyle="width: 110px;"/></td>
 						<td>
 							<c:if test="${status.last}">
 								<button value="/correction/addRow" onClick="document.pressed=this.value" style="width: 35px;">+</button>
@@ -270,42 +273,42 @@
 					<td colspan="3"/>
 					<td>Przed korektą</td>
 					<td>
-						<sf:input id="invoiceNetAmount" path="invoice.netAmount" readonly="true"/>
+						<sf:input id="invoiceNetAmount" path="invoice.netAmount" readonly="true" cssStyle="width: 100px;"/>
 					</td>
 					<td/>
 					<td>
-						<sf:input id="invoiceVatAmount" path="invoice.vatAmount" readonly="true"/>
+						<sf:input id="invoiceVatAmount" path="invoice.vatAmount" readonly="true" cssStyle="width: 100px;"/>
 					</td>
 					<td>
-						<sf:input id="invoiceGrossAmount" path="invoice.grossAmount" readonly="true"/>
+						<sf:input id="invoiceGrossAmount" path="invoice.grossAmount" readonly="true" cssStyle="width: 100px;"/>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="3"/>
 					<td>Po korekcie</td>
 					<td>
-						<sf:input id="netAmount" path="netAmount" readonly="true"/>
+						<sf:input id="netAmount" path="netAmount" readonly="true" cssStyle="width: 100px;"/>
 					</td>
 					<td/>
 					<td>
-						<sf:input id="vatAmount" path="vatAmount" readonly="true"/>
+						<sf:input id="vatAmount" path="vatAmount" readonly="true" cssStyle="width: 100px;"/>
 					</td>	
 					<td>
-						<sf:input id="grossAmount" path="grossAmount" readonly="true"/>
+						<sf:input id="grossAmount" path="grossAmount" readonly="true" cssStyle="width: 100px;"/>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="3"/>
 					<td>Korekta</td>
 					<td>
-						<sf:input id="netAmountDiff" path="netAmountDiff" readonly="true"/>
+						<sf:input id="netAmountDiff" path="netAmountDiff" readonly="true" cssStyle="width: 100px;"/>
 					</td>
 					<td/>
 					<td>
-						<sf:input id="vatAmountDiff" path="vatAmountDiff" readonly="true"/>
+						<sf:input id="vatAmountDiff" path="vatAmountDiff" readonly="true" cssStyle="width: 100px;"/>
 					</td>
 					<td>
-						<sf:input id="grossAmountDiff" path="grossAmountDiff" readonly="true"/>
+						<sf:input id="grossAmountDiff" path="grossAmountDiff" readonly="true" cssStyle="width: 100px;"/>
 					</td>
 				</tr>
 			</table>
@@ -315,13 +318,13 @@
 			<tr>
 				<th align="right"><label>Do zapłaty:</label></th>
 				<td>
-					<sf:input id="paymentAmount" path="grossAmount" />
+					<sf:input id="paymentAmount" path="grossAmount" cssStyle="width: 110px;"/>
 				</td>
 			</tr>
 			<tr>
 				<th align="right"><label>Słownie:</label></th>
 				<td>
-					<sf:input id="grossAmountDiffWords" path="grossAmountDiffWords" />
+					<sf:input id="grossAmountDiffWords" path="grossAmountDiffWords" cssStyle="width: 300px;"/>
 				</td>
 			</tr>
 		</table>

@@ -41,6 +41,9 @@ public class InvoicesGenerator {
 	@Autowired
 	private InvoiceDao invoiceDao;
 
+	@Autowired
+	private InvoiceNumberGenerator numberGenerator;
+
 	private static final Integer ONE = 1;
 
 	private Address determineInvoiceAddress(final List<Address> addresses) {
@@ -68,22 +71,18 @@ public class InvoicesGenerator {
 		return contentGenerator.generateHtml(invoice);
 	}
 
-	String generateInvoiceNumber(final long invoiceCount, final LocalDate dateFrom) {
-		final String sequenceNumber = String.format("%06d", invoiceCount+1);
-		final String month = String.format("%02d", dateFrom.getMonthOfYear());
-		return String.format("FVAT/%s/%s/%s", sequenceNumber, month, dateFrom.getYear());
-	}
-
 	@Transactional
 	public List<InvoiceModel> generateInvoices(final List<Contract> contracts, final LocalDate dateFrom, final LocalDate dateTo) {
 		final Properties props = loadProperties("companyDetails.properties");
 		final String city = props.getProperty("company.city");
 		final LocalDate currentDate = LocalDate.now();
-		long invoiceCount = getInvoiceCount(dateFrom, dateTo);
+		final LocalDate firstOfCurrentMonth = currentDate.dayOfMonth().withMinimumValue();
+		final LocalDate lastOfCurrentMonth = currentDate.dayOfMonth().withMaximumValue();
+		long lastInvoiceSequence = numberGenerator.getLastDocumentSequence(firstOfCurrentMonth, lastOfCurrentMonth);
 		final List<InvoiceModel> results = Lists.newArrayList();
 		for(final Contract contract : contracts){
 			final InvoiceModel.Builder invoiceBuilder = new InvoiceModel.Builder()
-			.withInvoiceNumber(generateInvoiceNumber(invoiceCount++, dateFrom))
+			.withInvoiceNumber(numberGenerator.generate(lastInvoiceSequence++, currentDate))
 			.withSubscriberIdn(contract.getSubscriber().getSubscriberIdn())
 			.withContract(contract)
 			.withSettlementPeriodStart(dateFrom)
@@ -186,10 +185,6 @@ public class InvoicesGenerator {
 		.withVatAmount(contract.getInstallationFeeVat())
 		.withGrossAmount(contract.getInstallationFeeGross());
 		return serviceBuilder.build();
-	}
-
-	private long getInvoiceCount(final LocalDate dateFrom, final LocalDate dateTo) {
-		return invoiceDao.getInvoiceCount(dateFrom, dateTo);
 	}
 
 	public InvoiceParticipant getInvoiceParticipant(final Subscriber subscriber) {

@@ -38,14 +38,15 @@ public class CorrectionDao {
 		return em.find(Correction.class, correctionId);
 	}
 
-	public long getCorrectionCount(final LocalDate dateFrom, final LocalDate dateTo) {
-		return (Long)em.createQuery("select count(*) "
+	@SuppressWarnings("unchecked")
+	public List<String> getCorrectionNumbers(final LocalDate dateFrom, final LocalDate dateTo) {
+		return em.createQuery("select c.correctionNumber "
 				+ "from Correction c where "
-				+ "c.invoice.settlementPeriodStart = :dateFrom "
-				+ "and c.invoice.settlementPeriodEnd = :dateTo ")
+				+ "c.createDate >= :dateFrom "
+				+ "and c.createDate <= :dateTo ")
 				.setParameter("dateFrom", dateFrom)
 				.setParameter("dateTo", dateTo)
-				.getSingleResult();
+				.getResultList();
 	}
 
 	public Integer save(final Correction entity) {

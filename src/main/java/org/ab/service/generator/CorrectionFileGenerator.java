@@ -11,7 +11,7 @@ import com.google.common.base.Optional;
 public class CorrectionFileGenerator extends FileGenerator {
 
 	public Optional<String> generatePdf(final CorrectionModel correction) {
-		final String filePath = generateSingleDocument(correction.getCorrectionNumber(), correction.getHtmlContent());
+		final String filePath = createFile(correction.getCorrectionNumber(), correction.getHtmlContent());
 		if(shouldBePrinted(correction)){
 			return Optional.of(filePath);
 		} else {

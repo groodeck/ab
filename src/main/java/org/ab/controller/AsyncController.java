@@ -38,38 +38,6 @@ public class AsyncController {
 	private CorrectionService correctionService;
 
 
-	@RequestMapping(value="/getInvoiceFile/{id}",  produces = "application/pdf; charset=utf-8")
-	@ResponseBody
-	public void getInvoiceFile(@PathVariable final int id, final HttpServletResponse response) {
-		final String filePath = invoiceService.getInvoiceFile(id);
-		response.setContentType("application/octet-stream");
-		//TODO: get filename from Service layer
-		response.setHeader("Content-Disposition", "filename=\"KOR_000001_02_2015.pdf\"");
-		final File file = new File(filePath);
-		try {
-			FileUtils.copyFile(file, response.getOutputStream());
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	@RequestMapping(value="/getCorrectionFile/{id}",  produces = "text/html; charset=utf-8")
-	@ResponseBody
-	public void getCorrectionFile(@PathVariable final int id, final HttpServletResponse response) {
-		final String filePath = correctionService.getCorrectionFile(id);
-		response.setContentType("application/octet-stream");
-		//TODO: get filename from Service layer
-		response.setHeader("Content-Disposition", "filename=\"KOR_000001_02_2015.pdf\"");
-		final File file = new File(filePath);
-		try {
-			FileUtils.copyFile(file, response.getOutputStream());
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	@RequestMapping(value="/getAmountWords",  produces = "text/html; charset=utf-8")
 	@ResponseBody
 	public String getAmountWords(final HttpServletRequest request) {
@@ -90,6 +58,22 @@ public class AsyncController {
 		return correctionService.getCorrectionHtmlContent(id);
 	}
 
+	@RequestMapping(value="/getCorrectionFile/{id}",  produces = "text/html; charset=utf-8")
+	@ResponseBody
+	public void getCorrectionFile(@PathVariable final int id, final HttpServletResponse response) {
+		final String filePath = correctionService.getCorrectionFile(id);
+		response.setContentType("application/octet-stream");
+		//TODO: get filename from Service layer
+		response.setHeader("Content-Disposition", "filename=\"KOR_000001_02_2015.pdf\"");
+		final File file = new File(filePath);
+		try {
+			FileUtils.copyFile(file, response.getOutputStream());
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	@RequestMapping(value="/clearSubscriberContext",  produces = "text/html; charset=utf-8")
 	@ResponseBody
 	public void getInvoiceContent(final HttpServletRequest request) {
@@ -100,6 +84,21 @@ public class AsyncController {
 	@ResponseBody
 	public String getInvoiceContent(@PathVariable final int id) {
 		return invoiceService.getInvoiceHtmlContent(id);
+	}
+
+	@RequestMapping(value="/getInvoiceFile/{id}",  produces = "application/pdf; charset=utf-8")
+	@ResponseBody
+	public void getInvoiceFile(@PathVariable final int id, final HttpServletResponse response) {
+		final String filePath = invoiceService.getInvoiceFile(id);
+		final File file = new File(filePath);
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "filename=\"" + file.getName() + "\"");
+		try {
+			FileUtils.copyFile(file, response.getOutputStream());
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@RequestMapping(value="/getPackageDetails/{id}", produces = "application/json; charset=utf-8")

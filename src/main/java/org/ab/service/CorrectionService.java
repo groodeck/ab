@@ -101,6 +101,12 @@ public class CorrectionService {
 		return correctionConverter.convertEntities(corrections, invoiceMap);
 	}
 
+	public String getCorrectionFile(final int correctionId) {
+		final Correction correction = correctionDao.getCorrection(correctionId);
+		final String correctionNumber = correction.getCorrectionNumber();
+		return correctionFileGenerator.createFile(correctionNumber, correction.getCorrectionContent().getCorrectionHtml());
+	}
+
 	public String getCorrectionHtmlContent(final int correctionId) {
 		final org.ab.entity.Correction correction = correctionDao.getCorrection(correctionId);
 		return correction.getCorrectionContent().getCorrectionHtml();
@@ -131,12 +137,19 @@ public class CorrectionService {
 	public CorrectionModel prepareCorrection(final int invoiceId) {
 		final Invoice invoice = invoiceDao.getInvoice(invoiceId);
 		final InvoiceModel invoiceModel = invoiceConverter.convertEntity(invoice);
-		final String correctionNumber = numberGenerator.generate(invoiceModel);
+		final String correctionNumber = getCorrectionNumber();
 
 		return new CorrectionModel.Builder()
 		.fromInvoice(invoiceModel)
 		.withCorrectionNumber(correctionNumber)
 		.build();
+	}
+
+	private String getCorrectionNumber() {
+		final LocalDate today = LocalDate.now();
+		final LocalDate dateFrom = today.dayOfMonth().withMinimumValue();
+		final LocalDate dateTo = today.dayOfMonth().withMaximumValue();
+		return numberGenerator.generate(dateFrom, dateTo);
 	}
 
 	private void printFile(final String file){
@@ -167,11 +180,6 @@ public class CorrectionService {
 		//	1. uncomment in production
 		// 	2. print only invoices for specific subscriber - email not defined;
 		//printToPrinter(filesToPrint);
-	}
-
-	public String getCorrectionFile(final int id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

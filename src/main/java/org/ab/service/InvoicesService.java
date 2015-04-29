@@ -1,7 +1,5 @@
 package org.ab.service;
 
-import static org.ab.service.generator.FileGenerator.DOWNLOAD_DIR;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +16,7 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import org.ab.dao.ContractDao;
 import org.ab.dao.InvoiceDao;
 import org.ab.entity.Contract;
+import org.ab.entity.Invoice;
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
 import org.ab.service.converter.InvoiceConverter;
@@ -61,7 +60,7 @@ public class InvoicesService {
 		final List<InvoiceModel> invoices = invoicesGenerator.generateInvoices(contracts, dateFrom, dateTo);
 		if(!CollectionUtils.isEmpty(invoices)){
 			persist(invoices);
-			final List<String> filesToPrint = invoiceFileGenerator.generatePdf(invoices);
+			//			final List<String> filesToPrint = invoiceFileGenerator.generatePdf(invoices);
 			// TODO:
 			//	1. uncomment in production
 			// 	2. print only invoices for specific subscriber - email not defined;
@@ -73,6 +72,12 @@ public class InvoicesService {
 
 	private LocalDate getFirstOfMonth(final InvoiceGenerationParams generationParams) {
 		return getLocalDate(generationParams).dayOfMonth().withMinimumValue();
+	}
+
+	public String getInvoiceFile(final int invoiceId) {
+		final Invoice invoice = invoiceDao.getInvoice(invoiceId);
+		final String invoiceNumber = invoice.getInvoiceNumber();
+		return invoiceFileGenerator.createFile(invoiceNumber, invoice.getInvoiceContent().getInvoiceHtml());
 	}
 
 	public String getInvoiceHtmlContent(final int invoiceId) {
@@ -116,14 +121,6 @@ public class InvoicesService {
 		for(final String file : filesToPrint){
 			printFile(file);
 		}
-	}
-
-	public String getInvoiceFile(final int id) {
-		// TODO Auto-generated method stub
-		final String fileName = "KOR_000001_02_2015.pdf";
-		final String workingDir = System.getProperty("user.dir");
-		final String filePath = workingDir + DOWNLOAD_DIR + fileName;
-		return filePath;
 	}
 
 }

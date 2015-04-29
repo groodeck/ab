@@ -20,7 +20,7 @@ public class FileGenerator {
 
 	public static final String DOWNLOAD_DIR = "src/main/webapp/resources/download/";
 
-	String generateSingleDocument(final String documentNumber, final String documentContent) {
+	public String createFile(final String documentNumber, final String documentContent) {
 		try {
 			final Document document = new Document();
 			final String fileName = documentNumber.replace("/", "_");
