@@ -12,44 +12,48 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.ab.model.dictionary.AddressType;
+import org.apache.commons.lang.StringUtils;
 
 @Entity
 @Table(name="Address")
 public class Address {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="addressId")
 	private Integer addressId;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name="addressType")
 	private AddressType addressType;
-	
+
 	@Column(name="city")
 	private String city;
-	
+
 	@Column(name="zipCode")
 	private String zipCode;
-	
+
 	@Column(name="street")
 	private String street;
-	
+
 	@Column(name="houseNo")
 	private String houseNo;
-	
+
 	@Column(name="apartmentNo")
 	private String apartmentNo;
-	
+
 	@ManyToOne
-    @JoinColumn(name="subscriberId", insertable=false, updatable=false, nullable=false)
+	@JoinColumn(name="subscriberId", insertable=false, updatable=false, nullable=false)
 	private Subscriber subscriber;
 
 	public Address(){
 	}
-	
-	public Address(final AddressType addressType, final String city, final String zipCode,
+
+	public Address(final String addressId, final AddressType addressType, final String city, final String zipCode,
 			final String street, final String houseNo, final String apartmentNo) {
+		if(StringUtils.isNotBlank(addressId)){
+			this.addressId = Integer.parseInt(addressId);
+		}
 		this.addressType = addressType;
 		this.city = city;
 		this.zipCode = zipCode;
@@ -66,60 +70,60 @@ public class Address {
 		return addressType;
 	}
 
+	public String getApartmentNo() {
+		return apartmentNo;
+	}
+
 	public String getCity() {
 		return city;
-	}
-
-	public String getZipCode() {
-		return zipCode;
-	}
-
-	public String getStreet() {
-		return street;
 	}
 
 	public String getHouseNo() {
 		return houseNo;
 	}
 
-	public String getApartmentNo() {
-		return apartmentNo;
+	public String getStreet() {
+		return street;
 	}
 
 	public Subscriber getSubscriber() {
 		return subscriber;
 	}
 
-	public void setAddressId(Integer addressId) {
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setAddressId(final Integer addressId) {
 		this.addressId = addressId;
 	}
 
-	public void setAddressType(AddressType addressType) {
+	public void setAddressType(final AddressType addressType) {
 		this.addressType = addressType;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public void setHouseNo(String houseNo) {
-		this.houseNo = houseNo;
-	}
-
-	public void setApartmentNo(String apartmentNo) {
+	public void setApartmentNo(final String apartmentNo) {
 		this.apartmentNo = apartmentNo;
 	}
 
-	public void setSubscriber(Subscriber subscriber) {
+	public void setCity(final String city) {
+		this.city = city;
+	}
+
+	public void setHouseNo(final String houseNo) {
+		this.houseNo = houseNo;
+	}
+
+	public void setStreet(final String street) {
+		this.street = street;
+	}
+
+	public void setSubscriber(final Subscriber subscriber) {
 		this.subscriber = subscriber;
+	}
+
+	public void setZipCode(final String zipCode) {
+		this.zipCode = zipCode;
 	}
 
 }

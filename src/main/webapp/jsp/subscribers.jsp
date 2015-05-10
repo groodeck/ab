@@ -45,8 +45,8 @@
 		<br/>
 		
 		<c:if test="${not empty subscribers}">
-			<table border="1" cellspacing="0" cellpadding="2">
-				<tr>
+			<table border="1" cellspacing="0" cellpadding="2" class="borderedTable">
+				<tr class="tableHeader">
 					<td>lp</td>
 					<td width="60px">Nr ab.</td>
 					<td width="100px">Data podpisania umowy</td>

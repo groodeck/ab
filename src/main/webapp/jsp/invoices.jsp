@@ -91,8 +91,8 @@
 		<br/>
 		
 		<c:if test="${not empty invoices}">
-			<table border="1" cellspacing="0" cellpadding="2">
-				<tr>
+			<table border="1" cellspacing="0" cellpadding="2" class="borderedTable">
+				<tr class="tableHeader">
 					<td>lp</td>
 					<td>Numer faktury</td>
 					<td>Abonent</td>

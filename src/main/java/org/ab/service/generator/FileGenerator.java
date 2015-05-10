@@ -3,6 +3,8 @@ package org.ab.service.generator;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
@@ -18,10 +20,15 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 public class FileGenerator {
 
-	public static final String DOWNLOAD_DIR = "src/main/webapp/resources/download/";
+	public static final String DOWNLOAD_DIR = "webapps/root/resources/download/";
+	//	public static final String DOWNLOAD_DIR = "resources/download/";
 
 	public String createFile(final String documentNumber, final String documentContent) {
 		try {
+			final Path currentRelativePath = Paths.get("");
+			final String s = currentRelativePath.toAbsolutePath().toString();
+			System.out.println("Current relative path is: " + s);
+
 			final Document document = new Document();
 			final String fileName = documentNumber.replace("/", "_");
 			final String outputFilePath = String.format(DOWNLOAD_DIR + "%s.pdf", fileName);

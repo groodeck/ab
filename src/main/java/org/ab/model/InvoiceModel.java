@@ -1,6 +1,7 @@
 package org.ab.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.ab.entity.Contract;
@@ -217,6 +218,10 @@ public class InvoiceModel implements PrintableContent{
 
 	public LocalDate getReceiveDate() {
 		return receiveDate;
+	}
+
+	public Date getReceiveDateTest() {
+		return receiveDate.toDate();
 	}
 
 	public InvoiceParticipant getSeller() {

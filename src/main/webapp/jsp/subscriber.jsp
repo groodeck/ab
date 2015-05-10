@@ -210,6 +210,7 @@
 		<h3>Adres</h3>
 			<table width="100%">
 				<tr>
+					<sf:hidden path="mainAddress.addressId"/>
 					<th align="right" style="width: 40%"><label for="city">Miasto:</label></th>
 					<td>
 						<sf:select path="mainAddress.city" items="${cities}" id="city"/>
@@ -237,6 +238,7 @@
 				onclick="changeAddressVisible(this, 'serviceAddressTable')"/> </h3>
 			<table id="serviceAddressTable"  width="100%">
 				<tr>
+					<sf:hidden path="serviceAddress.addressId"/>
 					<th align="right" style="width: 40%"><label for="city">Miasto:</label></th>
 					<td>
 						<sf:select path="serviceAddress.city" items="${cities}" id="city"/>
@@ -264,6 +266,7 @@
 				onclick="changeAddressVisible(this, 'correspondenceAddressTable')"/> </h3>
 			<table id="correspondenceAddressTable">
 				<tr>
+					<sf:hidden path="correspondenceAddress.addressId"/>
 					<th align="right" style="width: 40%"><label for="city">Miasto:</label></th>
 					<td>
 						<sf:select path="correspondenceAddress.city" items="${cities}" id="city"/>
@@ -291,6 +294,7 @@
 		
 		<div id="contractDiv" align="center" style="float:left; width: 50%">
 		<h3>Umowa</h3>
+		<sf:hidden path="currentContract.contractId"/>
 		<table style="font-family:sans-serif;"  width="100%" >
 			<tr>
 				<th align="right" style="width: 40%"><label for="contract_idn">Nr umowy:</label></th>
@@ -381,6 +385,7 @@
 			<c:forEach var="device" items="${subscriber.currentContract.devices}" varStatus="status">
 			<tr>
 				<td>
+					<sf:hidden path="currentContract.devices[${status.index}].deviceId"/>
 					<sf:select path="currentContract.devices[${status.index}].deviceType" items="${deviceTypes}" id="devices_${status.index}_deviceType" /></td>
 				<td>
 					<sf:input path="currentContract.devices[${status.index}].serialNumber" size="15"/></td>

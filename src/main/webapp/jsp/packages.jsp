@@ -29,8 +29,8 @@
    
 		<c:if test="${not empty contractPackages}">
 			<br/><br/>
-			<table border="1" cellspacing="0" cellpadding="2">
-				<tr>
+			<table border="1" cellspacing="0" cellpadding="2" class="borderedTable">
+				<tr class="tableHeader">
 					<td>lp</td>
 					<td>Nazwa pakietu</td>
 					<td>Typ klienta</td>
@@ -40,16 +40,16 @@
 					<td>Opłata aktywacyjna netto</td>
 					<td>Opłata aktywacyjna brutto</td>
 				</tr>
-				<c:forEach var="package" items="${contractPackages}" varStatus="status" >
+				<c:forEach var="contractPackage" items="${contractPackages}" varStatus="status" >
 					<tr>
-						<td onclick="editContractPackage(${package.packageId})"><c:out value="${status.index + 1}"/></td>
-						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.packageName}"/></td>
-						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.clientTypeDesc}"/></td>
-						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.packageSubscription}"/></td>
-						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.installationFeeNet}"/></td>
-						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.installationFeeGross}"/></td>
-						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.activationFeeNet}"/></td>
-						<td onclick="editContractPackage(${package.packageId})"><c:out value="${package.activationFeeGross}"/></td>
+						<td onclick="editContractPackage(${contractPackage.packageId})"><c:out value="${status.index + 1}"/></td>
+						<td onclick="editContractPackage(${contractPackage.packageId})"><c:out value="${contractPackage.packageName}"/></td>
+						<td onclick="editContractPackage(${contractPackage.packageId})"><c:out value="${contractPackage.clientTypeDesc}"/></td>
+						<td onclick="editContractPackage(${contractPackage.packageId})"><c:out value="${contractPackage.packageSubscription}"/></td>
+						<td onclick="editContractPackage(${contractPackage.packageId})"><c:out value="${contractPackage.installationFeeNet}"/></td>
+						<td onclick="editContractPackage(${contractPackage.packageId})"><c:out value="${contractPackage.installationFeeGross}"/></td>
+						<td onclick="editContractPackage(${contractPackage.packageId})"><c:out value="${contractPackage.activationFeeNet}"/></td>
+						<td onclick="editContractPackage(${contractPackage.packageId})"><c:out value="${contractPackage.activationFeeGross}"/></td>
 					</tr>
 				</c:forEach>
 			</table>

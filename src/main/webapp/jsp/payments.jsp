@@ -48,8 +48,8 @@
 					
 		<c:if test="${not empty payments}">
 			<br/><br/>
-			<table border="1" cellspacing="0" cellpadding="2">
-				<tr>
+			<table border="1" cellspacing="0" cellpadding="2" class="borderedTable">
+				<tr class="tableHeader">
 					<td>lp</td>
 					<td>Data wpłaty</td>
 					<td>Klient</td>

@@ -1,6 +1,9 @@
 package org.ab.service.generator;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringWriter;
 
 import org.ab.model.PrintableContent;
@@ -18,7 +21,11 @@ public abstract class ContentGenerator {
 		cfg.setDateFormat("dd/MM/yyyy");
 		cfg.setObjectWrapper( new DefaultObjectWrapper());
 		try {
-			final Template temp = cfg.getTemplate( "src/main/java/org/ab/service/generator/" + getTemplateName() );
+			final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			final InputStream stream = classLoader.getResourceAsStream(getTemplateName());
+			final Reader reader = new InputStreamReader(stream);
+			final Template temp = new Template(  getTemplateName() , reader, cfg);
+			temp.setDateFormat("dd/MM/yyyy");
 			temp.process(model, out);
 		} catch (IOException | TemplateException e) {
 			e.printStackTrace();

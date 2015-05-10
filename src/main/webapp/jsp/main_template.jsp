@@ -17,8 +17,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8" />
 <title>JaworNET - Abonenci</title>
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" />
 </head>
-<body style="font-family:sans-serif;">
+ 	
+ 	
+ 
+<body style="font-family:sans-serif; ">
 
 	<div id="banner">
 		<tiles:insertAttribute name="header" />

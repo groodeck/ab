@@ -1,6 +1,5 @@
 package org.ab.service.generator;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -222,9 +221,10 @@ public class InvoicesGenerator {
 
 	private Properties loadProperties(final String fileName) {
 		final Properties prop = new Properties();
-		InputStream input = null;
+		InputStream input=null;
 		try {
-			input = new FileInputStream("src/main/java/org/ab/service/generator/companyDetails.properties");
+			final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			input = classLoader.getResourceAsStream("companyDetails.properties");
 			prop.load(input);
 		} catch (final IOException ex) {
 			ex.printStackTrace();

@@ -19,7 +19,7 @@
  <html xmlns="http://www.w3.org/1999/xhtml">
  <body onload="document.forms.loginForm.login.focus()">   
     
-    <form method="post" action='/j_spring_security_check' enctype="application/x-www-form-urlencoded" accept-charset="UTF-8"
+    <form method="post" action='j_spring_security_check' enctype="application/x-www-form-urlencoded" accept-charset="UTF-8"
     	name="loginForm">
 	<input type="hidden" id="event" name="event" />
 	

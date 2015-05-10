@@ -6,11 +6,14 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 import java.math.BigDecimal;
 
 import org.ab.dao.ContractPackageDao;
+import org.ab.dao.SubscriberDao;
 import org.ab.dao.UserDao;
 import org.ab.entity.Contract;
 import org.ab.entity.ContractPackage;
+import org.ab.entity.Subscriber;
 import org.ab.model.dictionary.ContractStatus;
 import org.ab.model.dictionary.VatRate;
+import org.ab.util.Translator;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +27,9 @@ public class ContractConverter {
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private SubscriberDao subscriberDao;
 
 	@Autowired
 	private DeviceConverter deviceConverter;
@@ -91,8 +97,13 @@ public class ContractConverter {
 		return model;
 	}
 
-	public Contract convert(final org.ab.model.Contract model, final String userName) {
+	public Contract convert(final org.ab.model.Contract model, final String subscriberId, final String userName) {
 		final Contract entity = new Contract();
+
+		final String contractId = model.getContractId();
+		if(isNotBlank(contractId)){
+			entity.setContractId(Translator.parseInt(contractId));
+		}
 
 		entity.setContractIdn(model.getContractIdn());
 
@@ -117,6 +128,11 @@ public class ContractConverter {
 		if(isNotBlank(contractPack)){
 			final ContractPackage contractPackage = packageDao.getById(contractPack);
 			entity.setContractPackage(contractPackage);
+		}
+
+		if(isNotBlank(subscriberId)){
+			final Subscriber subscriber = subscriberDao.getSubscriber(Integer.parseInt(subscriberId));
+			entity.setSubscriber(subscriber);
 		}
 
 		entity.setContractPeriod(model.getContractPeriod());

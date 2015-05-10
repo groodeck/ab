@@ -102,8 +102,8 @@
 		</table>
 		
 		<h3 align="left">Usługi:</h3>
-		<table style="font-family:sans-serif;" width="100%" id="serviceTable" border="1">
-			<tr>
+		<table style="font-family:sans-serif;" width="100%" id="serviceTable" border="1" class="borderedTable">
+			<tr class="tableHeader">
 				<td>Nazwa usługi</td>
 				<td>Cena netto</td>
 				<td>Stawka VAT</td>

@@ -158,7 +158,7 @@ public class SubscriberConverter {
 		final List<Contract> contracts = Lists.newArrayList();
 		final org.ab.model.Contract currentContract = model.getCurrentContract();
 		if(currentContract != null){
-			contracts.add(contractConverter.convert(currentContract, userName));
+			contracts.add(contractConverter.convert(currentContract, subscriberId, userName));
 		}
 		entity.getContracts().clear();
 		entity.getContracts().addAll(contracts);
