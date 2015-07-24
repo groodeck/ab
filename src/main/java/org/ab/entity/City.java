@@ -16,19 +16,27 @@ public class City {
 	@Column(name="city_description")
 	private String cityDescription;
 
-	public String getCityIdn() {
-		return cityIdn;
+	private City() {
+	}
+
+	public City(final String cityIdn, final String cityDesc) {
+		this.cityIdn = cityIdn;
+		cityDescription = cityDesc;
 	}
 
 	public String getCityDescription() {
 		return cityDescription;
 	}
 
-	public void setCityIdn(String cityIdn) {
-		this.cityIdn = cityIdn;
+	public String getCityIdn() {
+		return cityIdn;
 	}
 
-	public void setCityDescription(String cityDescription) {
+	public void setCityDescription(final String cityDescription) {
 		this.cityDescription = cityDescription;
+	}
+
+	public void setCityIdn(final String cityIdn) {
+		this.cityIdn = cityIdn;
 	}
 }

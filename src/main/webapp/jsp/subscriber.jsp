@@ -10,8 +10,6 @@
  
  <jsp:text>
  	<![CDATA[
- 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> 
  		<script type="text/javascript">
 	 		function addRow(tableName, inputName){
 	 			var tableRowSet = $('#'+ tableName +' tr');
@@ -86,7 +84,7 @@
 	 		
 	 		refreshContractPack = function (){
 	 			var packageId = $("#contract_pack").val();
-	 			$.getJSON( "/async/getPackageDetails/" + packageId, function(data) {
+	 			$.getJSON( "/cities/getPackageDetails/" + packageId, function(data) {
 	 				$("#activationFeeNet").val(data.activationFeeNet)
 	 				$("#activationFeeVatRate").val(data.activationFeeVatRate)
 	 				$("#activationFeeVat").val(data.activationFeeVat)

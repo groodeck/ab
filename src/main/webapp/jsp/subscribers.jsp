@@ -9,8 +9,6 @@
  
  <jsp:text>
  	<![CDATA[
- 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> 
  		<script type="text/javascript">
 	 		editSubscriber = function (subscriberId){
 	 			window.location.href = '/subscriber/edit/'+subscriberId;
@@ -30,7 +28,7 @@
 		<table style="font-family:sans-serif;" >
 			<tr>
 				<td>
-					<sf:form method="get" action="/subscribers/search">
+					<sf:form method="get" action="/subscribers/search" cssStyle="margin: 0 0 0px;">
 						Znajdź abonenta: 
 						<input name="searchPhrase" value="${searchPhrase}"/>
 						<input type="submit" value="Znajdź"/>

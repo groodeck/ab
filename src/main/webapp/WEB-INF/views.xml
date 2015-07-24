@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC
 	"-//Apache Seftware Foundation//DTD Tiles Configuration 2.1//EN"
-	"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+	"src/main/webapp//WEB-INF/dtd/tiles-config_2_1.dtd"	
+	>
+	<!-- "http://tiles.apache.org/dtds/tiles-config_2_1.dtd" -->
 	
 	<tiles-definitions>
 
@@ -45,6 +47,10 @@
 		
 		<definition name="package" extends="template">
 			<put-attribute name="content" value="/jsp/package.jsp"/>
+		</definition>
+		
+		<definition name="cities" extends="template">
+			<put-attribute name="content" value="/jsp/cities.jsp"/>
 		</definition>
 		
 	</tiles-definitions>

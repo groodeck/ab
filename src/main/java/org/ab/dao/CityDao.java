@@ -14,8 +14,16 @@ public class CityDao {
 
 	@PersistenceContext
 	private EntityManager em;
-	
+
+	public void create(final String cityIdn, final String cityDesc){
+		em.persist(new City(cityIdn, cityDesc));
+	}
+
 	public List<City> findAll() {
-		return em.createQuery("from City").getResultList();
+		return em.createQuery("from City c order by c.cityIdn").getResultList();
+	}
+
+	public City getByIdn(final String cityIdn) {
+		return em.find(City.class, cityIdn);
 	}
 }

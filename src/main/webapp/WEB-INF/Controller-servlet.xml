@@ -16,6 +16,7 @@
 	<mvc:annotation-driven/>
 	
 	<mvc:resources location="/resources/" mapping="/resources/**"/>
+	<mvc:resources location="/bootstrap/" mapping="/bootstrap/**"/>
 	
 	<bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" />
 	

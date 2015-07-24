@@ -11,7 +11,7 @@
 				<tr height="50px">
 					<td>Jesteś zalogowany jako:</td>
 					<td><security:authentication property="principal.Username"/></td>
-					<td><a href="/j_spring_security_logout"><button>Wyloguj</button></a></td>
+					<td><a href="/j_spring_security_logout"><button class="btn btn-default">Wyloguj</button></a></td>
 				</tr>
 			</table>
 			 

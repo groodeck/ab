@@ -6,18 +6,21 @@
 
 	<span> 
 		<security:authorize access="isAuthenticated()"> 
-		
-			<table>
-				<tr>
-					<td align="center"><a href="/subscribers">Abonenci</a></td>
-					<td width="20px" />
-					<td align="center"><a href="/invoices">Faktury</a></td>
-					<td width="20px" />
-					<td align="center"><a href="/payments">Wpłaty</a></td>
-					<td width="20px" />
-					<td align="center"><a href="/packages">Pakiety</a></td>
-				</tr>
-			</table>
+			<ul class="nav nav-pills">
+				<li role="presentation"><a href="/subscribers">Abonenci</a></li>
+				<li role="presentation"><a href="/invoices">Faktury</a></li>
+				<li role="presentation"><a href="/payments">Wpłaty</a></li>
+				<li class="dropdown">
+			  		<a href="#" data-toggle="dropdown" class="dropdown-toggle">Ustawienia<!-- <b class="caret"/> --></a>
+		        	<ul class="dropdown-menu">
+		            	<li><a href="/packages">Pakiety</a></li>
+		            	<li><a href="/cities">Miasta</a></li>
+		            	<li><a href="/vatRates">Stawki VAT</a></li>
+		            	<li><a href="/contractDuration">Długość umowy</a></li>
+		        	</ul>
+				</li>
+			</ul>
+			
 			<br/><hr/>
 		</security:authorize>
 	</span>
