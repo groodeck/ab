@@ -84,7 +84,7 @@
 	 		
 	 		refreshContractPack = function (){
 	 			var packageId = $("#contract_pack").val();
-	 			$.getJSON( "/cities/getPackageDetails/" + packageId, function(data) {
+	 			$.getJSON( "/async/getPackageDetails/" + packageId, function(data) {
 	 				$("#activationFeeNet").val(data.activationFeeNet)
 	 				$("#activationFeeVatRate").val(data.activationFeeVatRate)
 	 				$("#activationFeeVat").val(data.activationFeeVat)

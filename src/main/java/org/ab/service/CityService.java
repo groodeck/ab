@@ -22,7 +22,7 @@ import com.google.common.collect.Maps;
 @Component
 public class CityService {
 
-	Logger log = Logger.getLogger(CityService.class);
+	private final static Logger log = Logger.getLogger(CityService.class);
 
 	@Autowired
 	private CityDao cityDao;

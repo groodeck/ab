@@ -20,8 +20,14 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 public class FileGenerator {
 
+	//production
 	public static final String DOWNLOAD_DIR = "webapps/root/resources/download/";
+
+	//separate server
 	//	public static final String DOWNLOAD_DIR = "resources/download/";
+
+	//eclipse run
+	//	public static final String DOWNLOAD_DIR = "src/main/webapp//resources/download/";
 
 	public String createFile(final String documentNumber, final String documentContent) {
 		try {

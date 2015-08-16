@@ -47,11 +47,11 @@ public class ContractPackageService {
 		final PackageDetails packageDetails = new PackageDetails();
 		packageDetails.setSubscription(contractPackage.getPackageSubscription().toPlainString());
 		packageDetails.setInstallationFeeNet(contractPackage.getInstallationFeeNet().toPlainString());
-		packageDetails.setInstallationFeeVatRate(contractPackage.getInstallationFeeVatRate().name());
+		packageDetails.setInstallationFeeVatRate(contractPackage.getInstallationFeeVatRate().getVatRateIdn());
 		packageDetails.setInstallationFeeVat(contractPackage.getInstallationFeeVat().toPlainString());
 		packageDetails.setInstallationFeeGross(contractPackage.getInstallationFeeGross().toPlainString());
 		packageDetails.setActivationFeeNet(contractPackage.getActivationFeeNet().toPlainString());
-		packageDetails.setActivationFeeVatRate(contractPackage.getActivationFeeVatRate().name());
+		packageDetails.setActivationFeeVatRate(contractPackage.getActivationFeeVatRate().getVatRateIdn());
 		packageDetails.setActivationFeeVat(contractPackage.getActivationFeeVat().toPlainString());
 		packageDetails.setActivationFeeGross(contractPackage.getActivationFeeGross().toPlainString());
 		return packageDetails;

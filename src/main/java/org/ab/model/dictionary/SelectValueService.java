@@ -6,6 +6,7 @@ import java.util.Map;
 import org.ab.service.CityService;
 import org.ab.service.ContractPackageService;
 import org.ab.service.DurationService;
+import org.ab.service.VatRateService;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,9 @@ public class SelectValueService {
 	@Autowired
 	private DurationService durationService;
 
+	@Autowired
+	private VatRateService vatRateService;
+
 	public Map<String, ?> getCorrectionDictionaries(final String subscriberIdn) {
 		final Map<String, Map> results = Maps.newHashMap();
 		results.put("months", Month.asValueMap());
@@ -43,7 +47,7 @@ public class SelectValueService {
 
 	public Map<String, ?> getPackageDictionaries() {
 		final Map<String, Map> results = Maps.newHashMap();
-		results.put("vatRates", VatRate.asValueMap());
+		results.put("vatRates", vatRateService.getVatRateDictionary());
 		results.put("clientTypes", ClientType.asValueMap());
 		return results;
 	}

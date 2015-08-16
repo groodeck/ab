@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.ab.model.dictionary.ContractStatus;
-import org.ab.model.dictionary.VatRate;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
@@ -62,8 +61,8 @@ public class Contract {
 	@Column(name="activationFeeNet")
 	private BigDecimal activationFeeNet;
 
-	@Enumerated(EnumType.ORDINAL)
-	@Column(name="activationFeeVatRate")
+	@ManyToOne
+	@JoinColumn(name="activationFeeVatRate")
 	private VatRate activationFeeVatRate;
 
 	@Column(name="activationFeeVat")
@@ -75,8 +74,8 @@ public class Contract {
 	@Column(name="installationFeeNet")
 	private BigDecimal installationFeeNet;
 
-	@Enumerated(EnumType.ORDINAL)
-	@Column(name="installationFeeVatRate")
+	@ManyToOne
+	@JoinColumn(name="installationFeeVatRate")
 	private VatRate installationFeeVatRate;
 
 	@Column(name="installationFeeVat")

@@ -12,11 +12,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.ab.model.dictionary.ClientType;
-import org.ab.model.dictionary.VatRate;
 
 @Entity
 @Table(name="ContractPackage")
@@ -40,8 +40,8 @@ public class ContractPackage {
 	@Column(name="activationFeeNet")
 	private BigDecimal activationFeeNet;
 
-	@Enumerated(EnumType.ORDINAL)
-	@Column(name="activationFeeVatRate")
+	@ManyToOne
+	@JoinColumn(name="activationFeeVatRate")
 	private VatRate activationFeeVatRate;
 
 	@Column(name="activationFeeVat")
@@ -53,8 +53,8 @@ public class ContractPackage {
 	@Column(name="installationFeeNet")
 	private BigDecimal installationFeeNet;
 
-	@Enumerated(EnumType.ORDINAL)
-	@Column(name="installationFeeVatRate")
+	@ManyToOne
+	@JoinColumn(name="installationFeeVatRate")
 	private VatRate installationFeeVatRate;
 
 	@Column(name="installationFeeVat")

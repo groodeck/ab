@@ -23,8 +23,9 @@ public class Service {
 	@Column(name="serviceName")
 	private String serviceName;
 
-	@Column(name="vatRate")
-	private Integer vatRate;
+	@ManyToOne
+	@JoinColumn(name="vatRate")
+	private VatRate vatRate;
 
 	@Column(name="vat")
 	private BigDecimal vatAmount;
@@ -40,31 +41,31 @@ public class Service {
 	private ContractPackage contractPackage;
 
 	public ContractPackage getContractPackage() {
-		return this.contractPackage;
+		return contractPackage;
 	}
 
 	public Integer getServiceId() {
-		return this.serviceId;
+		return serviceId;
 	}
 
 	public String getServiceName() {
-		return this.serviceName;
+		return serviceName;
 	}
 
 	public BigDecimal getSubscriptionGross() {
-		return this.subscriptionGross;
+		return subscriptionGross;
 	}
 
 	public BigDecimal getSubscriptionNet() {
-		return this.subscriptionNet;
+		return subscriptionNet;
 	}
 
 	public BigDecimal getVatAmount() {
-		return this.vatAmount;
+		return vatAmount;
 	}
 
-	public Integer getVatRate() {
-		return this.vatRate;
+	public VatRate getVatRate() {
+		return vatRate;
 	}
 
 	public void setContractPackage(final ContractPackage contractPackage) {
@@ -88,10 +89,10 @@ public class Service {
 	}
 
 	public void setVatAmount(final BigDecimal vat) {
-		this.vatAmount = vat;
+		vatAmount = vat;
 	}
 
-	public void setVatRate(final Integer vatRate) {
+	public void setVatRate(final VatRate vatRate) {
 		this.vatRate = vatRate;
 	}
 

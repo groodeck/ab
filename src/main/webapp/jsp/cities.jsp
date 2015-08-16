@@ -30,28 +30,6 @@
    
     <h2>Miasta</h2>
 		
-		<jsp:text>
- 	<![CDATA[
- 		<script type="text/javascript">
-	 		saveNewCity = function (){
-	 			//window.location.href = '/package/edit/'+packageId;
-	 			var newCityDesc = $("#newCityDesc").val();
-	 			$.getJSON( "/cities/saveNewCity/" + newCityDesc, function(city) {
-	 				if( city!= null){
-	 					var tableRowSet = $('#cityTable tr');
-	 					var rowCount = tableRowSet.length-1;
-						tableRowSet.last().after('<tr><td><input type="text" name="cities['+rowCount+'].cityIdn" value="' + city.cityIdn + '" size="15" disabled="true" />'
-							+'<input type="hidden" name="cities['+rowCount+'].cityIdn" value="' + city.cityIdn + '" />' 
-							+'</td><td><input type="text" name="cities['+rowCount+'].cityDesc" value="' + city.cityDesc + '" size="15" /></td></tr>');
-					}
-				});
-	 			
-	 		}	
-	 	</script>
- 	]]>
- </jsp:text>
- 
-    
 		<div class="row">
 		  <div class="col-lg-3">
 		    <div class="input-group">

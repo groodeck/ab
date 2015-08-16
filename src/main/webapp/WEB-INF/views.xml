@@ -53,4 +53,8 @@
 			<put-attribute name="content" value="/jsp/cities.jsp"/>
 		</definition>
 		
+		<definition name="vatRates" extends="template">
+			<put-attribute name="content" value="/jsp/vatRates.jsp"/>
+		</definition>
+		
 	</tiles-definitions>

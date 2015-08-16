@@ -131,6 +131,14 @@ public class Translator {
 		return result;
 	}
 
+	public static Integer parseInteger(final String value) {
+		if(StringUtils.isNumeric(value)){
+			return Integer.valueOf(value);
+		}else {
+			return null;
+		}
+	}
+
 	private static int parseIntNotNull(final String value) {
 		try {
 			return Integer.parseInt(value);

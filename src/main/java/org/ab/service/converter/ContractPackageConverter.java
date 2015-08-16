@@ -5,11 +5,13 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.util.List;
 
+import org.ab.dao.VatRateDao;
 import org.ab.entity.ContractPackage;
+import org.ab.entity.VatRate;
 import org.ab.model.Service;
 import org.ab.model.dictionary.ClientType;
-import org.ab.model.dictionary.VatRate;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
@@ -17,6 +19,9 @@ import com.google.common.collect.FluentIterable;
 
 @Component
 public class ContractPackageConverter {
+
+	@Autowired
+	private VatRateDao vatRateDao;
 
 	private final Function<ContractPackage, org.ab.model.ContractPackage> toContractPackageModel =
 			new Function<ContractPackage, org.ab.model.ContractPackage>(){
@@ -37,7 +42,7 @@ public class ContractPackageConverter {
 				model.setActivationFeeNet(entity.getActivationFeeNet().toPlainString());
 			}
 			if(entity.getActivationFeeVatRate() != null){
-				model.setActivationFeeVatRate(entity.getActivationFeeVatRate().name());
+				model.setActivationFeeVatRate(entity.getActivationFeeVatRate().getVatRateIdn());
 			}
 			if(entity.getActivationFeeVat() != null){
 				model.setActivationFeeVat(entity.getActivationFeeVat().toPlainString());
@@ -50,7 +55,7 @@ public class ContractPackageConverter {
 				model.setInstallationFeeNet(entity.getInstallationFeeNet().toPlainString());
 			}
 			if(entity.getInstallationFeeVatRate() != null){
-				model.setInstallationFeeVatRate(entity.getInstallationFeeVatRate().name());
+				model.setInstallationFeeVatRate(entity.getInstallationFeeVatRate().getVatRateIdn());
 			}
 			if(entity.getInstallationFeeVat() != null){
 				model.setInstallationFeeVat(entity.getInstallationFeeVat().toPlainString());
@@ -77,7 +82,7 @@ public class ContractPackageConverter {
 				model.setSubscriptionNet(entity.getSubscriptionNet().toPlainString());
 			}
 			if(entity.getVatRate() != null){
-				model.setVatRate(new VatRateConverter().convert(entity.getVatRate()));
+				model.setVatRate(entity.getVatRate().getVatRateIdn());
 			}
 			if(entity.getVatAmount() != null){
 				model.setVatAmount(entity.getVatAmount().toPlainString());
@@ -97,7 +102,7 @@ public class ContractPackageConverter {
 			final org.ab.entity.Service entity = new org.ab.entity.Service();
 			entity.setServiceName(model.getServiceName());
 			entity.setSubscriptionNet(toAmount(model.getSubscriptionNet()));
-			entity.setVatRate(new VatRateConverter().convert(model.getVatRate()));
+			entity.setVatRate(getVatRate(model.getVatRate()));
 			entity.setVatAmount(toAmount(model.getVatAmount()));
 			entity.setSubscriptionGross(toAmount(model.getSubscriptionGross()));
 			return entity;
@@ -120,12 +125,12 @@ public class ContractPackageConverter {
 			entity.setPackageSubscription(toAmount(model.getPackageSubscription()));
 
 			entity.setActivationFeeNet(toAmount(model.getActivationFeeNet()));
-			entity.setActivationFeeVatRate(VatRate.valueOf(model.getActivationFeeVatRate()));
+			entity.setActivationFeeVatRate(getVatRate(model.getActivationFeeVatRate()));
 			entity.setActivationFeeVat(toAmount(model.getActivationFeeVat()));
 			entity.setActivationFeeGross(toAmount(model.getActivationFeeGross()));
 
 			entity.setInstallationFeeNet(toAmount(model.getInstallationFeeNet()));
-			entity.setInstallationFeeVatRate(VatRate.valueOf(model.getInstallationFeeVatRate()));
+			entity.setInstallationFeeVatRate(getVatRate(model.getInstallationFeeVatRate()));
 			entity.setInstallationFeeVat(toAmount(model.getInstallationFeeVat()));
 			entity.setInstallationFeeGross(toAmount(model.getInstallationFeeGross()));
 
@@ -133,6 +138,7 @@ public class ContractPackageConverter {
 					.transform(toServiceEntity).toList());
 			return entity;
 		}
+
 	};
 
 	public org.ab.model.ContractPackage convert(final ContractPackage contractPackage) {
@@ -146,6 +152,10 @@ public class ContractPackageConverter {
 
 	public ContractPackage convert(final org.ab.model.ContractPackage model) {
 		return toPackageEntity.apply(model);
+	}
+
+	private VatRate getVatRate(final String activationFeeVatRate) {
+		return vatRateDao.getByIdn(activationFeeVatRate);
 	}
 
 }

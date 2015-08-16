@@ -8,11 +8,12 @@ import java.math.BigDecimal;
 import org.ab.dao.ContractPackageDao;
 import org.ab.dao.SubscriberDao;
 import org.ab.dao.UserDao;
+import org.ab.dao.VatRateDao;
 import org.ab.entity.Contract;
 import org.ab.entity.ContractPackage;
 import org.ab.entity.Subscriber;
+import org.ab.entity.VatRate;
 import org.ab.model.dictionary.ContractStatus;
-import org.ab.model.dictionary.VatRate;
 import org.ab.util.Translator;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class ContractConverter {
 
 	@Autowired
 	private DeviceConverter deviceConverter;
+
+	@Autowired
+	private VatRateDao vatRateDao;
 
 	private String asNumber(final String numericString) {
 		return numericString.replaceAll(",", ".");
@@ -65,7 +69,7 @@ public class ContractConverter {
 			model.setActivationFeeNet(entity.getActivationFeeNet().toPlainString());
 		}
 		if(entity.getActivationFeeVatRate() != null){
-			model.setActivationFeeVatRate(entity.getActivationFeeVatRate().name());
+			model.setActivationFeeVatRate(entity.getActivationFeeVatRate().getVatRateIdn());
 		}
 		if(entity.getActivationFeeVat() != null){
 			model.setActivationFeeVat(entity.getActivationFeeVat().toPlainString());
@@ -78,7 +82,7 @@ public class ContractConverter {
 			model.setInstallationFeeNet(entity.getInstallationFeeNet().toPlainString());
 		}
 		if(entity.getInstallationFeeVatRate() != null){
-			model.setInstallationFeeVatRate(entity.getInstallationFeeVatRate().name());
+			model.setInstallationFeeVatRate(entity.getInstallationFeeVatRate().getVatRateIdn());
 		}
 		if(entity.getInstallationFeeVat() != null){
 			model.setInstallationFeeVat(entity.getInstallationFeeVat().toPlainString());
@@ -143,12 +147,20 @@ public class ContractConverter {
 		}
 
 		entity.setActivationFeeNet(toAmount(model.getActivationFeeNet()));
-		entity.setActivationFeeVatRate(VatRate.valueOf(model.getActivationFeeVatRate()));
+		final String activationFeeVatRate = model.getActivationFeeVatRate();
+		if(activationFeeVatRate != null){
+			final VatRate vatRate = vatRateDao.getByIdn(activationFeeVatRate);
+			entity.setActivationFeeVatRate(vatRate);
+		}
 		entity.setActivationFeeVat(toAmount(model.getActivationFeeVat()));
 		entity.setActivationFeeGross(toAmount(model.getActivationFeeGross()));
 
 		entity.setInstallationFeeNet(toAmount(model.getInstallationFeeNet()));
-		entity.setInstallationFeeVatRate(VatRate.valueOf(model.getInstallationFeeVatRate()));
+		final String installationFeeVatRate = model.getInstallationFeeVatRate();
+		if(installationFeeVatRate!=null){
+			final VatRate vatRate = vatRateDao.getByIdn(installationFeeVatRate);
+			entity.setInstallationFeeVatRate(vatRate);
+		}
 		entity.setInstallationFeeVat(toAmount(model.getInstallationFeeVat()));
 		entity.setInstallationFeeGross(toAmount(model.getInstallationFeeGross()));
 

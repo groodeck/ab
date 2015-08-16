@@ -200,3 +200,9 @@ create table CorrectionContent(
  	correctionId integer not null IDENTITY PRIMARY KEY,
 	correctionHtml clob not null,
 );
+
+create table VatRate(
+ 	vatRateIdn varchar(100) not null  PRIMARY KEY,
+ 	vatRateDesc varchar(100) not null,
+ 	value integer,
+);

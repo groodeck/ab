@@ -112,7 +112,7 @@ public class InvoicesGenerator {
 		int serviceCounter = 1;
 		for(final Service service: services){
 			final BigDecimal netAmount = service.getSubscriptionNet().setScale(2);
-			final Integer vatRate = service.getVatRate();
+			final Integer vatRate = service.getVatRate().getValue();
 			final BigDecimal vatAmount = service.getVatAmount().setScale(2);
 			final BigDecimal grossAmount = netAmount.add(vatAmount);
 			final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
@@ -151,7 +151,7 @@ public class InvoicesGenerator {
 		.withLp(serviceNumber)
 		.withServiceName("Op³ata aktywacyjna")
 		.withQuantity(ONE)
-		.withVatRate(contract.getActivationFeeVatRate().getRate())
+		.withVatRate(contract.getActivationFeeVatRate().getValue())
 		.withNetAmount(contract.getActivationFeeNet())
 		.withVatAmount(contract.getActivationFeeVat())
 		.withGrossAmount(contract.getActivationFeeGross());
@@ -179,7 +179,7 @@ public class InvoicesGenerator {
 		.withLp(serviceNumber)
 		.withServiceName("Op³ata instalacyjna")
 		.withQuantity(ONE)
-		.withVatRate(contract.getInstallationFeeVatRate().getRate())
+		.withVatRate(contract.getInstallationFeeVatRate().getValue())
 		.withNetAmount(contract.getInstallationFeeNet())
 		.withVatAmount(contract.getInstallationFeeVat())
 		.withGrossAmount(contract.getInstallationFeeGross());
