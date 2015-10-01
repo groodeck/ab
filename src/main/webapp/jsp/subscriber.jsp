@@ -304,7 +304,13 @@
 			<tr>
 				<th align="right"><label for="contract_status">Status:</label></th>
 				<td>
-					<sf:select path="currentContract.contractStatus" items="${contractStatuses}" id="contract_status"/>
+					<sf:select path="currentContract.contractStatusIdn" items="${contractStatuses}" id="contract_status"/>
+				</td>
+			</tr>
+			<tr>
+				<th align="right"><label for="installation_type">Typ instalacji:</label></th>
+				<td>
+					<sf:select path="currentContract.installationTypeIdn" items="${installationTypes}" id="installation_type"/>
 				</td>
 			</tr>
 			<tr>
@@ -403,10 +409,22 @@
 		</table>
 		
 		</div>
-		
-		<div id="submitDiv" align="center" style="clear:both; width: 100%; height:50px; vertical-align: middle;">
-			<input type="submit" value="Zapisz"/>
+
+		<div id="submitDiv" align="center" class="row col-lg-12" style="clear:both;" >
+			<table>
+				<tr>
+				<td><input class="btn btn-default" type="submit" value="Zapisz"/></td>
+				<td width="20px"/>
+				<c:if test="${not empty subscriber.subscriberId}">
+					<td>
+						<!-- TODO daj tu tabelke albo inaczej odseparuj przyciski, uwarunkuj od customerId (wypełnione jesli customer zapisany w bazie) -->
+						<input class="btn btn-default" type="button" value="Pobierz umowę" onClick="window.location.href = '/async/getCustomerContract/${subscriber.subscriberIdn}'"/>
+					</td>
+				</c:if>
+				</tr>
+			</table>
 		</div>
+				
 		</fieldset>
 	</sf:form>
 	

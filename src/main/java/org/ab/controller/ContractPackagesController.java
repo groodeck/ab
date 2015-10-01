@@ -23,7 +23,14 @@ public class ContractPackagesController {
 
 	@RequestMapping
 	public String handleInitEntry(final Model model) {
-		model.addAttribute("contractPackages", contractPackageService.getAllPackages());
+		model.addAttribute("contractPackages", contractPackageService.getAllPackages(false));
+		model.addAllAttributes(selectValuesService.getPackageDictionaries());
+		return "packages";
+	}
+
+	@RequestMapping("/showAll")
+	public String handleShowAllAction(final Model model) {
+		model.addAttribute("contractPackages", contractPackageService.getAllPackages(true));
 		model.addAllAttributes(selectValuesService.getPackageDictionaries());
 		return "packages";
 	}

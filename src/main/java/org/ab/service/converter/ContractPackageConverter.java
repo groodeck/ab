@@ -34,6 +34,7 @@ public class ContractPackageConverter {
 			model.setPackageName(entity.getPackageName());
 			model.setClientType(entity.getClientType().name());
 			model.setClientTypeDesc(entity.getClientType().getDesc());
+			model.setPackageActive(entity.getPackageActive());
 			if(entity.getPackageSubscription() != null){
 				model.setPackageSubscription(entity.getPackageSubscription().toPlainString());
 			}
@@ -118,6 +119,7 @@ public class ContractPackageConverter {
 				entity.setPackageId(Integer.valueOf(model.getPackageId()));
 			}
 			entity.setPackageName(model.getPackageName());
+			entity.setPackageActive(model.getPackageActive());
 			if(isNotBlank(model.getClientType())){
 				final ClientType clientType = ClientType.valueOf(model.getClientType());
 				entity.setClientType(clientType);

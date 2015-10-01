@@ -17,7 +17,6 @@ import javax.persistence.Table;
 
 import org.ab.model.dictionary.ClientType;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 @Entity
@@ -83,6 +82,10 @@ public class Subscriber {
 		contacts = Lists.newArrayList();
 		addresses = Lists.newArrayList();
 	}
+	public void addBalanceAmount(final BigDecimal amount) {
+		balance = balance.add(amount);
+	}
+
 	public String getAdditionalComment() {
 		return additionalComment;
 	}
@@ -117,14 +120,6 @@ public class Subscriber {
 
 	public List<Contract> getContracts() {
 		return contracts;
-	}
-
-	public String getEffectiveName() {
-		if(clientType == ClientType.INDIVIDUAL){
-			return Joiner.on(" ").skipNulls().join(name, surname);
-		} else {
-			return companyName;
-		}
 	}
 
 	public String getName() {
@@ -214,8 +209,10 @@ public class Subscriber {
 	public void setSubscriberIdn(final String subscriberIdn) {
 		this.subscriberIdn = subscriberIdn;
 	}
-
 	public void setSurname(final String surname) {
 		this.surname = surname;
+	}
+	public void subtractBalanceAmount(final BigDecimal amount) {
+		balance = balance.subtract(amount);
 	}
 }

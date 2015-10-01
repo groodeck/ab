@@ -23,7 +23,7 @@ public class ContractPackageController {
 	private SelectValueService selectValuesService;
 
 	@RequestMapping("/edit/{packageId}")
-	public String handleEditPackage(@PathVariable final int packageId, final Model model) {
+	public String handleEditPackage(@PathVariable final String packageId, final Model model) {
 		final ContractPackage contractPackage = contractPackageService.getContractPackage(packageId);
 		if(contractPackage == null){
 			model.addAttribute("uiMessage", "Nie mo¿na pobraæ danych pakietu");

@@ -31,9 +31,10 @@ public class SubscribersController {
 
 	@RequestMapping("/search")
 	public String handleSearchAction(final @RequestParam("searchPhrase") String searchPhrase,
+			final @RequestParam(value="showAll", required=false) Boolean showAll,
 			final Model model, final HttpServletRequest request) {
 		final List<SubscriberModel> subscribers =
-				subscribersService.findSubscribers(searchPhrase, null, null);
+				subscribersService.findSubscribers(searchPhrase, null, null, showAll);
 		model.addAttribute("subscribers", subscribers);
 		request.getSession().setAttribute("subscriberList", subscribers);
 		return "subscribers";

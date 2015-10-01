@@ -1,8 +1,7 @@
 package org.ab.service.generator;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Properties;
 
@@ -19,7 +18,9 @@ import org.ab.model.InvoiceModel.Builder;
 import org.ab.model.dictionary.AddressType;
 import org.ab.model.dictionary.ClientType;
 import org.ab.util.DecimalWriter;
+import org.ab.util.PropertiesReader;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,49 @@ import com.google.common.collect.Lists;
 @Component
 @Transactional
 public class InvoicesGenerator {
+
+	private class PartialInvoiceAware {
+
+		private final boolean generatePartialInvoice;
+		private final LocalDate invoicePeriodStart;
+		private final LocalDate invoicePeriodEnd;
+		private final int invoicePeriodDays;
+		private final int settlementPeriodDays;
+
+		private PartialInvoiceAware(final LocalDate contractActivationDate,
+				final LocalDate contractEndDate, final LocalDate dateFrom, final LocalDate dateTo) {
+			if(contractActivationDate.isAfter(dateFrom) && contractActivationDate.isBefore(dateTo)){
+				generatePartialInvoice = true;
+				invoicePeriodStart = contractActivationDate;
+				invoicePeriodEnd = dateTo;
+			} else if(contractEndDate != null && contractEndDate.isAfter(dateFrom) && contractEndDate.isBefore(dateTo)){
+				generatePartialInvoice = true;
+				invoicePeriodStart = dateFrom;
+				invoicePeriodEnd = contractEndDate;
+			} else {
+				generatePartialInvoice = false;
+				invoicePeriodStart = dateFrom;
+				invoicePeriodEnd = dateTo;
+			}
+			invoicePeriodDays = Days.daysBetween(invoicePeriodStart, invoicePeriodEnd).getDays()+1;
+			settlementPeriodDays = Days.daysBetween(dateFrom, dateTo).getDays()+1;
+		}
+
+		private BigDecimal getAmount(final BigDecimal fullMonthAmount) {
+			if(generatePartialInvoice){
+				final BigDecimal amountPerDay = fullMonthAmount.divide(new BigDecimal(settlementPeriodDays), 2, RoundingMode.HALF_UP);
+				return amountPerDay.multiply(new BigDecimal(invoicePeriodDays)).setScale(2);
+			} else {
+				return fullMonthAmount;
+			}
+		}
+		private LocalDate getSettlementPeriodEnd() {
+			return invoicePeriodEnd;
+		}
+		private LocalDate getSettlementPeriodStart() {
+			return invoicePeriodStart;
+		}
+	}
 
 	@Autowired
 	private InvoiceContentGenerator contentGenerator;
@@ -72,7 +116,7 @@ public class InvoicesGenerator {
 
 	@Transactional
 	public List<InvoiceModel> generateInvoices(final List<Contract> contracts, final LocalDate dateFrom, final LocalDate dateTo) {
-		final Properties props = loadProperties("companyDetails.properties");
+		final Properties props = PropertiesReader.loadProperties("companyDetails.properties");
 		final String city = props.getProperty("company.city");
 		final LocalDate currentDate = LocalDate.now();
 		final LocalDate firstOfCurrentMonth = currentDate.dayOfMonth().withMinimumValue();
@@ -80,40 +124,45 @@ public class InvoicesGenerator {
 		long lastInvoiceSequence = numberGenerator.getLastDocumentSequence(firstOfCurrentMonth, lastOfCurrentMonth);
 		final List<InvoiceModel> results = Lists.newArrayList();
 		for(final Contract contract : contracts){
+			final Subscriber subscriber = contract.getSubscriber();
+			final PartialInvoiceAware partialInvoiceAware = resolvePartialInvoiceAware(contract, dateFrom, dateTo);
 			final InvoiceModel.Builder invoiceBuilder = new InvoiceModel.Builder()
 			.withInvoiceNumber(numberGenerator.generate(lastInvoiceSequence++, currentDate))
 			.withSubscriberIdn(contract.getSubscriber().getSubscriberIdn())
 			.withContract(contract)
-			.withSettlementPeriodStart(dateFrom)
-			.withSettlementPeriodEnd(dateTo)
+			.withSettlementPeriodStart(partialInvoiceAware.getSettlementPeriodStart())
+			.withSettlementPeriodEnd(partialInvoiceAware.getSettlementPeriodEnd())
 			.withSeller(getSeller(props))
-			.withSubscriber(getInvoiceParticipant(contract.getSubscriber()))
+			.withSubscriber(getInvoiceParticipant(subscriber))
 			.withCreateDate(currentDate)
 			.withReceiveDate(currentDate)
 			.withDateHeader(city + ", " + currentDate)
 			.withPaymentDate(currentDate.plusWeeks(2));
 			final ContractPackage contractPackage = contract.getContractPackage();
 			final List<Service> services = contractPackage.getServices();
-			generateServices(services, contract, invoiceBuilder);
+			generateServices(services, contract, invoiceBuilder, partialInvoiceAware);
 			final InvoiceModel invoice = invoiceBuilder.build();
 			final String html = generateHtmlContent(invoice);
 			invoice.setHtmlContent(html);
 			results.add(invoice);
+
+			subscriber.subtractBalanceAmount(invoice.getGrossAmount());
 		}
 		return results;
 	}
 
+
 	private void generateServices(final List<Service> services, final Contract contract,
-			final Builder invoiceBuilder) {
+			final Builder invoiceBuilder, final PartialInvoiceAware partialInvoiceAware) {
 
 		BigDecimal totalNetAmount = BigDecimal.ZERO;
 		BigDecimal totalVatAmount = BigDecimal.ZERO;
 		BigDecimal totalGrossAmount = BigDecimal.ZERO;
 		int serviceCounter = 1;
 		for(final Service service: services){
-			final BigDecimal netAmount = service.getSubscriptionNet().setScale(2);
 			final Integer vatRate = service.getVatRate().getValue();
-			final BigDecimal vatAmount = service.getVatAmount().setScale(2);
+			final BigDecimal netAmount = partialInvoiceAware.getAmount(service.getSubscriptionNet().setScale(2));
+			final BigDecimal vatAmount = partialInvoiceAware.getAmount(service.getVatAmount().setScale(2));
 			final BigDecimal grossAmount = netAmount.add(vatAmount);
 			final InvoiceServiceRecord.Builder serviceBuilder = new InvoiceServiceRecord.Builder()
 			.withLp(serviceCounter++)
@@ -203,7 +252,7 @@ public class InvoicesGenerator {
 	}
 
 	public InvoiceParticipant getSeller() {
-		final Properties props = loadProperties("companyDetails.properties");
+		final Properties props = PropertiesReader.loadProperties("companyDetails.properties");
 		return getSeller(props);
 	}
 
@@ -219,25 +268,13 @@ public class InvoicesGenerator {
 				.build();
 	}
 
-	private Properties loadProperties(final String fileName) {
-		final Properties prop = new Properties();
-		InputStream input=null;
-		try {
-			final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			input = classLoader.getResourceAsStream("companyDetails.properties");
-			prop.load(input);
-		} catch (final IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (final IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return prop;
+
+
+	private PartialInvoiceAware resolvePartialInvoiceAware(final Contract contract, final LocalDate dateFrom,
+			final LocalDate dateTo) {
+		final LocalDate contractActivationDate = contract.getContractActivationDate();
+		final LocalDate contractEndDate = contract.getContractEndDate();
+		return new PartialInvoiceAware(contractActivationDate, contractEndDate, dateFrom, dateTo);
 	}
 }
 

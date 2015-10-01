@@ -30,6 +30,9 @@ public class ContractPackage {
 	@Column(name="packageName")
 	private String packageName;
 
+	@Column(name="packageActive")
+	private Boolean packageActive;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name="clientType")
 	private ClientType clientType;
@@ -103,6 +106,10 @@ public class ContractPackage {
 		return installationFeeVatRate;
 	}
 
+	public Boolean getPackageActive() {
+		return packageActive;
+	}
+
 	public Integer getPackageId() {
 		return packageId;
 	}
@@ -153,6 +160,10 @@ public class ContractPackage {
 
 	public void setInstallationFeeVatRate(final VatRate installationFeeVatRate) {
 		this.installationFeeVatRate = installationFeeVatRate;
+	}
+
+	public void setPackageActive(final Boolean packageActive) {
+		this.packageActive = packageActive;
 	}
 
 	public void setPackageId(final Integer packageId) {

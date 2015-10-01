@@ -31,6 +31,7 @@
 					<sf:form method="get" action="/subscribers/search" cssStyle="margin: 0 0 0px;">
 						Znajdź abonenta: 
 						<input name="searchPhrase" value="${searchPhrase}"/>
+						<input type="checkbox" name="showAll" value="true" />Pokaż nieaktywne
 						<input type="submit" value="Znajdź"/>
 					</sf:form>
 				</td>
@@ -47,27 +48,29 @@
 				<tr class="tableHeader">
 					<td>lp</td>
 					<td width="60px">Nr ab.</td>
-					<td width="100px">Data podpisania umowy</td>
-					<td>Abonent</td>
 					<td>Typ klienta</td>
+					<td>Abonent</td>
 					<td>Adres</td>
+					<td>Adres św. usł.</td>
 					<td>Miejscowość</td>
 					<td>Pakiet</td>
+					<td width="100px">Data podpisania umowy</td>
 					<td width="100px">Data zakończenia umowy</td>
-					<td>Przedstawiciel handlowy</td>
+					<td width="200px">Uwagi</td>
 				</tr>
 				<c:forEach var="subscriber" items="${subscribers}" varStatus="status" >
 					<tr>
 						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${status.index + 1}"/></td>
 						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.subscriberIdn}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.contractSignDate}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.effectiveName}"/></td>
 						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.clientTypeDesc}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.effectiveName}"/></td>
 						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.mainAddress.streetDetails}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.mainAddress.city}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.serviceAddress.streetDetails}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.serviceAddress.city}"/></td>
 						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.contractPackageName}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.contractSignDate}"/></td>
 						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.contractEndDate}"/></td>
-						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.currentContract.user}"/></td>
+						<td onclick="editSubscriber(${subscriber.subscriberId})"><c:out value="${subscriber.comment}"/></td>
 					</tr>
 				</c:forEach>
 			</table>

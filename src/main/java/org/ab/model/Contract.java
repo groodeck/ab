@@ -2,13 +2,19 @@ package org.ab.model;
 
 import java.util.List;
 
+import org.ab.model.dictionary.ContractStatus;
+import org.ab.model.dictionary.InstalationType;
+
 import com.google.common.collect.Lists;
 
 public class Contract {
 
 	private String contractId;
 	private String contractIdn;
-	private String contractStatus;
+	private String contractStatusIdn;
+	private String contractStatusDesc;
+	private String installationTypeIdn;
+	private String installationTypeDesc;
 	private String contractSignDate;
 	private String contractActivationDate;
 	private String contractEndDate;
@@ -30,6 +36,8 @@ public class Contract {
 
 	public Contract(){
 		devices = Lists.newArrayList(new Device());
+		contractStatusIdn = ContractStatus.IN_PROGRESS.name();
+		installationTypeIdn = InstalationType.CABLE.name();
 		active = true;
 	}
 
@@ -69,8 +77,11 @@ public class Contract {
 	public String getContractSignDate() {
 		return contractSignDate;
 	}
-	public String getContractStatus() {
-		return contractStatus;
+	public String getContractStatusDesc() {
+		return contractStatusDesc;
+	}
+	public String getContractStatusIdn() {
+		return contractStatusIdn;
 	}
 	public String getContractSubscription() {
 		return contractSubscription;
@@ -90,6 +101,15 @@ public class Contract {
 	public String getInstallationFeeVatRate() {
 		return installationFeeVatRate;
 	}
+
+	public String getInstallationTypeDesc() {
+		return installationTypeDesc;
+	}
+
+	public String getInstallationTypeIdn() {
+		return installationTypeIdn;
+	}
+
 	public String getUser() {
 		return user;
 	}
@@ -150,8 +170,12 @@ public class Contract {
 		this.contractSignDate = contractSignDate;
 	}
 
-	public void setContractStatus(final String contractStatus) {
-		this.contractStatus = contractStatus;
+	public void setContractStatusDesc(final String contractStatusDesc) {
+		this.contractStatusDesc = contractStatusDesc;
+	}
+
+	public void setContractStatusIdn(final String contractStatus) {
+		contractStatusIdn = contractStatus;
 	}
 
 	public void setContractSubscription(final String contractSubscription) {
@@ -176,6 +200,14 @@ public class Contract {
 
 	public void setInstallationFeeVatRate(final String installationFeeVatRate) {
 		this.installationFeeVatRate = installationFeeVatRate;
+	}
+
+	public void setInstallationTypeDesc(final String installationTypeDesc) {
+		this.installationTypeDesc = installationTypeDesc;
+	}
+
+	public void setInstallationTypeIdn(final String installationType) {
+		installationTypeIdn = installationType;
 	}
 
 	public void setUser(final String user) {

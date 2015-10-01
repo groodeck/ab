@@ -7,9 +7,11 @@ import java.util.List;
 import org.ab.dao.InvoiceDao;
 import org.ab.dao.InvoicePaymentDao;
 import org.ab.dao.PaymentDao;
+import org.ab.dao.SubscriberDao;
 import org.ab.entity.Invoice;
 import org.ab.entity.InvoicePayment;
 import org.ab.entity.Payment;
+import org.ab.entity.Subscriber;
 import org.ab.model.InvoicePaymentModel;
 import org.ab.model.PaymentModel;
 import org.ab.service.converter.PaymentConverter;
@@ -39,53 +41,8 @@ public class PaymentsService {
 	@Autowired
 	private InvoicePaymentDao invoicePaymentDao;
 
-	private void createInvoicePayment(final Payment payment, final InvoicePaymentModel invoiceModel) {
-		if(invoiceModel.isShouldBePaid()){
-			final Invoice invoice = this.invoiceDao.getInvoice(Integer.parseInt(invoiceModel.getInvoiceId()));
-			final BigDecimal invoicePaymentAmount = Translator.toAmount(invoiceModel.getPaymentAmount());
-			final InvoicePayment invoicePayment = new InvoicePayment();
-			invoicePayment.setInvoice(invoice);
-			invoicePayment.setPayment(payment);
-			invoicePayment.setPaymentAmount(invoicePaymentAmount);
-			this.invoicePaymentDao.save(invoicePayment);
-		}
-	}
-
-	public List<PaymentModel> findPayments(final String subscriberIdn, final LocalDate dateFrom, final LocalDate dateTo) {
-		final List<Payment> payments = this.paymentDao.findPayments(subscriberIdn, dateFrom, dateTo);
-		return this.paymentConverter.convertPaymentEntities(payments);
-	}
-
-	private InvoicePayment getInvoicePayment(final InvoicePaymentModel invoiceModel) {
-		final String paymentId = invoiceModel.getPaymentId();
-		final String invoiceId = invoiceModel.getInvoiceId();
-		if(StringUtils.isNotBlank(invoiceId) && StringUtils.isNotBlank(paymentId)){
-			return this.invoicePaymentDao.getByInvoiceAndPayment(Integer.parseInt(invoiceId), Integer.parseInt(paymentId));
-		} else {
-			return null;
-		}
-	}
-
-	private Payment getOrCreatePayment(final String paymentId) {
-		if(StringUtils.isBlank(paymentId)){
-			return new Payment();
-		} else {
-			return this.paymentDao.getPayment(Integer.parseInt(paymentId));
-		}
-	}
-
-	public PaymentModel getPayment(final int paymentId) {
-		final Payment payment = this.paymentDao.getPayment(paymentId);
-		final PaymentModel paymentModel;
-		if(payment == null){
-			paymentModel = null;
-		}else {
-			paymentModel = this.paymentConverter.convertPaymentEntity(payment);
-			final String subscriberId = payment.getSubscriberId().toString();
-			complementByUnpaidInvoices(paymentModel.getInvoices(), subscriberId);
-		}
-		return paymentModel;
-	}
+	@Autowired
+	private SubscriberDao subscriberDao;
 
 	private void complementByUnpaidInvoices(final List<InvoicePaymentModel> invoices, final String subscriberId) {
 		final Collection<InvoicePaymentModel> unpaidInvoices = getUnpaidInvoices(subscriberId);
@@ -102,9 +59,57 @@ public class PaymentsService {
 		}
 	}
 
+	private void createInvoicePayment(final Payment payment, final InvoicePaymentModel invoiceModel) {
+		if(invoiceModel.isShouldBePaid()){
+			final Invoice invoice = invoiceDao.getInvoice(Integer.parseInt(invoiceModel.getInvoiceId()));
+			final BigDecimal invoicePaymentAmount = Translator.toAmount(invoiceModel.getPaymentAmount());
+			final InvoicePayment invoicePayment = new InvoicePayment();
+			invoicePayment.setInvoice(invoice);
+			invoicePayment.setPayment(payment);
+			invoicePayment.setPaymentAmount(invoicePaymentAmount);
+			invoicePaymentDao.save(invoicePayment);
+		}
+	}
+
+	public List<PaymentModel> findPayments(final String subscriberIdn, final LocalDate dateFrom, final LocalDate dateTo) {
+		final List<Payment> payments = paymentDao.findPayments(subscriberIdn, dateFrom, dateTo);
+		return paymentConverter.convertPaymentEntities(payments);
+	}
+
+	private InvoicePayment getInvoicePayment(final InvoicePaymentModel invoiceModel) {
+		final String paymentId = invoiceModel.getPaymentId();
+		final String invoiceId = invoiceModel.getInvoiceId();
+		if(StringUtils.isNotBlank(invoiceId) && StringUtils.isNotBlank(paymentId)){
+			return invoicePaymentDao.getByInvoiceAndPayment(Integer.parseInt(invoiceId), Integer.parseInt(paymentId));
+		} else {
+			return null;
+		}
+	}
+
+	private Payment getOrCreatePayment(final String paymentId) {
+		if(StringUtils.isBlank(paymentId)){
+			return new Payment();
+		} else {
+			return paymentDao.getPayment(Integer.parseInt(paymentId));
+		}
+	}
+
+	public PaymentModel getPayment(final int paymentId) {
+		final Payment payment = paymentDao.getPayment(paymentId);
+		final PaymentModel paymentModel;
+		if(payment == null){
+			paymentModel = null;
+		}else {
+			paymentModel = paymentConverter.convertPaymentEntity(payment);
+			final String subscriberId = payment.getSubscriberId().toString();
+			complementByUnpaidInvoices(paymentModel.getInvoices(), subscriberId);
+		}
+		return paymentModel;
+	}
+
 	public List<InvoicePaymentModel> getUnpaidInvoices(final String subscriberId) {
-		final List<Invoice> invoices = this.invoiceDao.findUnpaidInvoices(subscriberId);
-		return this.paymentConverter.convertInvoiceEntities(invoices);
+		final List<Invoice> invoices = invoiceDao.findUnpaidInvoices(subscriberId);
+		return paymentConverter.convertInvoiceEntities(invoices);
 	}
 
 	private boolean isNotEmpty(final List<InvoicePaymentModel> invoicePayments) {
@@ -119,15 +124,17 @@ public class PaymentsService {
 
 	public void save(final PaymentModel paymentModel, final String name) {
 		final Payment payment = getOrCreatePayment(paymentModel.getPaymentId());
-		payment.setSubscriberId(Integer.parseInt(paymentModel.getSubscriber().getSubscriberId()));
+		final String subscriberId = paymentModel.getSubscriber().getSubscriberId();
+		payment.setSubscriberId(Integer.parseInt(subscriberId));
 		payment.setCreateDate(Translator.toLocalDate(paymentModel.getCreateDate()));
 		payment.setPaymentAmount(Translator.toAmount(paymentModel.getPaymentAmount()));
 		saveInvoicePayments(payment, paymentModel.getInvoices());
 		if(isNotEmpty(paymentModel.getInvoices())){
-			this.paymentDao.save(payment);
+			paymentDao.save(payment);
 		} else if(payment.getPaymentId() != null) {
-			this.paymentDao.remove(payment);
+			paymentDao.remove(payment);
 		}
+		updateBalance(payment.getPaymentAmount(), subscriberId);
 	}
 
 	private void saveInvoicePayments(final Payment payment, final List<InvoicePaymentModel> invoicesModel) {
@@ -145,9 +152,14 @@ public class PaymentsService {
 		if(invoiceModel.isShouldBePaid()){
 			final BigDecimal invoicePaymentAmount = Translator.toAmount(invoiceModel.getPaymentAmount());
 			invoicePayment.setPaymentAmount(invoicePaymentAmount);
-			this.invoicePaymentDao.save(invoicePayment);
+			invoicePaymentDao.save(invoicePayment);
 		} else if (invoicePayment != null){
-			this.invoicePaymentDao.remove(invoicePayment);
+			invoicePaymentDao.remove(invoicePayment);
 		}
+	}
+
+	private void updateBalance(final BigDecimal paymentAmount, final String subscriberId) {
+		final Subscriber subscriber = subscriberDao.getSubscriber(Integer.parseInt(subscriberId));
+		subscriber.addBalanceAmount(paymentAmount);
 	}
 }

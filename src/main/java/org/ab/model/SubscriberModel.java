@@ -1,5 +1,6 @@
 package org.ab.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,6 +12,8 @@ public class SubscriberModel {
 
 	private String subscriberId;
 	private String subscriberIdn;
+	private String subscriberStatusIdn;
+	private String subscriberStatusDesc;
 	private String clientType;
 	private String clientTypeDesc;
 	private String name;
@@ -36,6 +39,7 @@ public class SubscriberModel {
 	private List<String> emails;
 
 	public SubscriberModel(){
+		balance = BigDecimal.ZERO.setScale(2).toPlainString();
 		phoneNumbers = Lists.newArrayList("");
 		emails = Lists.newArrayList("");
 		currentContract = new Contract();
@@ -108,6 +112,12 @@ public class SubscriberModel {
 	public String getSubscriberIdn() {
 		return subscriberIdn;
 	}
+	public String getSubscriberStatusDesc() {
+		return subscriberStatusDesc;
+	}
+	public String getSubscriberStatusIdn() {
+		return subscriberStatusIdn;
+	}
 	public String getSurname() {
 		return surname;
 	}
@@ -135,9 +145,11 @@ public class SubscriberModel {
 	public void setComment(final String comment) {
 		this.comment = comment;
 	}
+
 	public void setCompanyName(final String companyName) {
 		this.companyName = companyName;
 	}
+
 	public void setCorrespondenceAddress(final Address correspondenceAddress) {
 		this.correspondenceAddress = correspondenceAddress;
 	}
@@ -192,6 +204,14 @@ public class SubscriberModel {
 
 	public void setSubscriberIdn(final String subscriberIdn) {
 		this.subscriberIdn = subscriberIdn;
+	}
+
+	public void setSubscriberStatusDesc(final String subscriberStatusDesc) {
+		this.subscriberStatusDesc = subscriberStatusDesc;
+	}
+
+	public void setSubscriberStatusIdn(final String subscriberStatusIdn) {
+		this.subscriberStatusIdn = subscriberStatusIdn;
 	}
 
 	public void setSurname(final String surname) {

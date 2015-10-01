@@ -17,13 +17,18 @@ public class ContractPackageDao {
 	private EntityManager em;
 
 	@SuppressWarnings("unchecked")
+	public List<ContractPackage> findActive() {
+		return em.createQuery("from ContractPackage where packageActive is true").getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<ContractPackage> findAll() {
 		return em.createQuery("from ContractPackage").getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<ContractPackage> findAllOfClientType(final ClientType clientType) {
-		return em.createQuery("from ContractPackage cp where cp.clientType = :clientType")
+		return em.createQuery("from ContractPackage cp where cp.clientType = :clientType and cp.packageActive is true")
 				.setParameter("clientType", clientType)
 				.getResultList();
 	}

@@ -56,7 +56,7 @@ public class InvoicesService {
 	public List<InvoiceModel> generateInvoices(final InvoiceGenerationParams generationParams) {
 		final LocalDate dateFrom = getFirstOfMonth(generationParams);
 		final LocalDate dateTo = getLastOfMonth(generationParams);
-		final List<Contract> contracts = contractDao.findContracts(dateFrom, dateTo);
+		final List<Contract> contracts = contractDao.findContractsToInvoiceGenerate(dateFrom, dateTo);
 		final List<InvoiceModel> invoices = invoicesGenerator.generateInvoices(contracts, dateFrom, dateTo);
 		if(!CollectionUtils.isEmpty(invoices)){
 			persist(invoices);

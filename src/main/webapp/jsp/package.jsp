@@ -61,6 +61,12 @@
 		<sf:hidden path="packageId"/>
 		<table width="100%">
 			<tr>
+				<th align="right" style="width: 30%"><label for="packageActive">Aktywny:</label></th>
+				<td colspan="4">
+					<sf:checkbox path="packageActive" id="packageActive" />
+				</td>
+			</tr>
+			<tr>
 				<th align="right" style="width: 30%"><label for="package_name">Typ klienta:</label></th>
 				<td colspan="4">
 					<sf:select path="clientType" items="${clientTypes}" id="client_type" />

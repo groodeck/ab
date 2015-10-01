@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Optional;
+
 @Component
 @Transactional
 public class SubscriberService {
@@ -17,6 +19,18 @@ public class SubscriberService {
 
 	@Autowired
 	private SubscriberDao subscriberDao;
+
+	@Autowired
+	private ContractGenerator contractGenerator;
+
+	public Optional<String> getCurrentContractFile(final String subscriberIdn) {
+		final Optional<Subscriber> subscriber = subscriberDao.findByIdn(subscriberIdn);
+		if(subscriber.isPresent()){
+			return Optional.fromNullable(contractGenerator.generate(subscriber.get()));
+		} else {
+			return Optional.absent();
+		}
+	}
 
 	public String getMaxClientId() {
 		return subscriberDao.getLastSubscriberIdn();
@@ -36,5 +50,7 @@ public class SubscriberService {
 		final Subscriber subscriber = subscriberConverter.convert(subscriberModel, userName);
 		final Integer id = subscriberDao.save(subscriber);
 		subscriberModel.setSubscriberId(id.toString());
+		contractGenerator.generate(subscriber);
 	}
+
 }

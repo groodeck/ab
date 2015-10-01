@@ -31,14 +31,20 @@ public class ContractPackageService {
 	private ServiceDao serviceDao;
 
 	@Transactional
-	public List<org.ab.model.ContractPackage> getAllPackages() {
-		final List<ContractPackage> all = contractPackageDao.findAll();
-		return contractPackageConverter.convert(all);
+	public List<org.ab.model.ContractPackage> getAllPackages(final boolean showInactive) {
+		final List<ContractPackage> results;
+		if(showInactive){
+			results = contractPackageDao.findAll();
+		} else {
+			results = contractPackageDao.findActive();
+
+		}
+		return contractPackageConverter.convert(results);
 	}
 
 	@Transactional
-	public org.ab.model.ContractPackage getContractPackage(final int packageId) {
-		final ContractPackage contractPackage = contractPackageDao.getById(String.valueOf(packageId));
+	public org.ab.model.ContractPackage getContractPackage(final String packageId) {
+		final ContractPackage contractPackage = contractPackageDao.getById(packageId);
 		return contractPackageConverter.convert(contractPackage);
 	}
 
@@ -58,7 +64,7 @@ public class ContractPackageService {
 	}
 
 	public Map<String, String> getPackageDictionary(){
-		final List<ContractPackage> packages = contractPackageDao.findAll();
+		final List<ContractPackage> packages = contractPackageDao.findActive();
 		final Map<String, String> results = Maps.newHashMap();
 		for(final ContractPackage contractPackage : packages){
 			results.put(contractPackage.getPackageId().toString(),

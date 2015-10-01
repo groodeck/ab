@@ -17,8 +17,10 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import org.ab.dao.ContractDao;
 import org.ab.dao.CorrectionDao;
 import org.ab.dao.InvoiceDao;
+import org.ab.dao.SubscriberDao;
 import org.ab.entity.Correction;
 import org.ab.entity.Invoice;
+import org.ab.entity.Subscriber;
 import org.ab.model.CorrectionModel;
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
@@ -55,6 +57,9 @@ public class CorrectionService {
 
 	@Autowired
 	private CorrectionDao correctionDao;
+
+	@Autowired
+	private SubscriberDao subscriberDao;
 
 	@Autowired
 	private CorrectionNumberGenerator numberGenerator;
@@ -112,6 +117,13 @@ public class CorrectionService {
 		return correction.getCorrectionContent().getCorrectionHtml();
 	}
 
+	private String getCorrectionNumber() {
+		final LocalDate today = LocalDate.now();
+		final LocalDate dateFrom = today.dayOfMonth().withMinimumValue();
+		final LocalDate dateTo = today.dayOfMonth().withMaximumValue();
+		return numberGenerator.generate(dateFrom, dateTo);
+	}
+
 	private LocalDate getFirstOfMonth(final InvoiceGenerationParams generationParams) {
 		return getLocalDate(generationParams).dayOfMonth().withMinimumValue();
 	}
@@ -145,13 +157,6 @@ public class CorrectionService {
 		.build();
 	}
 
-	private String getCorrectionNumber() {
-		final LocalDate today = LocalDate.now();
-		final LocalDate dateFrom = today.dayOfMonth().withMinimumValue();
-		final LocalDate dateTo = today.dayOfMonth().withMaximumValue();
-		return numberGenerator.generate(dateFrom, dateTo);
-	}
-
 	private void printFile(final String file){
 		try {
 			final FileInputStream fis = new FileInputStream(file);
@@ -175,11 +180,24 @@ public class CorrectionService {
 	public void save(final CorrectionModel correction) {
 		final Correction entity = correctionConverter.convert(correction);
 		correctionDao.save(entity);
+		updateSubscriberBalance(correction);
 		final Optional<String> fileToPrint = correctionFileGenerator.generatePdf(correction);
 		// TODO:
 		//	1. uncomment in production
 		// 	2. print only invoices for specific subscriber - email not defined;
 		//printToPrinter(filesToPrint);
+	}
+
+	private void updateSubscriberBalance(final CorrectionModel correction) {
+		//		final Integer invoiceId = correction.getInvoice().getInvoiceId();
+		//		final Invoice invoice = invoiceDao.getInvoice(invoiceId);
+		//		final Subscriber subscriber = invoice.getContract().getSubscriber();
+
+		final String subscriberIdn = correction.getInvoice().getSubscriberIdn();
+		final Optional<Subscriber> subscriber = subscriberDao.findByIdn(subscriberIdn);
+		if(subscriber.isPresent()){
+			subscriber.get().subtractBalanceAmount(correction.getGrossAmountDiff());
+		}
 	}
 
 }

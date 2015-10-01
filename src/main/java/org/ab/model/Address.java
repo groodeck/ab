@@ -2,6 +2,8 @@ package org.ab.model;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.common.base.Joiner;
+
 public class Address {
 
 	private String addressId;
@@ -22,6 +24,9 @@ public class Address {
 	}
 	public String getHouseNo() {
 		return houseNo;
+	}
+	public String getOneLineAddress() {
+		return Joiner.on(" ").skipNulls().join(zipCode, city, getStreetDetails());
 	}
 	public String getStreet() {
 		return street;
@@ -49,10 +54,10 @@ public class Address {
 	public void setApartamentNo(final String apartamentNo) {
 		this.apartamentNo = apartamentNo;
 	}
+
 	public void setCity(final String city) {
 		this.city = city;
 	}
-
 	public void setHouseNo(final String houseNo) {
 		this.houseNo = houseNo;
 	}

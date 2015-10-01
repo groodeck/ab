@@ -13,6 +13,7 @@ import org.ab.model.js.ServiceDetails;
 import org.ab.service.ContractPackageService;
 import org.ab.service.CorrectionService;
 import org.ab.service.InvoicesService;
+import org.ab.service.SubscriberService;
 import org.ab.util.DecimalWriter;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.base.Optional;
 
 import flexjson.JSONSerializer;
 
@@ -33,6 +36,9 @@ public class AsyncController {
 
 	@Autowired
 	private InvoicesService invoiceService;
+
+	@Autowired
+	private SubscriberService subscriberService;
 
 	@Autowired
 	private CorrectionService correctionService;
@@ -62,15 +68,17 @@ public class AsyncController {
 	@ResponseBody
 	public void getCorrectionFile(@PathVariable final int id, final HttpServletResponse response) {
 		final String filePath = correctionService.getCorrectionFile(id);
-		response.setContentType("application/octet-stream");
-		//TODO: get filename from Service layer
-		response.setHeader("Content-Disposition", "filename=\"KOR_000001_02_2015.pdf\"");
-		final File file = new File(filePath);
-		try {
-			FileUtils.copyFile(file, response.getOutputStream());
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(filePath!=null){
+			sendFileToClient(response, filePath);
+		}
+	}
+
+	@RequestMapping(value="/getCustomerContract/{subscriberIdn}",  produces = "application/docx; charset=utf-8")
+	@ResponseBody
+	public void getCustomerContract(@PathVariable final String subscriberIdn, final HttpServletResponse response) {
+		final Optional<String> filePath = subscriberService.getCurrentContractFile(subscriberIdn);
+		if(filePath.isPresent()){
+			sendFileToClient(response, filePath.get());
 		}
 	}
 
@@ -90,14 +98,8 @@ public class AsyncController {
 	@ResponseBody
 	public void getInvoiceFile(@PathVariable final int id, final HttpServletResponse response) {
 		final String filePath = invoiceService.getInvoiceFile(id);
-		final File file = new File(filePath);
-		response.setContentType("application/octet-stream");
-		response.setHeader("Content-Disposition", "filename=\"" + file.getName() + "\"");
-		try {
-			FileUtils.copyFile(file, response.getOutputStream());
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(filePath!=null){
+			sendFileToClient(response, filePath);
 		}
 	}
 
@@ -113,5 +115,16 @@ public class AsyncController {
 	public String getServiceDetails(@PathVariable final int id) {
 		final ServiceDetails packageDetails =packageService.getService(String.valueOf(id));
 		return packageDetails.serialize();
+	}
+
+	private void sendFileToClient(final HttpServletResponse response, final String filePath) {
+		final File file = new File(filePath);
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "filename=\"" + file.getName() + "\"");
+		try {
+			FileUtils.copyFile(file, response.getOutputStream());
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

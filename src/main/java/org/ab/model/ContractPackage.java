@@ -7,6 +7,8 @@ import org.assertj.core.util.Lists;
 public class ContractPackage {
 	private String packageId;
 	private String packageName;
+	private String statusIdn;
+	private Boolean packageActive;
 	private String clientType;
 	private String clientTypeDesc;
 	private String packageSubscription;
@@ -24,6 +26,7 @@ public class ContractPackage {
 	private List<Service> services;
 
 	public ContractPackage(){
+		packageActive = Boolean.TRUE;
 		services = Lists.newArrayList();
 	}
 	public String getActivationFeeGross() {
@@ -56,6 +59,9 @@ public class ContractPackage {
 	public String getInstallationFeeVatRate() {
 		return installationFeeVatRate;
 	}
+	public Boolean getPackageActive() {
+		return packageActive;
+	}
 	public String getPackageId() {
 		return packageId;
 	}
@@ -67,6 +73,9 @@ public class ContractPackage {
 	}
 	public List<Service> getServices() {
 		return services;
+	}
+	public String getStatusIdn() {
+		return statusIdn;
 	}
 	public void setActivationFeeGross(final String activationFeeGross) {
 		this.activationFeeGross = activationFeeGross;
@@ -98,6 +107,9 @@ public class ContractPackage {
 	public void setInstallationFeeVatRate(final String installationFeeVatRate) {
 		this.installationFeeVatRate = installationFeeVatRate;
 	}
+	public void setPackageActive(final Boolean packageActive) {
+		this.packageActive = packageActive;
+	}
 	public void setPackageId(final String packageId) {
 		this.packageId = packageId;
 	}
@@ -109,6 +121,9 @@ public class ContractPackage {
 	}
 	public void setServices(final List<Service> services) {
 		this.services = services;
+	}
+	public void setStatusIdn(final String statusIdn) {
+		this.statusIdn = statusIdn;
 	}
 
 }

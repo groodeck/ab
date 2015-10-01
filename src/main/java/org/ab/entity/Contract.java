@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.ab.model.dictionary.ContractStatus;
+import org.ab.model.dictionary.InstalationType;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
@@ -35,6 +36,10 @@ public class Contract {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name="contractStatus")
 	private ContractStatus contractStatus;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="installationType")
+	private InstalationType installationType;
 
 	@Column(name="contractSignDate")
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
@@ -88,70 +93,130 @@ public class Contract {
 	private boolean disposableFeePaid;
 
 	@ManyToOne
-    @JoinColumn(name="subscriberId", insertable=false, updatable=true, nullable=true)
+	@JoinColumn(name="subscriberId", insertable=false, updatable=true, nullable=true)
 	private Subscriber subscriber;
 
 	@Column(name="active")
 	private boolean active;
 
 	@OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
-    @JoinColumn(name="contractId")
+	@JoinColumn(name="contractId")
 	private List<Device> devices;
 
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
 
-	public Integer getContractId() {
-		return this.contractId;
+	public BigDecimal getActivationFeeGross() {
+		return activationFeeGross;
 	}
 
-	public String getContractIdn() {
-		return this.contractIdn;
+	public BigDecimal getActivationFeeNet() {
+		return activationFeeNet;
 	}
 
-	public ContractStatus getContractStatus() {
-		return this.contractStatus;
+	public BigDecimal getActivationFeeVat() {
+		return activationFeeVat;
 	}
 
-	public LocalDate getContractSignDate() {
-		return this.contractSignDate;
+	public VatRate getActivationFeeVatRate() {
+		return activationFeeVatRate;
 	}
 
 	public LocalDate getContractActivationDate() {
-		return this.contractActivationDate;
+		return contractActivationDate;
 	}
 
 	public LocalDate getContractEndDate() {
-		return this.contractEndDate;
+		return contractEndDate;
 	}
 
-	public String getContractPeriod() {
-		return this.contractPeriod;
+	public Integer getContractId() {
+		return contractId;
+	}
+
+	public String getContractIdn() {
+		return contractIdn;
 	}
 
 	public ContractPackage getContractPackage() {
-		return this.contractPackage;
+		return contractPackage;
+	}
+
+	public String getContractPeriod() {
+		return contractPeriod;
+	}
+
+	public LocalDate getContractSignDate() {
+		return contractSignDate;
+	}
+
+	public ContractStatus getContractStatus() {
+		return contractStatus;
 	}
 
 	public BigDecimal getContractSubscription() {
-		return this.contractSubscription;
+		return contractSubscription;
 	}
 
-	public void setContractId(final Integer contractId) {
-		this.contractId = contractId;
+	public List<Device> getDevices() {
+		return devices;
 	}
 
-	public void setContractIdn(final String contractIdn) {
-		this.contractIdn = contractIdn;
+	public boolean getDisposableFeePaid() {
+		return disposableFeePaid;
 	}
 
-	public void setContractStatus(final ContractStatus contractStatus) {
-		this.contractStatus = contractStatus;
+	public BigDecimal getInstallationFeeGross() {
+		return installationFeeGross;
 	}
 
-	public void setContractSignDate(final LocalDate contractSignDate) {
-		this.contractSignDate = contractSignDate;
+	public BigDecimal getInstallationFeeNet() {
+		return installationFeeNet;
+	}
+
+	public BigDecimal getInstallationFeeVat() {
+		return installationFeeVat;
+	}
+
+	public VatRate getInstallationFeeVatRate() {
+		return installationFeeVatRate;
+	}
+
+	public InstalationType getInstallationType() {
+		return installationType;
+	}
+
+	public Subscriber getSubscriber() {
+		return subscriber;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActivationFeeGross(final BigDecimal activationFeeGross) {
+		this.activationFeeGross = activationFeeGross;
+	}
+
+	public void setActivationFeeNet(final BigDecimal activationFeeNet) {
+		this.activationFeeNet = activationFeeNet;
+	}
+
+	public void setActivationFeeVat(final BigDecimal activationFeeVat) {
+		this.activationFeeVat = activationFeeVat;
+	}
+
+	public void setActivationFeeVatRate(final VatRate activationFeeVatRate) {
+		this.activationFeeVatRate = activationFeeVatRate;
+	}
+
+	public void setActive(final boolean active) {
+		this.active = active;
 	}
 
 	public void setContractActivationDate(final LocalDate contractActivationDate) {
@@ -162,120 +227,68 @@ public class Contract {
 		this.contractEndDate = contractEndDate;
 	}
 
-	public void setContractPeriod(final String contractPeriod) {
-		this.contractPeriod = contractPeriod;
+	public void setContractId(final Integer contractId) {
+		this.contractId = contractId;
+	}
+
+	public void setContractIdn(final String contractIdn) {
+		this.contractIdn = contractIdn;
 	}
 
 	public void setContractPackage(final ContractPackage contractPackage) {
 		this.contractPackage = contractPackage;
 	}
 
+	public void setContractPeriod(final String contractPeriod) {
+		this.contractPeriod = contractPeriod;
+	}
+
+	public void setContractSignDate(final LocalDate contractSignDate) {
+		this.contractSignDate = contractSignDate;
+	}
+
+	public void setContractStatus(final ContractStatus contractStatus) {
+		this.contractStatus = contractStatus;
+	}
+
 	public void setContractSubscription(final BigDecimal contractSubscription) {
 		this.contractSubscription = contractSubscription;
-	}
-
-	public Subscriber getSubscriber() {
-		return this.subscriber;
-	}
-
-	public boolean isActive() {
-		return this.active;
-	}
-
-	public void setSubscriber(final Subscriber subscriber) {
-		this.subscriber = subscriber;
-	}
-
-	public void setActive(final boolean active) {
-		this.active = active;
-	}
-
-	public List<Device> getDevices() {
-		return this.devices;
 	}
 
 	public void setDevices(final List<Device> devices) {
 		this.devices = devices;
 	}
 
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(final User user) {
-		this.user = user;
-	}
-
-	public boolean getDisposableFeePaid() {
-		return this.disposableFeePaid;
-	}
-
 	public void setDisposableFeePaid(final boolean disposableFeePaid) {
 		this.disposableFeePaid = disposableFeePaid;
 	}
 
-	public BigDecimal getActivationFeeNet() {
-		return this.activationFeeNet;
-	}
-
-	public void setActivationFeeNet(final BigDecimal activationFeeNet) {
-		this.activationFeeNet = activationFeeNet;
-	}
-
-	public VatRate getActivationFeeVatRate() {
-		return this.activationFeeVatRate;
-	}
-
-	public void setActivationFeeVatRate(final VatRate activationFeeVatRate) {
-		this.activationFeeVatRate = activationFeeVatRate;
-	}
-
-	public BigDecimal getActivationFeeVat() {
-		return this.activationFeeVat;
-	}
-
-	public void setActivationFeeVat(final BigDecimal activationFeeVat) {
-		this.activationFeeVat = activationFeeVat;
-	}
-
-	public BigDecimal getActivationFeeGross() {
-		return this.activationFeeGross;
-	}
-
-	public void setActivationFeeGross(final BigDecimal activationFeeGross) {
-		this.activationFeeGross = activationFeeGross;
-	}
-
-	public BigDecimal getInstallationFeeNet() {
-		return this.installationFeeNet;
+	public void setInstallationFeeGross(final BigDecimal installationFeeGross) {
+		this.installationFeeGross = installationFeeGross;
 	}
 
 	public void setInstallationFeeNet(final BigDecimal installationFeeNet) {
 		this.installationFeeNet = installationFeeNet;
 	}
 
-	public VatRate getInstallationFeeVatRate() {
-		return this.installationFeeVatRate;
+	public void setInstallationFeeVat(final BigDecimal installationFeeVat) {
+		this.installationFeeVat = installationFeeVat;
 	}
 
 	public void setInstallationFeeVatRate(final VatRate installationFeeVatRate) {
 		this.installationFeeVatRate = installationFeeVatRate;
 	}
 
-	public BigDecimal getInstallationFeeVat() {
-		return this.installationFeeVat;
+	public void setInstallationType(final InstalationType installationType) {
+		this.installationType = installationType;
 	}
 
-	public void setInstallationFeeVat(final BigDecimal installationFeeVat) {
-		this.installationFeeVat = installationFeeVat;
+	public void setSubscriber(final Subscriber subscriber) {
+		this.subscriber = subscriber;
 	}
 
-	public BigDecimal getInstallationFeeGross() {
-		return this.installationFeeGross;
-	}
-
-	public void setInstallationFeeGross(final BigDecimal installationFeeGross) {
-		this.installationFeeGross = installationFeeGross;
+	public void setUser(final User user) {
+		this.user = user;
 	}
 
 }

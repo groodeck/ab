@@ -14,6 +14,7 @@ import org.ab.entity.ContractPackage;
 import org.ab.entity.Subscriber;
 import org.ab.entity.VatRate;
 import org.ab.model.dictionary.ContractStatus;
+import org.ab.model.dictionary.InstalationType;
 import org.ab.util.Translator;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,15 @@ public class ContractConverter {
 			model.setContractId(entity.getContractId().toString());
 		}
 		model.setContractIdn(entity.getContractIdn());
-		if(entity.getContractStatus() != null){
-			model.setContractStatus(entity.getContractStatus().name());
+		final ContractStatus contractStatus = entity.getContractStatus();
+		if(contractStatus != null){
+			model.setContractStatusIdn(entity.getContractStatus().name());
+			model.setContractStatusDesc(contractStatus.getDesc());
+		}
+		final InstalationType installationType = entity.getInstallationType();
+		if(installationType != null){
+			model.setInstallationTypeIdn(installationType.name());
+			model.setInstallationTypeDesc(installationType.getDesc());
 		}
 		if(entity.getContractSignDate() != null){
 			model.setContractSignDate(entity.getContractSignDate().toString());
@@ -126,7 +134,9 @@ public class ContractConverter {
 			entity.setContractEndDate(LocalDate.parse(contractEndDate));
 		}
 
-		entity.setContractStatus(ContractStatus.valueOf(model.getContractStatus()));
+		entity.setContractStatus(ContractStatus.valueOf(model.getContractStatusIdn()));
+
+		entity.setInstallationType(InstalationType.valueOf(model.getInstallationTypeIdn()));
 
 		final String contractPack = model.getContractPack();
 		if(isNotBlank(contractPack)){

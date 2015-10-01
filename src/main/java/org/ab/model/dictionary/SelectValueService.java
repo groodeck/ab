@@ -65,6 +65,7 @@ public class SelectValueService {
 		results.put("packages", packageService.getPackageDictionary());
 		results.put("contractDurations", durationService.getDurationDictionary());
 		results.put("deviceTypes", DeviceType.asValueMap());
+		results.put("installationTypes", InstalationType.asValueMap());
 		return results;
 	}
 
