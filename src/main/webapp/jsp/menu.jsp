@@ -16,9 +16,9 @@
 		            	<li><a href="/packages">Pakiety</a></li>
 		            	<li><a href="/cities">Miasta</a></li>
 		            	<li><a href="/vatRates">Stawki VAT</a></li>
-		            	<li><a href="/contractDuration">Długość umowy</a></li>
 		        	</ul>
 				</li>
+				<li role="presentation"><a href="/reports">Raporty</a></li>
 			</ul>
 			
 			<br/><hr/>

@@ -34,7 +34,7 @@
 			<div id="menu">
 				<tiles:insertAttribute name="menu" />
 			</div>
-			<div id="menu">
+			<div id="subscriberDetails">
 				<tiles:insertAttribute name="subscriberDetails" />
 			</div>
 			<div id="page">

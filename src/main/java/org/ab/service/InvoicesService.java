@@ -19,9 +19,11 @@ import org.ab.entity.Contract;
 import org.ab.entity.Invoice;
 import org.ab.model.InvoiceGenerationParams;
 import org.ab.model.InvoiceModel;
+import org.ab.model.SubscriberModel;
 import org.ab.service.converter.InvoiceConverter;
 import org.ab.service.generator.InvoiceFileGenerator;
 import org.ab.service.generator.InvoicesGenerator;
+import org.ab.util.PropertiesReader;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,8 @@ import org.springframework.util.CollectionUtils;
 @Component
 @Transactional
 public class InvoicesService {
+
+	private static final String SYSTEM_PAPER_PRINT_ON = "system.paperPrintOn";
 
 	@Autowired
 	public ContractDao contractDao;
@@ -47,24 +51,28 @@ public class InvoicesService {
 	@Autowired
 	private InvoiceFileGenerator invoiceFileGenerator;
 
+	private List<Contract> findContractsToInvoiceGenerate(
+			final LocalDate dateFrom, final LocalDate dateTo, final SubscriberModel subscriber) {
+		return contractDao.findContractsToInvoiceGenerate(dateFrom, dateTo, getSubscriberId(subscriber));
+	}
+
 	public List<InvoiceModel> findInvoices(final String subscriberIdn, final LocalDate dateFrom, final LocalDate dateTo) {
 		final List<org.ab.entity.Invoice> invoices = invoiceDao.findInvoices(subscriberIdn, dateFrom, dateTo);
 		return invoiceConverter.convertEntities(invoices);
 	}
 
 	@Transactional
-	public List<InvoiceModel> generateInvoices(final InvoiceGenerationParams generationParams) {
+	public List<InvoiceModel> generateInvoices(final InvoiceGenerationParams generationParams, final SubscriberModel subscriber) {
 		final LocalDate dateFrom = getFirstOfMonth(generationParams);
 		final LocalDate dateTo = getLastOfMonth(generationParams);
-		final List<Contract> contracts = contractDao.findContractsToInvoiceGenerate(dateFrom, dateTo);
+		final List<Contract> contracts = findContractsToInvoiceGenerate(dateFrom, dateTo, subscriber);
 		final List<InvoiceModel> invoices = invoicesGenerator.generateInvoices(contracts, dateFrom, dateTo);
 		if(!CollectionUtils.isEmpty(invoices)){
 			persist(invoices);
-			//			final List<String> filesToPrint = invoiceFileGenerator.generatePdf(invoices);
-			// TODO:
-			//	1. uncomment in production
-			// 	2. print only invoices for specific subscriber - email not defined;
-			//printToPrinter(filesToPrint);
+			final List<String> filesToPrint = invoiceFileGenerator.generatePdf(invoices);
+			if(isPaperPrintOn()){
+				printToPrinter(filesToPrint);
+			}
 		}
 		return invoices;
 
@@ -95,6 +103,19 @@ public class InvoicesService {
 				.withMonthOfYear(Integer.parseInt(generationParams.getMonth()));
 	}
 
+	private String getSubscriberId(final SubscriberModel subscriber) {
+		if(subscriber == null) {
+			return null;
+		} else {
+			return subscriber.getSubscriberId();
+		}
+	}
+
+	private boolean isPaperPrintOn() {
+		final String property = PropertiesReader.getProperty(SYSTEM_PAPER_PRINT_ON);
+		return Boolean.valueOf(property);
+	}
+
 	private void persist(final List<InvoiceModel> invoices) {
 		for(final InvoiceModel invoice : invoices){
 			final org.ab.entity.Invoice entity = invoiceConverter.convert(invoice);
@@ -105,13 +126,15 @@ public class InvoicesService {
 
 	private void printFile(final String file){
 		try {
-			final FileInputStream fis = new FileInputStream(file);
-			final DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
-			final Doc pdfDoc = new SimpleDoc(fis, flavor, null);
 			final PrintService printService = PrintServiceLookup.lookupDefaultPrintService();
-			final DocPrintJob printJob = printService.createPrintJob();
-			printJob.print(pdfDoc, new HashPrintRequestAttributeSet());
-			fis.close();
+			if(printService != null){
+				final FileInputStream fis = new FileInputStream(file);
+				final DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
+				final Doc pdfDoc = new SimpleDoc(fis, flavor, null);
+				final DocPrintJob printJob = printService.createPrintJob();
+				printJob.print(pdfDoc, new HashPrintRequestAttributeSet());
+				fis.close();
+			}
 		} catch (final PrintException | IOException e) {
 			e.printStackTrace();
 		}
@@ -122,5 +145,4 @@ public class InvoicesService {
 			printFile(file);
 		}
 	}
-
 }

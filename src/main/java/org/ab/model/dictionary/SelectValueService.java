@@ -57,6 +57,12 @@ public class SelectValueService {
 		return null;
 	}
 
+	public Map<String, Map<String, String>> getReportsDictionaries() {
+		final Map<String, Map<String, String>> results = Maps.newHashMap();
+		results.put("reportTypes", ReportType.asValueMap());
+		return results;
+	}
+
 	public Map<String, Map<String, String>> getSubscriberDictionaries() {
 		final Map<String, Map<String, String>> results = Maps.newHashMap();
 		results.put("clientTypes", ClientType.asValueMap());

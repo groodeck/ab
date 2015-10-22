@@ -18,14 +18,15 @@ public class ContractDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public List<Contract> findContractsToInvoiceGenerate(final LocalDate dateFrom, final LocalDate dateTo) {
-		final List contractToInvoiceGenerate = findFullMonthInvoiceContracts(dateFrom, dateTo);
-		contractToInvoiceGenerate.addAll(findPartMonthInvoiceContracts(dateFrom, dateTo));
+	public List<Contract> findContractsToInvoiceGenerate(final LocalDate dateFrom, final LocalDate dateTo, final String subscriberId) {
+		final List<Contract> contractToInvoiceGenerate = findFullMonthInvoiceContracts(dateFrom, dateTo, subscriberId);
+		contractToInvoiceGenerate.addAll(findPartMonthInvoiceContracts(dateFrom, dateTo, subscriberId));
 		return contractToInvoiceGenerate;
 	}
 
-	private List findFullMonthInvoiceContracts(final LocalDate dateFrom,
-			final LocalDate dateTo) {
+	@SuppressWarnings("unchecked")
+	private List<Contract> findFullMonthInvoiceContracts(final LocalDate dateFrom,
+			final LocalDate dateTo, final String subscriberId) {
 		return em.createQuery("from Contract c where "
 				+ "c.contractActivationDate <= :dateFrom "
 				+ "and (c.contractEndDate = null "
@@ -35,15 +36,18 @@ public class ContractDao {
 				+ "			i.contract = c"
 				+ "			and i.settlementPeriodStart = :dateFrom"
 				+ "			and i.settlementPeriodEnd = :dateTo) "
-				+ "and c.contractStatus in (:activeSubscriberStatuses)")
+				+ "and c.contractStatus in (:activeSubscriberStatuses) "
+				+ "and (:subscriberId is null or c.subscriber.subscriberId=:subscriberId)")
 				.setParameter("dateFrom", dateFrom)
 				.setParameter("dateTo", dateTo)
 				.setParameter("activeSubscriberStatuses", ContractStatus.activeSubscriberStatuses())
+				.setParameter("subscriberId", subscriberId)
 				.getResultList();
 	}
 
-	private List findPartMonthInvoiceContracts(final LocalDate dateFrom,
-			final LocalDate dateTo) {
+	@SuppressWarnings("unchecked")
+	private List<Contract> findPartMonthInvoiceContracts(final LocalDate dateFrom,
+			final LocalDate dateTo, final String subscriberId) {
 		return em.createQuery("from Contract c where "
 				+ "c.contractStatus in (:activeSubscriberStatuses) "
 				+ "and (c.contractActivationDate > :dateFrom "
@@ -59,10 +63,12 @@ public class ContractDao {
 				+ "		 from Invoice i2 where "
 				+ "			i2.contract = c "
 				+ "			and i2.settlementPeriodStart = :dateFrom "
-				+ "			and i2.settlementPeriodEnd = c.contractActivationDate)) ")
+				+ "			and i2.settlementPeriodEnd = c.contractActivationDate)) "
+				+ "and (:subscriberId is null or c.subscriber.subscriberId=:subscriberId)")
 				.setParameter("dateFrom", dateFrom)
 				.setParameter("dateTo", dateTo)
 				.setParameter("activeSubscriberStatuses", ContractStatus.activeSubscriberStatuses())
+				.setParameter("subscriberId", subscriberId)
 				.getResultList();
 	}
 

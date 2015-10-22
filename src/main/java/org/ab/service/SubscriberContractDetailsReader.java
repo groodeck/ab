@@ -1,7 +1,6 @@
 package org.ab.service;
 
 import java.util.Map;
-import java.util.Properties;
 
 import org.ab.entity.Subscriber;
 import org.ab.model.Address;
@@ -27,12 +26,11 @@ public class SubscriberContractDetailsReader {
 	private ContractPackageService contractPackageService;
 
 	public Map<String, String> getContractDetails(final Subscriber subscriber) {
-		final Properties companyProperties = PropertiesReader.loadProperties("companyDetails.properties");
 		final SubscriberModel subscriberModel = subscriberConverter.convert(subscriber);
 		final Map<String, String> results = Maps.newHashMap();
 		putValueOrEmpty("<CONTRACT_NUMBER>",subscriberModel.getCurrentContract().getContractIdn(), results);
 		putValueOrEmpty("<CURRENT_DATE>",getContractSignDate(subscriberModel), results);
-		putValueOrEmpty("<PLACE_OF_SIGN>",getPlaceOfSign(companyProperties), results);
+		putValueOrEmpty("<PLACE_OF_SIGN>",getPlaceOfSign(), results);
 		putValueOrEmpty("<CUSTOMER_NAME>",subscriberModel.getEffectiveName(), results);
 		putValueOrEmpty("<INSTALLATION_ADDRESS>",getOneLineAddress(subscriberModel.getServiceAddress()), results);
 		putValueOrEmpty("<MAIN_ADDRESS>", getOneLineAddress(subscriberModel.getMainAddress()), results);
@@ -41,7 +39,7 @@ public class SubscriberContractDetailsReader {
 		putValueOrEmpty("<PESEL>",subscriberModel.getPesel(), results);
 		putValueOrEmpty("<EMAIL>",Joiner.on(", ").join(subscriberModel.getEmails()), results);
 		putValueOrEmpty("<PHONE_NUMBER>", Joiner.on(", ").join(subscriberModel.getPhoneNumbers()), results);
-		putValueOrEmpty("<PAYMENT_ACCOUNT_NUMBER>", getPaymentAccountNumber(companyProperties), results);
+		putValueOrEmpty("<PAYMENT_ACCOUNT_NUMBER>", getPaymentAccountNumber(), results);
 		putValueOrEmpty("<CONTRACT_PACKAGE>",subscriberModel.getCurrentContract().getContractPackageName(), results);
 		putValueOrEmpty("<GROSS_AMOUNT>", getGrossSubscription(subscriberModel.getCurrentContract().getContractPack()), results);
 		putValueOrEmpty("<INSTALLATION_FEE>",subscriberModel.getCurrentContract().getInstallationFeeGross(), results);
@@ -67,12 +65,12 @@ public class SubscriberContractDetailsReader {
 		}
 	}
 
-	private String getPaymentAccountNumber(final Properties companyProperties) {
-		return companyProperties.getProperty("company.bankAccount");
+	private String getPaymentAccountNumber() {
+		return PropertiesReader.getProperty("company.bankAccount");
 	}
 
-	private String getPlaceOfSign(final Properties companyProperties) {
-		return companyProperties.getProperty("company.city");
+	private String getPlaceOfSign() {
+		return PropertiesReader.getProperty("company.city");
 	}
 
 	private void putValueOrEmpty(final String placeholder, final String replacement,

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.ab.util.PropertiesReader;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 
@@ -20,14 +21,8 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 public class FileGenerator {
 
-	//production
-	public static final String DOWNLOAD_DIR = "webapps/root/resources/download/";
-
-	//separate server
-	//	public static final String DOWNLOAD_DIR = "resources/download/";
-
-	//eclipse run
-	//	public static final String DOWNLOAD_DIR = "src/main/webapp//resources/download/";
+	public static final String RESOURCE_DIR = PropertiesReader.getProperty("system.resourceDir");
+	public static final String DOWNLOAD_DIR = RESOURCE_DIR + "download/";
 
 	public String createFile(final String documentNumber, final String documentContent) {
 		try {

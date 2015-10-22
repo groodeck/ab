@@ -2,8 +2,10 @@ package org.ab.service.converter;
 
 import java.util.List;
 
+import org.ab.dao.CityDao;
 import org.ab.entity.Address;
 import org.ab.model.dictionary.AddressType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
@@ -11,14 +13,21 @@ import com.google.common.collect.Lists;
 @Component
 public class AddressConverter {
 
+	@Autowired
+	private CityDao cityDao;
+
 	public org.ab.model.Address convert(final org.ab.entity.Address address) {
 		final org.ab.model.Address result = new org.ab.model.Address();
 		result.setAddressId(address.getAddressId().toString());
-		result.setCity(address.getCity());
+		final String city = address.getCity();
+		result.setCity(city);
 		result.setStreet(address.getStreet());
 		result.setHouseNo(address.getHouseNo());
 		result.setZipCode(address.getZipCode());
 		result.setApartamentNo(address.getApartmentNo());
+		if(city != null){
+			result.setCityDesc(cityDao.getByIdn(city).getCityDescription());
+		}
 		return result;
 	}
 

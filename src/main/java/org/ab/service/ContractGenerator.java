@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.ab.entity.Subscriber;
+import org.ab.util.PropertiesReader;
 import org.apache.poi.xwpf.usermodel.BodyElementType;
 import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -24,8 +25,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContractGenerator {
 
-	//TODO: wypchnac do properties
-	private static final String RESOURCE_DIR = "src/main/webapp/resources/";
+	private static final String RESOURCE_DIR = PropertiesReader.getProperty("system.resourceDir");
 
 	private static final String CONTRACT_TEMPLATE_PATH = RESOURCE_DIR + "template/umowa.docx";
 	private static final String CONTRACT_OUTPUT_TEMPLATE_PATH = RESOURCE_DIR + "download/Umowa.%s.docx";

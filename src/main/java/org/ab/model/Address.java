@@ -12,6 +12,7 @@ public class Address {
 	private String street;
 	private String houseNo;
 	private String apartamentNo;
+	private String cityDesc;
 
 	public String getAddressId() {
 		return addressId;
@@ -22,11 +23,14 @@ public class Address {
 	public String getCity() {
 		return city;
 	}
+	public String getCityDesc() {
+		return cityDesc;
+	}
 	public String getHouseNo() {
 		return houseNo;
 	}
 	public String getOneLineAddress() {
-		return Joiner.on(" ").skipNulls().join(zipCode, city, getStreetDetails());
+		return Joiner.on(" ").skipNulls().join(zipCode, cityDesc, getStreetDetails());
 	}
 	public String getStreet() {
 		return street;
@@ -42,7 +46,7 @@ public class Address {
 			}
 			return sb.toString();
 		} else {
-			return "";
+			return null;
 		}
 	}
 	public String getZipCode() {
@@ -51,12 +55,15 @@ public class Address {
 	public void setAddressId(final String addressId) {
 		this.addressId = addressId;
 	}
+
 	public void setApartamentNo(final String apartamentNo) {
 		this.apartamentNo = apartamentNo;
 	}
-
 	public void setCity(final String city) {
 		this.city = city;
+	}
+	public void setCityDesc(final String cityDescription) {
+		cityDesc = cityDescription;
 	}
 	public void setHouseNo(final String houseNo) {
 		this.houseNo = houseNo;

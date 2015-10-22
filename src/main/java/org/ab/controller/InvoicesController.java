@@ -76,8 +76,9 @@ public class InvoicesController {
 
 	@RequestMapping("/generate")
 	public String handleInvoicesGeneration(final @ModelAttribute("generationParams") InvoiceGenerationParams generationParams,
-			final Model model) {
-		final List<InvoiceModel> invoices = invoicesService.generateInvoices(generationParams);
+			final Model model, final HttpServletRequest request) {
+		final SubscriberModel subscriber = (SubscriberModel)request.getSession().getAttribute("subscriber");
+		final List<InvoiceModel> invoices = invoicesService.generateInvoices(generationParams, subscriber);
 		model.addAttribute("uiMessage", getGenerationResultsMessage(invoices));
 
 		model.addAllAttributes(selectValuesService.getInvoicesDictionaries());

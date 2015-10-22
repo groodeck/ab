@@ -1,7 +1,5 @@
 package org.ab.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -15,7 +13,6 @@ import org.ab.service.CorrectionService;
 import org.ab.service.InvoicesService;
 import org.ab.service.SubscriberService;
 import org.ab.util.DecimalWriter;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +40,8 @@ public class AsyncController {
 	@Autowired
 	private CorrectionService correctionService;
 
+	@Autowired
+	private FileResponseHandler fileResponse;
 
 	@RequestMapping(value="/getAmountWords",  produces = "text/html; charset=utf-8")
 	@ResponseBody
@@ -69,7 +68,7 @@ public class AsyncController {
 	public void getCorrectionFile(@PathVariable final int id, final HttpServletResponse response) {
 		final String filePath = correctionService.getCorrectionFile(id);
 		if(filePath!=null){
-			sendFileToClient(response, filePath);
+			fileResponse.sendToClient(filePath, response);
 		}
 	}
 
@@ -78,7 +77,7 @@ public class AsyncController {
 	public void getCustomerContract(@PathVariable final String subscriberIdn, final HttpServletResponse response) {
 		final Optional<String> filePath = subscriberService.getCurrentContractFile(subscriberIdn);
 		if(filePath.isPresent()){
-			sendFileToClient(response, filePath.get());
+			fileResponse.sendToClient(filePath.get(), response);
 		}
 	}
 
@@ -99,7 +98,7 @@ public class AsyncController {
 	public void getInvoiceFile(@PathVariable final int id, final HttpServletResponse response) {
 		final String filePath = invoiceService.getInvoiceFile(id);
 		if(filePath!=null){
-			sendFileToClient(response, filePath);
+			fileResponse.sendToClient(filePath, response);
 		}
 	}
 
@@ -115,16 +114,5 @@ public class AsyncController {
 	public String getServiceDetails(@PathVariable final int id) {
 		final ServiceDetails packageDetails =packageService.getService(String.valueOf(id));
 		return packageDetails.serialize();
-	}
-
-	private void sendFileToClient(final HttpServletResponse response, final String filePath) {
-		final File file = new File(filePath);
-		response.setContentType("application/octet-stream");
-		response.setHeader("Content-Disposition", "filename=\"" + file.getName() + "\"");
-		try {
-			FileUtils.copyFile(file, response.getOutputStream());
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

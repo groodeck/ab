@@ -3,7 +3,6 @@ package org.ab.service.generator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Properties;
 
 import javax.transaction.Transactional;
 
@@ -116,8 +115,7 @@ public class InvoicesGenerator {
 
 	@Transactional
 	public List<InvoiceModel> generateInvoices(final List<Contract> contracts, final LocalDate dateFrom, final LocalDate dateTo) {
-		final Properties props = PropertiesReader.loadProperties("companyDetails.properties");
-		final String city = props.getProperty("company.city");
+		final String city = PropertiesReader.getProperty("company.city");
 		final LocalDate currentDate = LocalDate.now();
 		final LocalDate firstOfCurrentMonth = currentDate.dayOfMonth().withMinimumValue();
 		final LocalDate lastOfCurrentMonth = currentDate.dayOfMonth().withMaximumValue();
@@ -132,7 +130,7 @@ public class InvoicesGenerator {
 			.withContract(contract)
 			.withSettlementPeriodStart(partialInvoiceAware.getSettlementPeriodStart())
 			.withSettlementPeriodEnd(partialInvoiceAware.getSettlementPeriodEnd())
-			.withSeller(getSeller(props))
+			.withSeller(getSeller())
 			.withSubscriber(getInvoiceParticipant(subscriber))
 			.withCreateDate(currentDate)
 			.withReceiveDate(currentDate)
@@ -252,19 +250,14 @@ public class InvoicesGenerator {
 	}
 
 	public InvoiceParticipant getSeller() {
-		final Properties props = PropertiesReader.loadProperties("companyDetails.properties");
-		return getSeller(props);
-	}
-
-	public InvoiceParticipant getSeller(final Properties props) {
 		return new InvoiceParticipant.Builder()
-		.withName(props.getProperty("company.name"))
+		.withName(PropertiesReader.getProperty("company.name"))
 		.withAddressCity(Joiner.on("/").skipNulls()
-				.join(props.getProperty("company.addressZipCode"), props.getProperty("company.addressCity")))
-				.withAddressStreet(props.getProperty("company.addressStreet"))
-				.withRegon(props.getProperty("company.regon"))
-				.withNip(props.getProperty("company.nip"))
-				.withPhone(props.getProperty("company.phone"))
+				.join(PropertiesReader.getProperty("company.addressZipCode"), PropertiesReader.getProperty("company.addressCity")))
+				.withAddressStreet(PropertiesReader.getProperty("company.addressStreet"))
+				.withRegon(PropertiesReader.getProperty("company.regon"))
+				.withNip(PropertiesReader.getProperty("company.nip"))
+				.withPhone(PropertiesReader.getProperty("company.phone"))
 				.build();
 	}
 

@@ -15,12 +15,17 @@ import org.joda.time.LocalDate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@SuppressWarnings("unchecked")
 @Repository
 @Transactional
 public class SubscribersDao {
 
 	@PersistenceContext
 	private EntityManager em;
+
+	public List<Subscriber> findAll() {
+		return em.createQuery("from Subscriber").getResultList();
+	}
 
 	public List<Subscriber> findSubscribers(final String phrase, final LocalDate dateFrom, final LocalDate dateTo,
 			final Boolean showInactive) {
