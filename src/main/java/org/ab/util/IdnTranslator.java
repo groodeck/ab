@@ -10,7 +10,7 @@ public class IdnTranslator {
 		polishLettersMap = new HashMap<Character, Character>();
 		polishLettersMap.put(' ', '_');
 		polishLettersMap.put('¹', 'a');
-		polishLettersMap.put('ê', 'a');
+		polishLettersMap.put('ê', 'e');
 		polishLettersMap.put('ó', 'o');
 		polishLettersMap.put('œ', 's');
 		polishLettersMap.put('³', 'l');
