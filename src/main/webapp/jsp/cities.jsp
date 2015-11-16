@@ -40,15 +40,16 @@
 		    </div>
 		  </div>
 		</div>
+		<br/>
 		
 		
 		<sf:form method="post" action="/cities/save" modelAttribute="cities" >
 		<fieldset>
-			<table class="table" id="cityTable">
+			<table class="table" id="cityTable" >
 				<thead>
-					<tr>
-						<th>Identyfikator</th>
-						<th>Nazwa miasta</th>
+					<tr class="tableHeader">
+						<custom:sortableHeader column="${tableHeader.columns.cityIdn}" sortUrl="/cities/sort/"/>
+						<custom:sortableHeader column="${tableHeader.columns.cityDescription}" sortUrl="/cities/sort/"/>
 					</tr>
 				</thead>
 				<tbody>

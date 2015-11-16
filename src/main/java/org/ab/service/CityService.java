@@ -9,6 +9,7 @@ import org.ab.dao.CityDao;
 import org.ab.entity.City;
 import org.ab.model.CitiesModel;
 import org.ab.model.CityModel;
+import org.ab.ui.SortableColumn;
 import org.ab.util.IdnTranslator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -32,7 +33,7 @@ public class CityService {
 	}
 
 	public Map<String, String> getCityDictionary(){
-		final List<City> cities = cityDao.findAll();
+		final List<City> cities = cityDao.findAll(null);
 		final Map<String, String> results = Maps.newHashMap();
 		for(final City city : cities){
 			results.put(city.getCityIdn(), city.getCityDescription());
@@ -40,8 +41,8 @@ public class CityService {
 		return results;
 	}
 
-	public List<org.ab.model.CityModel> getCityList() {
-		final List<City> cities = cityDao.findAll();
+	public List<org.ab.model.CityModel> getCityList(final SortableColumn sortColumn) {
+		final List<City> cities = cityDao.findAll(sortColumn);
 		return FluentIterable.from(cities).transform(new Function<City, org.ab.model.CityModel>(){
 
 			@Override
