@@ -28,7 +28,7 @@
    
 		<c:if test="${not empty contractPackages}">
 			<br/><br/>
-			<table border="1" cellspacing="0" cellpadding="2" class="borderedTable">
+			<table class="table">
 				<tr class="tableHeader">
 					<td>lp</td>
 					<td>Typ klienta</td>
