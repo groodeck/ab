@@ -8,9 +8,14 @@ public class SortableColumn {
 	private final String columnDescription;
 
 	public SortableColumn(final String columnKey, final String columnName, final String columnDescription) {
+		this(columnKey, columnName, columnDescription, null);
+	}
+
+	public SortableColumn(final String columnKey, final String columnName, final String columnDescription, final SortOrder sortOrder) {
 		this.columnKey = columnKey;
 		this.columnName = columnName;
 		this.columnDescription = columnDescription;
+		this.sortOrder = sortOrder;
 	}
 
 	public void clear() {

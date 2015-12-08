@@ -2,21 +2,17 @@ package org.ab.model;
 
 import java.util.List;
 
-import org.assertj.core.util.Lists;
+import org.ab.ui.ResultPage;
 
-public class CitiesModel {
+public class CitiesModel extends ResultPage<CityModel> {
 
-	private List<CityModel> cities;
-
-	public CitiesModel(){
-		cities = Lists.newArrayList();
+	@Override
+	public List<CityModel> getRecords() {
+		return records;
 	}
 
-	public List<CityModel> getCities() {
-		return cities;
-	}
-
-	public void setCities(final List<CityModel> cities) {
-		this.cities = cities;
+	@Override
+	public void setRecords(final List<CityModel> records) {
+		this.records = records;
 	}
 }

@@ -10,6 +10,7 @@ import org.ab.entity.ContractPackage;
 import org.ab.entity.VatRate;
 import org.ab.model.Service;
 import org.ab.model.dictionary.ClientType;
+import org.ab.ui.ResultPage;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -147,13 +148,14 @@ public class ContractPackageConverter {
 		return toContractPackageModel.apply(contractPackage);
 	}
 
-	public List<org.ab.model.ContractPackage> convert(final List<ContractPackage> entities) {
-		return FluentIterable.from(entities)
-				.transform(toContractPackageModel).toList();
-	}
-
 	public ContractPackage convert(final org.ab.model.ContractPackage model) {
 		return toPackageEntity.apply(model);
+	}
+
+	public ResultPage<org.ab.model.ContractPackage> convert(final ResultPage<ContractPackage> entities) {
+		final List<org.ab.model.ContractPackage> results =
+				FluentIterable.from(entities.getRecords()).transform(toContractPackageModel).toList();
+		return new ResultPage<org.ab.model.ContractPackage>(results, entities.getPageNo(), entities.getPageCount());
 	}
 
 	private VatRate getVatRate(final String activationFeeVatRate) {

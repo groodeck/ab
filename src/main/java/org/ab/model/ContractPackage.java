@@ -2,9 +2,24 @@ package org.ab.model;
 
 import java.util.List;
 
+import org.ab.ui.SortOrder;
+import org.ab.ui.SortableColumn;
+import org.ab.ui.TableHeader;
 import org.assertj.core.util.Lists;
 
 public class ContractPackage {
+
+	public static final TableHeader resultTableHeader = new TableHeader(
+			new SortableColumn("clientTypeDesc", "clientType", "Typ klienta"),
+			new SortableColumn("packageName", "packageName", "Nazwa pakietu", SortOrder.ASC),
+			new SortableColumn("packageActive", "packageActive", "Status"),
+			new SortableColumn("packageSubscription", "packageSubscription", "Abonament"),
+			new SortableColumn("activationFeeNet", "activationFeeNet", "Aktywacja netto"),
+			new SortableColumn("activationFeeGross", "activationFeeGross", "Aktywacja brutto"),
+			new SortableColumn("installationFeeNet", "installationFeeNet", "Instalacja netto"),
+			new SortableColumn("installationFeeGross", "installationFeeGross", "Instalacja brutto")
+			);
+
 	private String packageId;
 	private String packageName;
 	private String statusIdn;

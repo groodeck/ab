@@ -1,12 +1,13 @@
 package org.ab.model;
 
+import org.ab.ui.SortOrder;
 import org.ab.ui.SortableColumn;
 import org.ab.ui.TableHeader;
 
 public class CityModel {
 
 	public static final TableHeader resultTableHeader = new TableHeader(
-			new SortableColumn("cityIdn", "c.cityIdn", "Identyfikator"),
+			new SortableColumn("cityIdn", "c.cityIdn", "Identyfikator", SortOrder.ASC),
 			new SortableColumn("cityDescription", "c.cityDescription", "Nazwa miasta"));
 
 	private String cityIdn;

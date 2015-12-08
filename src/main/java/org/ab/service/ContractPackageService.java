@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.ab.dao.ContractPackageDao;
+import org.ab.dao.PageInfo;
 import org.ab.dao.ServiceDao;
 import org.ab.entity.ContractPackage;
 import org.ab.entity.Service;
@@ -13,6 +14,7 @@ import org.ab.model.dictionary.ClientType;
 import org.ab.model.js.PackageDetails;
 import org.ab.model.js.ServiceDetails;
 import org.ab.service.converter.ContractPackageConverter;
+import org.ab.ui.ResultPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,8 @@ import com.google.common.collect.Maps;
 
 @Component
 public class ContractPackageService {
+
+	private static final boolean ACTIVE_ONLY = true;
 
 	@Autowired
 	private ContractPackageConverter contractPackageConverter;
@@ -31,14 +35,8 @@ public class ContractPackageService {
 	private ServiceDao serviceDao;
 
 	@Transactional
-	public List<org.ab.model.ContractPackage> getAllPackages(final boolean showInactive) {
-		final List<ContractPackage> results;
-		if(showInactive){
-			results = contractPackageDao.findAll();
-		} else {
-			results = contractPackageDao.findActive();
-
-		}
+	public ResultPage<org.ab.model.ContractPackage> getAllPackages(final boolean showInactive, final PageInfo pageInfo) {
+		final ResultPage<ContractPackage> results = contractPackageDao.findAll(pageInfo, !showInactive);
 		return contractPackageConverter.convert(results);
 	}
 
@@ -64,9 +62,9 @@ public class ContractPackageService {
 	}
 
 	public Map<String, String> getPackageDictionary(){
-		final List<ContractPackage> packages = contractPackageDao.findActive();
+		final ResultPage<ContractPackage> packages = contractPackageDao.findAll(null, ACTIVE_ONLY);
 		final Map<String, String> results = Maps.newHashMap();
-		for(final ContractPackage contractPackage : packages){
+		for(final ContractPackage contractPackage : packages.getRecords()){
 			results.put(contractPackage.getPackageId().toString(),
 					contractPackage.getPackageName());
 		}

@@ -8,8 +8,8 @@
  <jsp:text>
  	<![CDATA[
  		<script type="text/javascript">
+	 		
 	 		saveNewCity = function (){
-	 			//window.location.href = '/package/edit/'+packageId;
 	 			var newCityDesc = $("#newCityDesc").val();
 	 			$.getJSON( "/cities/saveNewCity/" + newCityDesc, function(city) {
 	 				if( city!= null){
@@ -22,6 +22,7 @@
 				});
 	 			
 	 		}	
+	 		
 	 	</script>
  	]]>
  </jsp:text>
@@ -53,19 +54,21 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="city" items="${cities.cities}" varStatus="status" >
+					<c:forEach var="city" items="${cities.records}" varStatus="status" >
 						<tr>
 							<td>
-								<sf:input path="cities[${status.index}].cityIdn" size="15" disabled="true" />
-								<sf:hidden path="cities[${status.index}].cityIdn"/> 
+								<sf:input path="records[${status.index}].cityIdn" size="15" disabled="true" class="form-control"/>
+								<sf:hidden path="records[${status.index}].cityIdn"/> 
 							</td>
 							<td>
-								<sf:input path="cities[${status.index}].cityDesc" size="15" />
+								<sf:input path="records[${status.index}].cityDesc" size="15" class="form-control" />
 							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
+
+			<custom:pageNav page="${cities}" pageChangeUrl="/cities/changePage/"/>
 			
 			<div id="submitDiv" align="center" style="clear:both; width: 100%; height:50px; vertical-align: middle;">
 				<input type="submit" class="btn btn-default" value="Zapisz zmiany"/>

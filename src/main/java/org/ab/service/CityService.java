@@ -6,10 +6,11 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.ab.dao.CityDao;
+import org.ab.dao.PageInfo;
 import org.ab.entity.City;
 import org.ab.model.CitiesModel;
 import org.ab.model.CityModel;
-import org.ab.ui.SortableColumn;
+import org.ab.ui.ResultPage;
 import org.ab.util.IdnTranslator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 @Component
@@ -33,7 +35,7 @@ public class CityService {
 	}
 
 	public Map<String, String> getCityDictionary(){
-		final List<City> cities = cityDao.findAll(null);
+		final List<City> cities = cityDao.findAll(null).getRecords();
 		final Map<String, String> results = Maps.newHashMap();
 		for(final City city : cities){
 			results.put(city.getCityIdn(), city.getCityDescription());
@@ -41,16 +43,19 @@ public class CityService {
 		return results;
 	}
 
-	public List<org.ab.model.CityModel> getCityList(final SortableColumn sortColumn) {
-		final List<City> cities = cityDao.findAll(sortColumn);
-		return FluentIterable.from(cities).transform(new Function<City, org.ab.model.CityModel>(){
+	public ResultPage<CityModel> getCityList(final PageInfo pageInfo) {
+		final ResultPage<City> cities = cityDao.findAll(pageInfo);
+		final ImmutableList<CityModel> resultList =
+				FluentIterable.from(cities.getRecords())
+				.transform(new Function<City, org.ab.model.CityModel>(){
 
-			@Override
-			public org.ab.model.CityModel apply(final City arg0) {
-				return new org.ab.model.CityModel(arg0.getCityIdn(), arg0.getCityDescription());
-			}
+					@Override
+					public org.ab.model.CityModel apply(final City arg0) {
+						return new org.ab.model.CityModel(arg0.getCityIdn(), arg0.getCityDescription());
+					}
 
-		}).toList();
+				}).toList();
+		return new ResultPage<CityModel>(resultList, cities.getPageNo(), cities.getPageCount());
 	}
 
 	public CityModel saveNewCity(final String newCityDesc) {
@@ -67,7 +72,7 @@ public class CityService {
 
 	@Transactional
 	public void updateCities(final CitiesModel citiesModel, final String userName) {
-		for(final CityModel city : citiesModel.getCities()){
+		for(final CityModel city : citiesModel.getRecords()){
 			final City entity = cityDao.getByIdn(city.getCityIdn());
 			updateCityDescription(city, entity);
 		}

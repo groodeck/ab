@@ -26,21 +26,23 @@
 		<a href="/package/new"><button>Dodaj pakiet</button></a>
 		<a href="/packages/showAll"><button>Pokaż wszystkie</button></a>
    
-		<c:if test="${not empty contractPackages}">
+		<c:if test="${not empty contractPackages.records}">
 			<br/><br/>
 			<table class="table">
-				<tr class="tableHeader">
-					<td>lp</td>
-					<td>Typ klienta</td>
-					<td>Nazwa pakietu</td>
-					<td>Status</td>
-					<td>Abonament</td>
-					<td>Aktywacja netto</td>
-					<td>Aktywacja brutto</td>
-					<td>Instalacyjna netto</td>
-					<td>Instalacyjna brutto</td>
-				</tr>
-				<c:forEach var="contractPackage" items="${contractPackages}" varStatus="status" >
+				<thead>
+					<tr class="tableHeader">
+						<td>lp</td>
+						<custom:sortableHeader column="${tableHeader.columns.clientTypeDesc}" sortUrl="/packages/sort/" />
+						<custom:sortableHeader column="${tableHeader.columns.packageName}" sortUrl="/packages/sort/" />
+						<custom:sortableHeader column="${tableHeader.columns.packageActive}" sortUrl="/packages/sort/" />
+						<custom:sortableHeader column="${tableHeader.columns.packageSubscription}" sortUrl="/packages/sort/" />
+						<custom:sortableHeader column="${tableHeader.columns.activationFeeNet}" sortUrl="/packages/sort/" />
+						<custom:sortableHeader column="${tableHeader.columns.activationFeeGross}" sortUrl="/packages/sort/" />
+						<custom:sortableHeader column="${tableHeader.columns.installationFeeNet}" sortUrl="/packages/sort/" />
+						<custom:sortableHeader column="${tableHeader.columns.installationFeeGross}" sortUrl="/packages/sort/" />
+					</tr>
+				</thead>
+				<c:forEach var="contractPackage" items="${contractPackages.records}" varStatus="status" >
 					<tr>
 						<td onclick="editContractPackage(${contractPackage.packageId})"><c:out value="${status.index + 1}"/></td>
 						<td onclick="editContractPackage(${contractPackage.packageId})"><c:out value="${contractPackage.clientTypeDesc}"/></td>
@@ -54,6 +56,8 @@
 					</tr>
 				</c:forEach>
 			</table>
+			
+			<custom:pageNav page="${contractPackages}" pageChangeUrl="/packages/changePage/"/>
 		</c:if>
 	
 </body>

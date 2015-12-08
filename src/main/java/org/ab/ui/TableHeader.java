@@ -1,8 +1,12 @@
 package org.ab.ui;
 
+import static org.ab.util.Translator.parseInt;
+
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.ab.dao.PageInfo;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -12,8 +16,7 @@ import com.google.common.collect.Lists;
 
 public class TableHeader{
 
-	public static final String TABLE_HEADER = "tableHeader";
-
+	final PageInfo pageInfo;
 	final Map<String, SortableColumn> columnsById;
 
 	public TableHeader(final SortableColumn...sortableColumns) {
@@ -27,15 +30,15 @@ public class TableHeader{
 					}
 
 				});
+		pageInfo = new PageInfo(getCurrentSortColumn().orNull());
 	}
 
 	public Map<String, SortableColumn> getColumns(){
 		return columnsById;
 	}
 
-	public SortableColumn updateSortColumn(final HttpServletRequest request, final String sortColumnId) {
-
-		final Optional<SortableColumn> currentSortColumnOpt = FluentIterable.from(columnsById.values()).firstMatch(
+	public Optional<SortableColumn> getCurrentSortColumn() {
+		return FluentIterable.from(columnsById.values()).firstMatch(
 				new Predicate<SortableColumn>(){
 
 					@Override
@@ -44,7 +47,20 @@ public class TableHeader{
 					}
 
 				});
+	}
 
+	public PageInfo getPageInfo() {
+		return pageInfo;
+	}
+
+	public PageInfo updatePageNo(final HttpServletRequest request, final String newPageNo) {
+		pageInfo.setPageNo(parseInt(newPageNo));
+		return pageInfo;
+	}
+
+	public PageInfo updateSortColumn(final String sortColumnId) {
+
+		final Optional<SortableColumn> currentSortColumnOpt = getCurrentSortColumn();
 		SortOrder sortOrder = SortOrder.ASC;
 		if(currentSortColumnOpt.isPresent()){
 			final SortableColumn currentSortColumn = currentSortColumnOpt.get();
@@ -57,6 +73,7 @@ public class TableHeader{
 		final SortableColumn newSortColumn = columnsById.get(sortColumnId);
 		newSortColumn.setSortOrder(sortOrder);
 
-		return newSortColumn;
+		pageInfo.updateSort(newSortColumn);
+		return pageInfo;
 	}
 }

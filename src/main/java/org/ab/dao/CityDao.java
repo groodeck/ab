@@ -4,15 +4,15 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.ab.entity.City;
-import org.ab.ui.SortOrder;
-import org.ab.ui.SortableColumn;
+import org.ab.ui.ResultPage;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @org.springframework.transaction.annotation.Transactional
-public class CityDao {
+public class CityDao extends SortableDataPageFetch {
 
 	@PersistenceContext
 	private EntityManager em;
@@ -21,18 +21,17 @@ public class CityDao {
 		em.persist(new City(cityIdn, cityDesc));
 	}
 
-	public List<City> findAll(final SortableColumn orderColumn) {
-		final String orderBy;
-		final SortOrder sortOrder;
-		if(orderColumn == null){
-			orderBy = "c.cityIdn";
-			sortOrder = SortOrder.ASC;
-		} else {
-			orderBy = orderColumn.getColumnName();
-			sortOrder = orderColumn.getSortOrder();
-		}
-		final String sortfulQuery = String.format("from City c order by lower(%s) %s", orderBy, sortOrder.getClause());
-		return em.createQuery(sortfulQuery).getResultList();
+	@SuppressWarnings("unchecked")
+	public ResultPage<City> findAll(final PageInfo pageInfo) {
+		final String queryText = String.format("from City c order by lower(%s) %s",
+				pageInfo.getSortColumn(), pageInfo.getSortOrder().getClause());
+		final Query query = em.createQuery(queryText);
+		final int allRecordsCount = query.getResultList().size();
+		final List<City> resultList = em.createQuery(queryText)
+				.setMaxResults(MAX_RECORDS_ON_PAGE)
+				.setFirstResult(pageInfo.getFirstResult())
+				.getResultList();
+		return new ResultPage<City>(resultList, pageInfo.getPageNo(), countPages(allRecordsCount));
 	}
 
 	public City getByIdn(final String cityIdn) {
