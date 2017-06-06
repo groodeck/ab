@@ -14,6 +14,7 @@ public class Translator {
 	private static String commaNumber(final String numericString) {
 		return numericString.replaceAll(",", ".");
 	}
+
 	public static String complement(final String word, final char c, final int resultLenght) {
 
 		final StringBuilder sb = new StringBuilder(word != null ? word : "");
@@ -24,6 +25,7 @@ public class Translator {
 		}
 		return sb.toString();
 	}
+
 	public static String emptyAsNull(final String parameter) {
 
 		return parameter == null || parameter.isEmpty() ? null : parameter;
@@ -120,6 +122,14 @@ public class Translator {
 		return result;
 	}
 
+	public static Integer parseInteger(final String value) {
+		if(StringUtils.isNumeric(value)){
+			return Integer.valueOf(value);
+		}else {
+			return null;
+		}
+	}
+
 	public static String parseIntegerStr(final String source){
 		final String result;
 		final Double doubleValue = parseDoubleIfNotNull(source);
@@ -129,14 +139,6 @@ public class Translator {
 			result = "" + doubleValue.intValue();
 		}
 		return result;
-	}
-
-	public static Integer parseInteger(final String value) {
-		if(StringUtils.isNumeric(value)){
-			return Integer.valueOf(value);
-		}else {
-			return null;
-		}
 	}
 
 	private static int parseIntNotNull(final String value) {

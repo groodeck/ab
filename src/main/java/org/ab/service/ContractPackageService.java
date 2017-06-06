@@ -62,7 +62,8 @@ public class ContractPackageService {
 	}
 
 	public Map<String, String> getPackageDictionary(){
-		final ResultPage<ContractPackage> packages = contractPackageDao.findAll(null, ACTIVE_ONLY);
+		final PageInfo pageInfo = org.ab.model.ContractPackage.resultTableHeader.getPageInfo();
+		final ResultPage<ContractPackage> packages = contractPackageDao.findAll(pageInfo, ACTIVE_ONLY);
 		final Map<String, String> results = Maps.newHashMap();
 		for(final ContractPackage contractPackage : packages.getRecords()){
 			results.put(contractPackage.getPackageId().toString(),

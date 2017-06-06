@@ -35,7 +35,8 @@ public class CityService {
 	}
 
 	public Map<String, String> getCityDictionary(){
-		final List<City> cities = cityDao.findAll(null).getRecords();
+		final PageInfo pageInfo = CityModel.resultTableHeader.getPageInfo();
+		final List<City> cities = cityDao.findAll(pageInfo).getRecords();
 		final Map<String, String> results = Maps.newHashMap();
 		for(final City city : cities){
 			results.put(city.getCityIdn(), city.getCityDescription());

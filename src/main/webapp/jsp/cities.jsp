@@ -49,8 +49,8 @@
 			<table class="table" id="cityTable" >
 				<thead>
 					<tr class="tableHeader">
-						<custom:sortableHeader column="${tableHeader.columns.cityIdn}" sortUrl="/cities/sort/"/>
-						<custom:sortableHeader column="${tableHeader.columns.cityDescription}" sortUrl="/cities/sort/"/>
+						<custom:sortableHeader column="${citiesTableHeader.columns.cityIdn}" sortUrl="/cities/sort/"/>
+						<custom:sortableHeader column="${citiesTableHeader.columns.cityDescription}" sortUrl="/cities/sort/"/>
 					</tr>
 				</thead>
 				<tbody>
